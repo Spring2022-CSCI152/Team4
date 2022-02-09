@@ -12,10 +12,13 @@ public class EmployeeAccount extends WorkerAccount{
     @NotEmpty(message = "Permissions can not be empty!")
     private HashMap<String, Boolean> permissions;
 
+    //No permissions passed
     public EmployeeAccount(String email, String password, String firstName, String lastName, String jobTitle) {
         super(email, password, firstName, lastName, Timestamp.valueOf(LocalDateTime.now()), jobTitle);
         this.buildDefaultPermissions();
     }
+
+    //Permissions Passed
     public EmployeeAccount(String email, String password,
                            String firstName, String lastName,
                            String jobTitle, HashMap<String, Boolean> permissions) {
@@ -44,10 +47,14 @@ public class EmployeeAccount extends WorkerAccount{
         }
     }
 
+    //Not called, but needed for Persistence
     private void setPermissions(HashMap<String, Boolean> permissions) {
         this.permissions = permissions;
     }
 
+    //Return a List containing the keys of permissions
+    //Design Decision to reduce data movement and allows
+    //easier portability with other modules and updates
     public List<String> getPermissions() {
         List<String> permissions = new ArrayList<>();
         for(String key : this.permissions.keySet()){
