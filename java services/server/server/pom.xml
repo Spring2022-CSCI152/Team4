@@ -12,7 +12,7 @@
 	<artifactId>server</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>server</name>
-	<description>Java Servcer for CSCI 152 Team 4 Project</description>
+	<description>Java Server for CSCI 152 Team 4 Project</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
@@ -62,6 +62,11 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate.validator</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>6.1.7.Final</version>
 		</dependency>
 	</dependencies>
 
