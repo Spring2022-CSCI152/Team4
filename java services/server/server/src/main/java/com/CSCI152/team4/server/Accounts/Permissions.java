@@ -1,18 +1,18 @@
 package com.CSCI152.team4.server.Accounts;
 
 public enum Permissions {
-    CR,
+    CR, //Reports
     ER,
     DR,
-    CU,
+    CU, //Updates
     EU,
     DU,
-    CA,
+    CA, //Attachments
     DA,
-    CI,
+    CI, //Images
     EI,
-    CP,
+    CP, //Profiles
     EP,
     DP,
-    EN
+    EN //Notifications
 }
