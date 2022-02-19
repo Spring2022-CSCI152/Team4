@@ -1,17 +1,20 @@
+import ReportTabs from "./components/ReportTabs";
 import AllList from "./components/AllList";
+import WatchList from "./components/WatchList";
+import BannedList from "./components/BannedList";
+import UpdatedLogs from "./components/FetchUpdatedLogs";
 import React, { useState } from "react";
-import {FaUserCircle} from 'react-icons/fa';
-import logo from './assets/logo.png';
-import DashBtns from "./components/DashBtns";
-
+import reports from "./components/reports";
+import Notifications from "./components/Notifications";
+import {BsFilePersonFill} from 'react-icons/bs';
 
 const Header = () => {
  
   return (
     <header className="area-padding">
- <img src={logo} className="txt-align-center"/>  <h1 className="txt-align-center">FR Most Wanted </h1>
-      <div className = "txt-align-right">
-        <FaUserCircle size="1.5em"/>
+     most wanted
+      <div className = "txt-right">
+        <BsFilePersonFill size="1.5em"/>
         <div>username</div>
       </div>
     </header>
@@ -25,11 +28,11 @@ const NavBar = () => {
   <ul>
     <li><a className="active">Reports</a></li>
     <li><a>Notifications</a></li>
-    <li><a>Admin</a></li>   
     <li><a>Profiles</a></li>   
   </ul>
-  <button id="btn-signout">Signout</button>
-   </nav-bar>);
+  <button className="btn-signout">Signout</button>
+ 
+  </nav-bar>);
 
 };
 
@@ -37,7 +40,7 @@ const NavBar = () => {
 const Main = () => {
   return (
   <main className="area-padding">
-    <DashBtns/>
+    <ReportTabs/>
     <AllList /> 
   </main>
   );
@@ -49,8 +52,7 @@ const Footer = () => {
 };
 
 
-
-export default function App() {
+export default function AppTest() {
   const [nav, setNav] = useState("reports");
 
   return (

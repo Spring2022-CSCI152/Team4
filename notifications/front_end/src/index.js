@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import './main_reports.css';
+import './report_dashboard.css';
 
 ReactDOM.render(
      <App />,

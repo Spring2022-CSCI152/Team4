@@ -3,8 +3,8 @@ import FetchAllReports from "./FetchAllReports";
 import React, { useState } from "react";
 import mockData from "../mockData.js";
 import ReactPaginate from "react-paginate";
-import { FaPen } from 'react-icons/fa';
-import ReportTabs from "./ReportTabs";
+import { FaPen, FaCaretLeft, FaCaretRight  } from 'react-icons/fa';
+import ReportTabs from "./DashBtns";
 
 function AllList() {
 
@@ -17,7 +17,7 @@ function AllList() {
     .slice(pagesVisited, pagesVisited + cardsPerPage)
     .map((profile) => {
       return (
-        <div className="card">
+        <div className="card txt-align-center">
           <div className="nested">
             <div>ID: {profile.id}</div>
             <div>mm dd yy</div>
@@ -30,7 +30,7 @@ function AllList() {
           <div>Type</div>
           <div>location: n/a</div>
           <div>0</div>
-          <div><button className="btn sm"> edit <FaPen size="1.5em" /> </button></div>
+          <div><button className="btn sm round"> edit <FaPen size="1.5em" /> </button></div>
         </div>
       )
     })
@@ -54,10 +54,10 @@ function AllList() {
 
       {AllReports}
 
-      {/* Pagination functionality*/}
+      {/* Pagination functionality */}
       <ReactPaginate
-        previousLabel={"prev"}
-        nextLabel={"next"}
+        previousLabel={<FaCaretLeft style={{ fill: '#00f200' }}/>} 
+        nextLabel={<FaCaretRight style={{ fill: '#00f200' }}/>}
         pageCount={pageCount}
         onPageChange={changePage}
         containerClassName={"pagination-btn"}
