@@ -1,4 +1,4 @@
-package com.CSCI152.team4.server.Accounts;
+package com.CSCI152.team4.server.Accounts.Settings;
 
 public enum Permissions {
     CR,
