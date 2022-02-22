@@ -1,5 +1,6 @@
-package com.CSCI152.team4.server.Accounts;
+package com.CSCI152.team4.server.Accounts.Classes;
 
+import javax.persistence.Id;
 import java.sql.Timestamp;
 import java.util.Objects;
 import java.util.UUID;
@@ -7,9 +8,14 @@ import java.util.UUID;
 /*This class acts as an intermediary step between
 * Accounts and Admin/Employee Accounts to make
 * inheritance issues easier to work with*/
-public class WorkerAccount extends Account{
+public class WorkerAccount extends Account {
 
+    //accountId will be a UUID cast to String for DB compatibility
+    @Id
     private String accountId;
+
+
+    private int businessId;
     private String email;
     private String password;
     private String firstName;
@@ -17,10 +23,11 @@ public class WorkerAccount extends Account{
     private Timestamp timestamp;
     private String jobTitle;
 
-    public WorkerAccount(String email, String password,
+    public WorkerAccount(int businessId, String email, String password,
                          String firstName, String lastName,
                          Timestamp timestamp,
                          String jobTitle) {
+        this.businessId = businessId;
         this.accountId = UUID.randomUUID().toString();
         this.email = email;
         this.password = password;
@@ -83,7 +90,13 @@ public class WorkerAccount extends Account{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         WorkerAccount that = (WorkerAccount) o;
-        return accountId.equals(that.accountId) && email.equals(that.email) && password.equals(that.password) && Objects.equals(firstName, that.firstName) && Objects.equals(lastName, that.lastName) && Objects.equals(timestamp, that.timestamp) && Objects.equals(jobTitle, that.jobTitle);
+        return this.accountId.equals(that.accountId)
+                && this.email.equals(that.email)
+                && this.password.equals(that.password)
+                && Objects.equals(this.firstName, that.firstName)
+                && Objects.equals(this.lastName, that.lastName)
+                && Objects.equals(this.timestamp, that.timestamp)
+                && Objects.equals(this.jobTitle, that.jobTitle);
     }
 
     @Override

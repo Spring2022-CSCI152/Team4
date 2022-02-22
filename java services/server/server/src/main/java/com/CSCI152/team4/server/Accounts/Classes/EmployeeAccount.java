@@ -1,29 +1,43 @@
-package com.CSCI152.team4.server.Accounts;
+package com.CSCI152.team4.server.Accounts.Classes;
 
-import javax.validation.constraints.NotEmpty;
+import com.CSCI152.team4.server.Accounts.Settings.Permissions;
+
+import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class EmployeeAccount extends WorkerAccount{
+@Entity
+@Table(name="Employee_Account")
+public class EmployeeAccount extends WorkerAccount {
 
-    @NotEmpty(message = "Permissions can not be empty!")
+
+    @Id
+    private String accountId;
+
+    @Transient
     private HashMap<String, Boolean> permissions;
 
+    @Column(nullable = false)
+    @ElementCollection
+    private List<String> permissions_list;
+
     //No permissions passed
-    public EmployeeAccount(String email, String password, String firstName, String lastName, String jobTitle) {
-        super(email, password, firstName, lastName, Timestamp.valueOf(LocalDateTime.now()), jobTitle);
+    public EmployeeAccount(String email, String password, String firstName, String lastName, String jobTitle, int businessId) {
+        super(businessId, email, password, firstName, lastName, Timestamp.valueOf(LocalDateTime.now()), jobTitle);
         this.buildDefaultPermissions();
+        this.permissions_list = this.getPermissions();
     }
 
     //Permissions Passed
     public EmployeeAccount(String email, String password,
                            String firstName, String lastName,
-                           String jobTitle, HashMap<String, Boolean> permissions) {
-        super(email, password, firstName, lastName, Timestamp.valueOf(LocalDateTime.now()), jobTitle);
+                           String jobTitle, HashMap<String, Boolean> permissions, int businessId) {
+        super(businessId, email, password, firstName, lastName, Timestamp.valueOf(LocalDateTime.now()), jobTitle);
         this.buildPermissionsFromList(permissions);
+        this.permissions_list = this.getPermissions();
     }
 
     //Inherently Distrust the Permissions Map, and iterate over

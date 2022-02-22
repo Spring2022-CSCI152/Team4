@@ -1,17 +1,18 @@
-package com.CSCI152.team4.server.Accounts;
+package com.CSCI152.team4.server.Accounts.Settings;
 
 
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
+
 
 @Entity
 @Table(name = "report_format")
 public class ReportFormat {
     @Id
-    @NotNull(message = "Business Id must not be empty")
+    @Column(nullable = false)
     private int businessId;
     private boolean reportId;
     private boolean profiles;
@@ -34,28 +35,6 @@ public class ReportFormat {
 
     //Needed for Persistence Provider
     public ReportFormat(){}
-
-    public ReportFormat(ReportFormatBuilder builder){
-        this.businessId = builder.businessId;
-        this.reportId = builder.reportId;
-        this.profiles = builder.profiles;
-        this.date = builder.date;
-        this.time = builder.time;
-        this.author = builder.author;
-        this.type = builder.type;
-        this.box1 = builder.box1;
-        this.box1Name = builder.box1Name;
-        this.box2 = builder.box2;
-        this.box2Name = builder.box2Name;
-        this.box3 = builder.box3;
-        this.box3Name = builder.box3Name;
-        this.box4 = builder.box4;
-        this.box4Name = builder.box4Name;
-        this.box5 = builder.box5;
-        this.box5Name = builder.box5Name;
-        this.attachments = builder.attachments;
-        this.changeLog = builder.changeLog;
-    }
 
     @Override
     public String toString() {
@@ -235,106 +214,5 @@ public class ReportFormat {
         this.changeLog = changeLog;
     }
 
-    public static class ReportFormatBuilder {
-        private int businessId;
-        private boolean reportId = false;
-        private boolean profiles = false;
-        private boolean date = false;
-        private boolean time = false;
-        private boolean author = false;
-        private boolean type = false;
-        private boolean box1;
-        private String box1Name = "";
-        private boolean box2;
-        private String box2Name = "";
-        private boolean box3;
-        private String box3Name = "";
-        private boolean box4;
-        private String box4Name = "";
-        private boolean box5;
-        private String box5Name = "";
-        private boolean attachments = false;
-        private boolean changeLog = false;
 
-        ReportFormatBuilder(int businessId){
-            this.businessId = businessId;
-        }
-        public ReportFormatBuilder enableReportId(){
-            this.reportId = true;
-            return this;
-        }
-        public ReportFormatBuilder enableProfiles(){
-            this.profiles = true;
-            return this;
-        }
-        public ReportFormatBuilder enableDate(){
-            this.date = true;
-            return this;
-        }
-        public ReportFormatBuilder enableTime(){
-            this.time = true;
-            return this;
-        }
-        public ReportFormatBuilder enableAuthor(){
-            this.author = true;
-            return this;
-        }
-        public ReportFormatBuilder enableType(){
-            this.type = true;
-            return this;
-        }
-        public ReportFormatBuilder enableBox1(){
-            this.box1 = true;
-            return this;
-        }
-        public ReportFormatBuilder nameBox1(String name){
-            this.box1Name = name;
-            return this;
-        }
-        public ReportFormatBuilder enableBox2(){
-            this.box2 = true;
-            return this;
-        }
-        public ReportFormatBuilder nameBox2(String name){
-            this.box2Name = name;
-            return this;
-        }
-        public ReportFormatBuilder enableBox3(){
-            this.box3 = true;
-            return this;
-        }
-        public ReportFormatBuilder nameBox3(String name){
-            this.box3Name = name;
-            return this;
-        }
-        public ReportFormatBuilder enableBox4(){
-            this.box4 = true;
-            return this;
-        }
-        public ReportFormatBuilder nameBox4(String name){
-            this.box4Name = name;
-            return this;
-        }
-        public ReportFormatBuilder enableBox5(){
-            this.box5 = true;
-            return this;
-        }
-        public ReportFormatBuilder nameBox5(String name){
-            this.box5Name = name;
-            return this;
-        }
-        public ReportFormatBuilder enableAttachments(){
-            this.attachments = true;
-            return this;
-        }
-        public ReportFormatBuilder enableChangeLog(){
-            this.changeLog = true;
-            return this;
-        }
-
-        public ReportFormat build(){
-            return new ReportFormat(this);
-        }
-
-    }
 }
