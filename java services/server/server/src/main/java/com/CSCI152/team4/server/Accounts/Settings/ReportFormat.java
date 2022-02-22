@@ -2,13 +2,10 @@ package com.CSCI152.team4.server.Accounts.Settings;
 
 
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 
-@Entity
+@Embeddable
 @Table(name = "report_format")
 public class ReportFormat {
     @Id
