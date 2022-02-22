@@ -6,7 +6,7 @@ import com.CSCI152.team4.server.Accounts.Repos.EmployeeAccountRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
+//@Service
 public class AccountsService {
 
 

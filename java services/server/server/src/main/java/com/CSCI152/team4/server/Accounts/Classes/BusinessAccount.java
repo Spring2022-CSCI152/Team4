@@ -2,26 +2,31 @@ package com.CSCI152.team4.server.Accounts.Classes;
 
 import com.CSCI152.team4.server.Accounts.Settings.ReportFormat;
 
-import javax.persistence.Column;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
+@Table(name = "Business_Account")
 public class BusinessAccount extends Account {
 
 
+    @Id
+    private int businessId;
     private String businessName;
+
+    @Transient
     private ReportFormat reportFormat;
 
     @Column(nullable = false)
+    @ElementCollection
     @NotEmpty(message = "Admin Accounts must not be empty!")
     List<String> admins;
-
+    @ElementCollection
     List<String> employees;
 
-    public BusinessAccount(){
-        super();
-    }
+    public BusinessAccount(){}
 
     public BusinessAccount(int id, String businessName) {
         super(id);
@@ -29,12 +34,12 @@ public class BusinessAccount extends Account {
         this.employees = new ArrayList<String>();
     }
 
-    public BusinessAccount(int id, String businessName, ReportFormat reportFormat, String admin) {
+    public BusinessAccount(int id, String businessName, String admin) {
         super(id);
         this.businessName = businessName;
-        this.reportFormat = reportFormat;
         this.admins = new ArrayList<String>();
         this.admins.add(admin);
+        this.employees = new ArrayList<String>();
     }
 
     public void addEmployee(String employeeId){

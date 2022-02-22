@@ -1,5 +1,6 @@
 package com.CSCI152.team4.server.Accounts.Classes;
 
+import javax.persistence.Id;
 import java.sql.Timestamp;
 import java.util.Objects;
 import java.util.UUID;
@@ -10,7 +11,11 @@ import java.util.UUID;
 public class WorkerAccount extends Account {
 
     //accountId will be a UUID cast to String for DB compatibility
+    @Id
     private String accountId;
+
+
+    private int businessId;
     private String email;
     private String password;
     private String firstName;
@@ -18,10 +23,11 @@ public class WorkerAccount extends Account {
     private Timestamp timestamp;
     private String jobTitle;
 
-    public WorkerAccount(String email, String password,
+    public WorkerAccount(int businessId, String email, String password,
                          String firstName, String lastName,
                          Timestamp timestamp,
                          String jobTitle) {
+        this.businessId = businessId;
         this.accountId = UUID.randomUUID().toString();
         this.email = email;
         this.password = password;
