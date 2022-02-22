@@ -16,7 +16,7 @@ public class BusinessAccount extends Account {
     private int businessId;
     private String businessName;
 
-    @Transient
+    @Embedded
     private ReportFormat reportFormat;
 
     @Column(nullable = false)
@@ -25,6 +25,8 @@ public class BusinessAccount extends Account {
     List<String> admins;
     @ElementCollection
     List<String> employees;
+
+
 
     public BusinessAccount(){}
 
