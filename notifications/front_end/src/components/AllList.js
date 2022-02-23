@@ -3,43 +3,95 @@ import FetchAllReports from "./FetchAllReports";
 import React, { useState } from "react";
 import mockData from "../mockData.js";
 import ReactPaginate from "react-paginate";
-import { FaPen, FaCaretLeft, FaCaretRight  } from 'react-icons/fa';
+import { FaPen, FaCaretLeft, FaCaretRight } from "react-icons/fa";
 import ReportTabs from "./DashBtns";
 
 function AllList() {
-
-  {/* Cards display and page calculation */ }
-  const [profile, setProfile] = useState(mockData);
+  {
+    /* Cards display and page calculation */
+  }
+  const [profiles, setProfiles] = useState(mockData);
   const [pageNum, setPageNum] = useState(0);
-  const cardsPerPage = 8;
+  const cardsPerPage = 6;
   const pagesVisited = pageNum * cardsPerPage;
-  const AllReports = profile
+ 
+  const AllReports = profiles
     .slice(pagesVisited, pagesVisited + cardsPerPage)
-    .map((profile) => {
+    .map((profiles) => {
       return (
-        <div className="card txt-align-center">
-          <div className="nested">
-            <div>ID: {profile.id}</div>
-            <div>mm dd yy</div>
+       
+        <div key={profiles.r_id} className="card txt-align-center ">
+          <div >
+            <p>ID: {profiles.r_id}</p>
+            <p>{profiles.date}</p>
           </div>
-          <img src={profile.thumbnailUrl} />
-          <div className="nested">
-            <div>name:{profile.title} </div>
-            <div>status: n/a</div>
-          </div>
-          <div>Type</div>
-          <div>location: n/a</div>
-          <div>0</div>
-          <div><button className="btn sm round"> edit <FaPen size="1.5em" /> </button></div>
-        </div>
-      )
-    })
 
-  const pageCount = Math.ceil(profile.length / cardsPerPage)
+          <div>
+            {profiles.profile.map((item,i) => {
+              return <div key={i}> 
+              <img src={item.url}/>
+              </div>
+            })}
+          </div>
+
+          <div className="nested" >
+            {profiles.profile.map((item,i) => {
+              return <div className="nested" key={i}> 
+               {item.name} <br></br>
+               {item.status}
+              </div>
+            })}
+          </div>
+         
+        
+
+          <p>{profiles.type}</p>
+          <p>{profiles.location}</p>
+          <p>{profiles.attachements}</p>
+          <button className="btn sm round">
+            {" "}
+            edit <FaPen size="1.5em" />{" "}
+          </button>
+        </div>
+      );
+    });
+    
+    
+   
+
+
+/*
+  const AllReports = profile.map(item => {    
+
+    for (let i of item.names){
+       x =  item.names[i];
+      }
+
+    return (
+      item.names
+    
+      
+      );
+     
+      
+  
+    
+  });
+       
+    
+ 
+ 
+}*/
+     
+    
+    
+
+
+      
+  const pageCount = Math.ceil(profiles.length / cardsPerPage);
   const changePage = ({ selected }) => {
     setPageNum(selected);
-  }
-
+  };
 
   return (
     <main>
@@ -56,8 +108,8 @@ function AllList() {
 
       {/* Pagination functionality */}
       <ReactPaginate
-        previousLabel={<FaCaretLeft style={{ fill: '#00f200' }}/>} 
-        nextLabel={<FaCaretRight style={{ fill: '#00f200' }}/>}
+        previousLabel={<FaCaretLeft style={{ fill: "#00f200" }} />}
+        nextLabel={<FaCaretRight style={{ fill: "#00f200" }} />}
         pageCount={pageCount}
         onPageChange={changePage}
         containerClassName={"pagination-btn"}
@@ -67,8 +119,7 @@ function AllList() {
         activeClassName={""}
       />
     </main>
-  )
+  );
 }
 
 export default AllList;
-
