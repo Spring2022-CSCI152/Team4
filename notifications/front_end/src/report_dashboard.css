@@ -23,12 +23,6 @@ body {
   background-color: #ffffff;
 }
 
-#app > nav-bar {
-  grid-area: navBar;
-  display: grid;
-  grid-template-columns: 10fr 1fr;
-}
-
 #app > main {
   grid-area: main;
   display: flex;
@@ -118,16 +112,6 @@ li a:hover {
   box-shadow: inset 0.5em 0em #d6d6d6;
   overflow: hidden;
 }
-/*
-.nested {
-  grid-template-rows: 1fr 1fr;
-  gap: 2px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-}*/
-
-
 
 .nested{
   display:flex;
@@ -170,7 +154,6 @@ li a:hover {
   color: #000000;
 }
 
-
 .btn.green {
   background-color: #00f200;
 
@@ -188,6 +171,7 @@ li a:hover {
   background-color: #333;
   color: #999999;
   border: none;
+  float: right;
 }
 
 #btn-signout:hover{
