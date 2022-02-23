@@ -25,7 +25,8 @@ public class EmployeeAccount extends WorkerAccount {
     private List<String> permissions_list;
 
     //No permissions passed
-    public EmployeeAccount(String email, String password, String firstName, String lastName, String jobTitle, int businessId) {
+    public EmployeeAccount(String email, String password, String firstName, String lastName,
+                           String jobTitle, Integer businessId) {
         super(businessId, email, password, firstName, lastName, Timestamp.valueOf(LocalDateTime.now()), jobTitle);
         this.buildDefaultPermissions();
         this.permissions_list = this.getPermissions();
@@ -54,6 +55,9 @@ public class EmployeeAccount extends WorkerAccount {
     //By Default, All permissions are turned off
     private void buildDefaultPermissions() {
 
+        if(this.permissions == null){
+            this.permissions = new HashMap<String, Boolean>();
+        }
         for(Permissions permission : Permissions.values()){
             if(!this.permissions.containsKey(permission.toString())) {
                 this.permissions.put(permission.toString(), Boolean.valueOf(false));
