@@ -8,9 +8,11 @@ import javax.persistence.*;
 @Embeddable
 @Table(name = "report_format")
 public class ReportFormat {
+
     @Id
     @Column(nullable = false)
-    private int businessId;
+    private Integer businessId;
+
     private boolean reportId;
     private boolean profiles;
     private boolean date;
@@ -63,7 +65,7 @@ public class ReportFormat {
         return businessId;
     }
 
-    public void setBusinessId(int businessId) {
+    public void setBusinessId(Integer businessId) {
         this.businessId = businessId;
     }
 
