@@ -42,6 +42,7 @@ body {
   padding: .5em;
 }
 
+/* utility */
 .area-padding{
   padding: 0.5em;
 }
@@ -97,7 +98,7 @@ li a:hover {
 .card-label {
   font-size: 12px;
   display: grid;
-  grid-template-columns: 0.55fr 2.1fr 0.6fr 0.5fr 1fr;
+  grid-template-columns: 1fr 2.3fr .95fr .9fr 1.6fr ;
   grid-gap: 1em;
   margin: 0.25rem;
   padding: 0.75rem;
@@ -105,25 +106,35 @@ li a:hover {
 
 .card {
   display: grid;
-  grid-template-columns: 1fr 0.5fr 3fr 1fr 1fr 1fr 0.5fr;
+  grid-template-columns: 1fr .25fr 2fr 1fr 1fr 1fr 0.5fr;
   grid-gap: 1em;
   font-size: 13px;
   margin: 0.25rem;
   padding: 0.5rem;
+  padding-left: 2em;
   border-radius: 2px;
   border: 1px solid #acacac;
   transition: all 0.1s ease-in-out;
   box-shadow: inset 0.5em 0em #d6d6d6;
   overflow: hidden;
-
-  
 }
-
+/*
 .nested {
   grid-template-rows: 1fr 1fr;
+  gap: 2px;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+}*/
+
+
+
+.nested{
+  display:flex;
+  flex-direction: column;
+  align-self: left;
+  justify-content: center;
+  height: 100%;
 }
 
 .card img {
@@ -145,7 +156,6 @@ li a:hover {
   margin: 10px;
   border: none;
 }
-
 
 .btn.sm {
   width: fit-content;
@@ -202,6 +212,9 @@ li a:hover {
   background-color: rgb(0, 0, 0);
 }
 
+
+
+
 /* shrink page */
 @media (max-width: 600px){
   .card-label {
@@ -222,6 +235,8 @@ li a:hover {
   .card img {
     width: 8em;
     height: 8em;
-    object-fit: cover;
+    grid-template-rows: 1fr 1fr;
+
   }
+
 }
