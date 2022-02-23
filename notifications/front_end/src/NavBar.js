@@ -14,9 +14,8 @@ const NavBar = () => {
             <Link to="Profiles">Profiles</Link>
           </li>
           <li>
-          <Link to="Admin">Admin</Link>
+            <Link to="Admin">Admin</Link>
           </li>
-     
         <button id="btn-signout">Signout</button>   </ul>
       </nav-bar>
     );

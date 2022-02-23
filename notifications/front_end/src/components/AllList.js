@@ -1,26 +1,25 @@
-import react from "react";
-import FetchAllReports from "./FetchAllReports";
+import {Link} from 'react-router-dom'
 import React, { useState } from "react";
 import mockData from "../mockData.js";
 import ReactPaginate from "react-paginate";
 import { FaPen, FaCaretLeft, FaCaretRight } from "react-icons/fa";
 import DashBtns from "./DashBtns";
+import ReportModal from  "./ReportModal";
+
 
 function AllList() {
 
-  {
-    /* Cards display and page calculation */
-  }
+  {/* Cards display and page calculation */}
+
   const [profiles, setProfiles] = useState(mockData);
   const [pageNum, setPageNum] = useState(0);
   const cardsPerPage = 6;
   const pagesVisited = pageNum * cardsPerPage;
-
   const AllReports = profiles
     .slice(pagesVisited, pagesVisited + cardsPerPage)
     .map((profiles) => {
       return (
-        <div key={profiles.r_id} className="card txt-align-center ">
+        <div key={profiles.r_id} className="card txt-align-center" onClick={()=> setReportModal(true)}>
           <div>
             <p>ID: {profiles.r_id}</p>
             <p>{profiles.date}</p>
@@ -29,18 +28,19 @@ function AllList() {
           <div>
             {profiles.profile.map((item, i) => {
               return (
-                <div key={i}>
+                <div key={i} >
                   <img src={item.url} />
                 </div>
               );
             })}
           </div>
+       
 
           <div className="nested">
             {profiles.profile.map((item, i) => {
               return (
                 <div className="nested" key={i}>
-                  {item.name} <br></br>
+                  {item.name} <br/><br/>
                   {item.status}
                 </div>
               );
@@ -50,14 +50,18 @@ function AllList() {
           <p>{profiles.type}</p>
           <p>{profiles.location}</p>
           <p>{profiles.attachements}</p>
-          <button className="btn sm round">
+            <button className="btn sm round">
             {" "}
             edit <FaPen size="1.5em" />{" "}
-          </button>
-        </div>
+          </button>  
+        </div>   
+       
+     
       );
     });
 
+
+  const [reportModal, setReportModal] = useState("false");
   const pageCount = Math.ceil(profiles.length / cardsPerPage);
   const changePage = ({ selected }) => {
     setPageNum(selected);
@@ -65,6 +69,7 @@ function AllList() {
 
   return (
     <main>
+      <ReportModal trigger={reportModal} setTrigger={setReportModal} >"report stuff" </ReportModal>
       { <DashBtns />}
       <div className="searchBar">search</div>
       <div className="card-label">
@@ -74,7 +79,7 @@ function AllList() {
         <div>Location</div>
         <div>Attachments</div>
       </div>
-
+     
       {AllReports}
 
       {/* Pagination functionality */}

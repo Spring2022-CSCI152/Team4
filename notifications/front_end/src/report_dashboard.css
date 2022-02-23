@@ -8,10 +8,9 @@ body {
   height: 100vh;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 1fr .5fr 10fr .5fr;
+  grid-template-rows: 1fr 10fr .5fr;
   grid-template-areas:
     "header"
-    "navBar"
     "main"
     "footer";
 }
@@ -103,7 +102,7 @@ li a:hover {
   grid-template-columns: 1fr .25fr 2fr 1fr 1fr 1fr 0.5fr;
   grid-gap: 1em;
   font-size: 13px;
-  margin: 0.25rem;
+  margin:  0 1rem .5rem;
   padding: 0.5rem;
   padding-left: 2em;
   border-radius: 2px;
@@ -119,6 +118,7 @@ li a:hover {
   align-self: left;
   justify-content: center;
   height: 100%;
+  
 }
 
 .card img {
