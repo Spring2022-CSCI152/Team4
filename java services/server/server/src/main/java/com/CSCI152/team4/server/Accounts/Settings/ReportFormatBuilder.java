@@ -2,7 +2,7 @@ package com.CSCI152.team4.server.Accounts.Settings;
 
 
 public class ReportFormatBuilder {
-    private int businessId;
+    private Integer businessId;
     private boolean reportId = false;
     private boolean profiles = false;
     private boolean date = false;
@@ -22,7 +22,7 @@ public class ReportFormatBuilder {
     private boolean attachments = false;
     private boolean changeLog = false;
 
-    ReportFormatBuilder(int businessId) {
+    public ReportFormatBuilder(Integer businessId) {
         this.businessId = businessId;
     }
 
