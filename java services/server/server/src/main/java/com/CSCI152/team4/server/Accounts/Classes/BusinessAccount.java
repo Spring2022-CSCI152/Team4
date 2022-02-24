@@ -58,10 +58,15 @@ public class BusinessAccount{
     }
 
     public void addEmployee(String employeeId){
-
+        if(!this.employees.contains(employeeId)){
+            this.employees.add(employeeId);
+        }
     }
 
     public void addAdmin(String adminId){
+        if(!this.admins.contains(adminId)){
+            this.admins.add(adminId);
+        }
 
     }
 

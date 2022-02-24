@@ -15,7 +15,7 @@ public class WorkerAccount extends Account {
     private String accountId;
 
 
-    private int businessId;
+    private Integer businessId;
     private String email;
     private String password;
     private String firstName;
@@ -23,7 +23,7 @@ public class WorkerAccount extends Account {
     private Timestamp timestamp;
     private String jobTitle;
 
-    public WorkerAccount(int businessId, String email, String password,
+    public WorkerAccount(Integer businessId, String email, String password,
                          String firstName, String lastName,
                          Timestamp timestamp,
                          String jobTitle) {
