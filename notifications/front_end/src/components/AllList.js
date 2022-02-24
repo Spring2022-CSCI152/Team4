@@ -1,11 +1,9 @@
-import {Link} from 'react-router-dom'
 import React, { useState } from "react";
 import mockData from "../mockData.js";
 import ReactPaginate from "react-paginate";
 import { FaPen, FaCaretLeft, FaCaretRight } from "react-icons/fa";
 import DashBtns from "./DashBtns";
 import ReportModal from  "./ReportModal";
-
 
 function AllList() {
 
@@ -19,7 +17,7 @@ function AllList() {
     .slice(pagesVisited, pagesVisited + cardsPerPage)
     .map((profiles) => {
       return (
-        <div key={profiles.r_id} className="card txt-align-center" onClick={()=> setReportModal(true)}>
+        <div className="card txt-align-center" key={profiles.r_id} onClick={() => setIsOpen(true)}>
           <div>
             <p>ID: {profiles.r_id}</p>
             <p>{profiles.date}</p>
@@ -34,8 +32,6 @@ function AllList() {
               );
             })}
           </div>
-       
-
           <div className="nested">
             {profiles.profile.map((item, i) => {
               return (
@@ -55,21 +51,21 @@ function AllList() {
             edit <FaPen size="1.5em" />{" "}
           </button>  
         </div>   
-       
-     
       );
     });
 
-
-  const [reportModal, setReportModal] = useState("false");
   const pageCount = Math.ceil(profiles.length / cardsPerPage);
   const changePage = ({ selected }) => {
     setPageNum(selected);
   };
 
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <main>
-      <ReportModal trigger={reportModal} setTrigger={setReportModal} >"report stuff" </ReportModal>
+      
+      <ReportModal open={isOpen} onClose={() => setIsOpen(false)}> 
+      "report stuff" 
+      </ReportModal>
       { <DashBtns />}
       <div className="searchBar">search</div>
       <div className="card-label">

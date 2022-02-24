@@ -19,7 +19,7 @@ body {
   grid-area: header;
   display: grid;
   grid-template-columns: 1fr 10fr 1fr;
-  background-color: #ffffff;
+  background-color: #ffffff;  
 }
 
 #app > main {
@@ -27,6 +27,7 @@ body {
   display: flex;
   flex-direction: column;
   background-color: #ffffff;
+
 }
 
 #app > footer {
@@ -74,7 +75,6 @@ li a {
   background-color: #000000;
   color: #ffffff;
 }
-
 
 li a:hover {
   color: #ffffff;
@@ -162,7 +162,6 @@ li a:hover {
   background-color: #00e400 ;
 }
 
-
 .btn.round {
   border-radius: 3px;
 }
@@ -195,9 +194,6 @@ li a:hover {
   color: rgb(255, 255, 255);
   background-color: rgb(0, 0, 0);
 }
-
-
-
 
 /* shrink page */
 @media (max-width: 600px){

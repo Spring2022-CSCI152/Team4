@@ -1,16 +1,20 @@
 import React from 'react';
+import { createPortal } from 'react-dom';
 import '../report_modal.css';
 
-function ReportModal(props){
+const ReportModal=({open, children, onClose})=>{
+    if (!open) return null;
 
-    return (props.trigger) ? (
-        <div className='view-report-overlay model-open'>  
+    return createPortal(
+        <div className='view-report-overlay'>  
             <div className='view-report-inner'>
-                <button className='close-btn' onClick={() => props.setTrigger(false)}>close</button>
-                  {props.children}
+                <button className='close-btn' onClick={onClose}>X</button>
+                  {children}
             </div>
-        </div>
-    ): "";
+        </div>,
+    document.getElementById('modal')
+       
+ )
 }
 
-export default ReportModal;
+export default ReportModal; 
