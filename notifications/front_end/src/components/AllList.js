@@ -63,9 +63,7 @@ function AllList() {
   return (
     <main>
       
-      <ReportModal open={isOpen} onClose={() => setIsOpen(false)}> 
-      "report stuff" 
-      </ReportModal>
+      <ReportModal open={isOpen} onClose={() => setIsOpen(false)}> </ReportModal>
       { <DashBtns />}
       <div className="searchBar">search</div>
       <div className="card-label">
