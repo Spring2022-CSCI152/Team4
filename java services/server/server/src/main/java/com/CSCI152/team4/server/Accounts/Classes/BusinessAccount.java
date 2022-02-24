@@ -3,6 +3,7 @@ package com.CSCI152.team4.server.Accounts.Classes;
 import com.CSCI152.team4.server.Accounts.Settings.ReportFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
@@ -34,7 +35,8 @@ public class BusinessAccount{
     @Column(nullable = false)
     @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
     @NotEmpty(message = "Admin Accounts must not be empty!")
-    List<String> admins;
+    @Size(min = 1)
+    List<@NotEmpty  String> admins;
 
     @Column(nullable = false)
     @ElementCollection(targetClass = String.class, fetch = FetchType.LAZY)
@@ -52,8 +54,10 @@ public class BusinessAccount{
     public BusinessAccount(Integer id, String businessName, String admin) {
         this.businessId = id;
         this.businessName = businessName;
-        this.admins = new ArrayList<String>();
-        if(admin != null) this.admins.add(admin);
+        if(admin != null) {
+            this.admins = new ArrayList<String>();
+            this.admins.add(admin);
+        }
         this.employees = new ArrayList<String>();
     }
 
