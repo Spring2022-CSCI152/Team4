@@ -19,9 +19,7 @@ import java.util.Optional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-//@DataJpaTest(
-//        properties = "spring.jpa.properties.javax.persistence.validation=none"
-//)
+
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
