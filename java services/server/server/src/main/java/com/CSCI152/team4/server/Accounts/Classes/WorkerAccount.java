@@ -23,6 +23,7 @@ public class WorkerAccount extends Account {
     private Timestamp timestamp;
     private String jobTitle;
 
+    public WorkerAccount(){}
     public WorkerAccount(Integer businessId, String email, String password,
                          String firstName, String lastName,
                          Timestamp timestamp,

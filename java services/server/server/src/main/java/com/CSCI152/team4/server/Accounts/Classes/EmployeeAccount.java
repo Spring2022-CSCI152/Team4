@@ -24,6 +24,9 @@ public class EmployeeAccount extends WorkerAccount {
     @ElementCollection
     private List<String> permissions_list;
 
+    public EmployeeAccount() {
+    }
+
     //No permissions passed
     public EmployeeAccount(String email, String password, String firstName, String lastName,
                            String jobTitle, Integer businessId) {

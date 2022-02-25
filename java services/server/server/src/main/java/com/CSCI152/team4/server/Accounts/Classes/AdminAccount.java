@@ -13,6 +13,9 @@ public class AdminAccount extends WorkerAccount {
     @Id
     private String accountId;
 
+    public AdminAccount() {
+    }
+
     public AdminAccount(String email, String password,
                         String firstName, String lastName, String jobTitle, int businessId) {
         super(businessId, email, password, firstName, lastName, Timestamp.valueOf(LocalDateTime.now()), jobTitle);
