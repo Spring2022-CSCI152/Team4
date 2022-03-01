@@ -3,7 +3,7 @@ import mockData from "../mockData.js";
 import ReactPaginate from "react-paginate";
 import { FaPen, FaCaretLeft, FaCaretRight } from "react-icons/fa";
 import DashBtns from "./DashBtns";
-import ReportModal from  "./ReportModal";
+import ReportModal from "./ReportModal";
 
 function AllList() {
 
@@ -26,12 +26,16 @@ function AllList() {
           <div>
             {profiles.profile.map((item, i) => {
               return (
-                <div key={i} >
+                <div key={i} className="nested" >
                   <img src={item.url} />
+                  {item.name}<br/>
+                  {item.status}
+           
                 </div>
               );
             })}
           </div>
+          {/*
           <div className="nested">
             {profiles.profile.map((item, i) => {
               return (
@@ -41,14 +45,13 @@ function AllList() {
                 </div>
               );
             })}
-          </div>
+          </div>*/}
 
           <p>{profiles.type}</p>
           <p>{profiles.location}</p>
           <p>{profiles.attachements}</p>
             <button className="btn sm round">
-            {" "}
-            edit <FaPen size="1.5em" />{" "}
+            {" "}edit <FaPen size="1.5em" />{" "}
           </button>  
         </div>   
       );
