@@ -2,7 +2,7 @@ package com.CSCI152.team4.server.Accounts.Settings;
 
 
 public class ReportFormatBuilder {
-    private Integer businessId;
+//    private Integer businessId;
     private boolean reportId = false;
     private boolean profiles = false;
     private boolean date = false;
@@ -22,8 +22,12 @@ public class ReportFormatBuilder {
     private boolean attachments = false;
     private boolean changeLog = false;
 
-    public ReportFormatBuilder(Integer businessId) {
-        this.businessId = businessId;
+//    public ReportFormatBuilder(Integer businessId) {
+//        this.businessId = businessId;
+//    }
+
+    public ReportFormatBuilder() {
+
     }
 
     public ReportFormatBuilder enableReportId() {
@@ -118,7 +122,7 @@ public class ReportFormatBuilder {
 
     public ReportFormat build() {
         ReportFormat reportFormat = new ReportFormat();
-        reportFormat.setBusinessId(this.businessId);
+//        reportFormat.setBusinessId(this.businessId);
         reportFormat.setReportId(this.reportId);
         reportFormat.setProfiles(this.profiles);
         reportFormat.setDate(this.date);

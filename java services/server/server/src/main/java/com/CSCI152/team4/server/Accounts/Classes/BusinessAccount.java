@@ -36,7 +36,7 @@ public class BusinessAccount{
     @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
     @NotEmpty(message = "Admin Accounts must not be empty!")
     @Size(min = 1)
-    List<@NotEmpty  String> admins;
+    List<String> admins;
 
     @Column(nullable = false)
     @ElementCollection(targetClass = String.class, fetch = FetchType.LAZY)

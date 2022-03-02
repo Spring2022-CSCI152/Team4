@@ -1,6 +1,8 @@
 package com.CSCI152.team4.server.Accounts.Classes;
 
 import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
+import javax.validation.constraints.NotBlank;
 import java.sql.Timestamp;
 import java.util.Objects;
 import java.util.UUID;
@@ -8,13 +10,10 @@ import java.util.UUID;
 /*This class acts as an intermediary step between
 * Accounts and Admin/Employee Accounts to make
 * inheritance issues easier to work with*/
+@MappedSuperclass
 public class WorkerAccount extends Account {
 
-    //accountId will be a UUID cast to String for DB compatibility
-    @Id
-    private String accountId;
-
-
+    @NotBlank
     private Integer businessId;
     private String email;
     private String password;
@@ -23,22 +22,23 @@ public class WorkerAccount extends Account {
     private Timestamp timestamp;
     private String jobTitle;
 
+    public WorkerAccount(){}
+
+    public void setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
+    }
+
     public WorkerAccount(Integer businessId, String email, String password,
                          String firstName, String lastName,
                          Timestamp timestamp,
                          String jobTitle) {
         this.businessId = businessId;
-        this.accountId = UUID.randomUUID().toString();
         this.email = email;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.timestamp = timestamp;
         this.jobTitle = jobTitle;
-    }
-
-    public String getAccountId() {
-        return accountId;
     }
 
     public Timestamp getTimestamp() {
@@ -77,6 +77,11 @@ public class WorkerAccount extends Account {
         this.lastName = lastName;
     }
 
+
+    public void setBusinessId(Integer businessId) {
+        this.businessId = businessId;
+    }
+
     public String getJobTitle() {
         return jobTitle;
     }
@@ -90,8 +95,7 @@ public class WorkerAccount extends Account {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         WorkerAccount that = (WorkerAccount) o;
-        return this.accountId.equals(that.accountId)
-                && this.email.equals(that.email)
+        return this.email.equals(that.email)
                 && this.password.equals(that.password)
                 && Objects.equals(this.firstName, that.firstName)
                 && Objects.equals(this.lastName, that.lastName)
@@ -101,14 +105,13 @@ public class WorkerAccount extends Account {
 
     @Override
     public int hashCode() {
-        return Objects.hash(accountId, email, password, firstName, lastName, timestamp, jobTitle);
+        return Objects.hash(email, password, firstName, lastName, timestamp, jobTitle);
     }
 
     @Override
     public String toString() {
         return "WorkerAccount{" +
-                "accountId='" + accountId + '\'' +
-                ", email='" + email + '\'' +
+                "email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +

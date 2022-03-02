@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name="Employee_Account")
@@ -24,10 +25,14 @@ public class EmployeeAccount extends WorkerAccount {
     @ElementCollection
     private List<String> permissions_list;
 
+    public EmployeeAccount() {
+    }
+
     //No permissions passed
     public EmployeeAccount(String email, String password, String firstName, String lastName,
                            String jobTitle, Integer businessId) {
         super(businessId, email, password, firstName, lastName, Timestamp.valueOf(LocalDateTime.now()), jobTitle);
+        this.accountId = UUID.randomUUID().toString();
         this.buildDefaultPermissions();
         this.permissions_list = this.getPermissions();
     }
@@ -80,5 +85,13 @@ public class EmployeeAccount extends WorkerAccount {
                 permissions.add(key);
         }
         return permissions;
+    }
+
+    public String getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(String accountId) {
+        this.accountId = accountId;
     }
 }
