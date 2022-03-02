@@ -1,11 +1,10 @@
 import React from "react";
 import { createPortal } from "react-dom";
-import "../report_modal.css";
-import { BsFillExclamationCircleFill } from "react-icons/bs";
+import "../reportModal.css";
+import { BsFillExclamationCircleFill, BsFileEarmarkImage, BsFillTrashFill } from "react-icons/bs";
 import mockData from "../mockData.js";
-import { FaThinkPeaks } from "react-icons/fa";
 
-const ReportModal = ({ open, children, onClose }) => {
+const ReportModal = ({ open, onClose }) => {
   if (!open) return null;
 
   return createPortal(
@@ -22,31 +21,25 @@ const ReportModal = ({ open, children, onClose }) => {
           />
           Security Incident Report
         </h>
-
         <div className="col-5">
           <p>
-            Report Number:
-            <br />
+            Report Number:<br/>
             {mockData[0].r_id}
           </p>
           <p>
-            Date/Time:
-            <br />
+            Date/Time:<br/>
             {mockData[0].date}
           </p>
           <p>
-            Incident Date/Time:
-            <br />
+            Incident Date/Time:<br/>
             {mockData[0].date}
           </p>
           <p>
-            Location:
-            <br />
+            Location:<br/>
             {mockData[0].location}
           </p>
           <p>
-            Incident Type:
-            <br />
+            Incident Type:<br/>
             {mockData[0].type}
           </p>
         </div>
@@ -57,18 +50,12 @@ const ReportModal = ({ open, children, onClose }) => {
               <div className="col-4">
                 <img src={customer.url} />
                 <div>
-                  <b>Name:</b> {customer.name}
-                  <br/>
-                  <b>Status:</b> {customer.status}
-                  <br/>
+                  <b>Name:</b> {customer.name}<br/>
+                  <b>Status:</b> {customer.status}<br/>
                   <b>Eyes:</b>
                 </div>
-                <div>
-                  <b>Ban Start:</b> somedate
-                </div>
-                <div>
-                  <b>Ban End:</b> never
-                </div>
+                <div><b>Ban Start:</b> somedate</div>
+                <div><b>Ban End:</b> never</div>
                 <div>
                   <b>Something else:</b> Something
                 </div>
@@ -79,20 +66,22 @@ const ReportModal = ({ open, children, onClose }) => {
         <div className="row">
             {mockData[0].boxes.map((boxes,i) => (
             <div key={i}>
-                <div>
-                    <h>{boxes.box}</h>
-                </div>
-                <div  className="var-box">
-                    {boxes.txt} 
-                </div>
-    
+                <div><h>{boxes.box}</h></div>
+                <div className="var-box">{boxes.txt} </div>
             </div>))}
         </div>
         <div className="row">
-        <   h>Files</h>
+          <h>Files</h>
+          <div className="var-box">
+          <BsFileEarmarkImage size="1.5em"/>
+          <BsFillTrashFill size="1.5em"/>
+          </div>
         </div>
         <div className="row">
-        <h>Update logs</h>
+          <h>Updates</h>
+          <div className="var-box">
+            updates here
+          </div>
         </div>
       </div>
     </div>,

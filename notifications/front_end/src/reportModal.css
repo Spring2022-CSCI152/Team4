@@ -72,17 +72,22 @@ h{
     font-size: 14px;
 }
 
+h1{
+    color: #999999;
+}
+
 h.modal-header{
     display: flex;
     align-items: center;
     gap: .5em;
+    font-size: 18px;
 }
 
 .var-box{
-border: solid 1px #666666;
+border: solid 1px #acacac;
 padding: 1em;
 margin: .5em .1em 2em;
-
+border-radius: 5px;
 }
 
 
