@@ -79,6 +79,7 @@ class BusinessAccountRepoTest {
         // Then
         assertThrows(javax.persistence.TransactionRequiredException.class,
                 () -> { underTest.save(businessAccount); entityManager.flush();});
+
     }
 
     @Test
