@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 
+import javax.persistence.EntityManager;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -22,6 +23,9 @@ class AdminAccountRepoTest {
 
     @Autowired
     AdminAccountRepo underTest;
+
+    @Autowired
+    private EntityManager entityManager;
 
 
 
@@ -50,7 +54,7 @@ class AdminAccountRepoTest {
         AdminAccount account = new AdminAccount();
         // When
         // Then
-        assertThrows(Exception.class, () -> {underTest.save(account);});
+        assertThrows(Exception.class, () -> {underTest.save(account); entityManager.flush();});
     }
 
     @Test

@@ -11,7 +11,7 @@ import java.util.UUID;
 * Accounts and Admin/Employee Accounts to make
 * inheritance issues easier to work with*/
 @MappedSuperclass
-public class WorkerAccount extends Account {
+public class WorkerAccount{
 
     @NotBlank
     private Integer businessId;
@@ -23,6 +23,7 @@ public class WorkerAccount extends Account {
     private String jobTitle;
 
     public WorkerAccount(){}
+
 
     public void setTimestamp(Timestamp timestamp) {
         this.timestamp = timestamp;

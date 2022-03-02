@@ -9,6 +9,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import javax.persistence.EntityManager;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -22,19 +24,81 @@ class EmployeeAccountRepoTest {
     @Autowired
     EmployeeAccountRepo underTest;
 
+    @Autowired
+    private EntityManager entityManager;
+
     @Test
     void itShouldSaveEmployeeAccount() {
         // Given
-        EmployeeAccount account = new EmployeeAccount("email", "pass",
+        EmployeeAccount accountWNullPermission = new EmployeeAccount("email", "pass",
                 "fName", "lName", "title", null,
                 127);
+
         // When
-        underTest.save(account);
+        underTest.save(accountWNullPermission);
+
         // Then
-        Optional<EmployeeAccount> optionalEmployeeAccount = underTest.findById(account.getAccountId());
+        Optional<EmployeeAccount> optionalEmployeeAccount =
+                underTest.findById(accountWNullPermission.getAccountId());
         assertThat(optionalEmployeeAccount).isPresent()
                 .hasValueSatisfying(c -> {
-                    assertThat(c).usingRecursiveComparison().isEqualTo(account);
+                    //"permissions" is a transient hashmap
+                    assertThat(c).usingRecursiveComparison()
+                            .ignoringFields("timestamp")
+                            .isEqualTo(accountWNullPermission);
                 });
+    }
+
+    @Test
+    void itShouldThrowExceptionWhenNoBusinessId() {
+        // Given
+        EmployeeAccount emptyAccount = new EmployeeAccount();
+        // When
+        // Then
+        assertThrows(Exception.class, () -> {underTest.save(emptyAccount); entityManager.flush();});
+    }
+
+    @Test
+    void itShouldSaveFieldChanges() {
+        // Given
+        EmployeeAccount accountWNullPermission = new EmployeeAccount("email", "pass",
+                "fName", "lName", "title", null,
+                127);
+        underTest.save(accountWNullPermission);
+
+        // When
+        accountWNullPermission.setEmail("newEmail@org.com");
+        accountWNullPermission.setFirstName("NewName");
+        underTest.save(accountWNullPermission);
+        // Then
+        Optional<EmployeeAccount> optionalEmployeeAccount =
+                underTest.findById(accountWNullPermission.getAccountId());
+        assertThat(optionalEmployeeAccount).isPresent()
+                .hasValueSatisfying(c -> {
+                    assertThat(c).usingRecursiveComparison()
+                            .ignoringFields("permissions", "timestamp")
+                            .isEqualTo(accountWNullPermission);
+                });
+    }
+
+    @Test
+    void itShouldSavePermissionChanges() {
+        // Given
+        EmployeeAccount accountWNullPermission = new EmployeeAccount("email", "pass",
+                "fName", "lName", "title", null,
+                127);
+        underTest.save(accountWNullPermission);
+
+
+        // When
+        List<String> perms = List.of("CR", "ER", "DR", "CU", "EU", "DU", "CA");
+        accountWNullPermission.setPermissions_list(perms);
+        underTest.save(accountWNullPermission);
+        // Then
+        Optional<EmployeeAccount> optionalEmployeeAccount =
+                underTest.findById(accountWNullPermission.getAccountId());
+        assertThat(optionalEmployeeAccount).hasValueSatisfying(c -> {
+           assertThat(c.getPermissions_list()).usingRecursiveComparison().isEqualTo(perms);
+        });
     }
 }
