@@ -19,15 +19,15 @@ public class AdminAccount extends WorkerAccount {
 
     public AdminAccount(String email, String password,
                         String firstName, String lastName, String jobTitle, Integer businessId) {
-//        super(businessId, email, password, firstName, lastName, Timestamp.valueOf(LocalDateTime.now()), jobTitle);
-        super();
-        this.setEmail(email);
-        this.setPassword(password);
-        this.setFirstName(firstName);
-        this.setLastName(lastName);
-        this.setJobTitle(jobTitle);
-        this.setBusinessId(businessId);
-        this.setTimestamp(Timestamp.valueOf(LocalDateTime.now()));
+        super(businessId, email, password, firstName, lastName, Timestamp.valueOf(LocalDateTime.now()), jobTitle);
+//        super();
+//        this.setEmail(email);
+//        this.setPassword(password);
+//        this.setFirstName(firstName);
+//        this.setLastName(lastName);
+//        this.setJobTitle(jobTitle);
+//        this.setBusinessId(businessId);
+//        this.setTimestamp(Timestamp.valueOf(LocalDateTime.now()));
         this.accountId = UUID.randomUUID().toString();
     }
 
