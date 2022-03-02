@@ -3,6 +3,7 @@ package com.CSCI152.team4.server.Accounts.Repos;
 import com.CSCI152.team4.server.Accounts.Classes.AdminAccount;
 import com.CSCI152.team4.server.Accounts.Classes.BusinessAccount;
 import com.CSCI152.team4.server.Accounts.Classes.EmployeeAccount;
+import com.CSCI152.team4.server.Accounts.Settings.ReportFormat;
 import com.CSCI152.team4.server.Accounts.Settings.ReportFormatBuilder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,10 +39,17 @@ class BusinessAccountRepoTest {
     BusinessAccount buildBusinessAccount(Integer businessAccId){
         AdminAccount admin = getAdminAccount(businessAccId);
         BusinessAccount businessAccount = new BusinessAccount(businessAccId, "Business", admin.getAccountId());
-        ReportFormatBuilder builder = new ReportFormatBuilder(businessAccId);
-        businessAccount.setReportFormat(builder.build());
+        addReportFormatAndProfileFormat(businessAccount);
 
         return businessAccount;
+    }
+
+    void addReportFormatAndProfileFormat(BusinessAccount acc){
+
+        ReportFormatBuilder reportFormatBuilder = new ReportFormatBuilder();
+        acc.setReportFormat(reportFormatBuilder.build());
+        //ProfileFormatBuilder profileFormatBuilder = new ProfileFormatBuilder(acc.getBusinessId());
+        //acc.setProfileFormat(profileFormatBuilder.build());
     }
 
     @Test
@@ -56,10 +64,7 @@ class BusinessAccountRepoTest {
         // Then
         assertThat(optionalBusinessAccount).isPresent()
                 .hasValueSatisfying(c -> {
-                    assertThat(c.getBusinessId()).isEqualTo(businessAccount.getBusinessId());
-                    assertThat(c.getBusinessName()).isEqualTo(businessAccount.getBusinessName());
-                    assertThat(c.getAdmins()).asList().containsExactlyElementsOf(businessAccount.getAdmins());
-                    assertThat(c.getEmployees()).asList().containsExactlyElementsOf((businessAccount.getEmployees()));
+                    assertThat(c).usingRecursiveComparison().isEqualTo(businessAccount);
                 });
     }
 
@@ -68,15 +73,12 @@ class BusinessAccountRepoTest {
         // Given
         Integer businessAccId = 128;
         BusinessAccount businessAccount = new BusinessAccount(businessAccId, "Business", null);
-        ReportFormatBuilder builder = new ReportFormatBuilder(businessAccId);
-        businessAccount.setReportFormat(builder.build());
+        addReportFormatAndProfileFormat(businessAccount);
 
         // When
         // Then
-        Throwable exception = assertThrows(javax.persistence.TransactionRequiredException.class,
+        assertThrows(javax.persistence.TransactionRequiredException.class,
                 () -> { underTest.save(businessAccount); entityManager.flush();});
-
-//        assertThat(exception.getMessage()).contains("Could not commit JPA transaction; nested exception is javax.persistence.RollbackException: Error while committing the transaction");
     }
 
     @Test
@@ -121,5 +123,41 @@ class BusinessAccountRepoTest {
         }
     }
 
+    @Test
+    void isShouldSaveNewReportFormat(){
+        //Given
+        Integer businessAccId = 130;
+        BusinessAccount businessAccount = buildBusinessAccount(businessAccId);
+
+        ReportFormat oldFormat = businessAccount.getReportFormat();
+        underTest.save(businessAccount);
+
+        //When
+        ReportFormat newFormat = new ReportFormatBuilder()
+                .enableReportId()
+                .enableAuthor()
+                .enableBox1()
+                .enableBox2()
+                .nameBox1("Source of Activity")
+                .nameBox2("Description")
+                .build();
+        businessAccount.setReportFormat(newFormat);
+        underTest.save(businessAccount);
+
+        //Then
+        Optional<BusinessAccount> optionalBusinessAccount = underTest.findById(businessAccount.getBusinessId());
+
+        assertThat(optionalBusinessAccount).isPresent()
+                .hasValueSatisfying(c -> {
+                    assertThat(c.getReportFormat()).usingRecursiveComparison().isEqualTo(newFormat);
+                });
+
+    }
+
+    @Test
+    void isShouldSaveNewProfileFormat(){
+
+
+    }
 
 }
