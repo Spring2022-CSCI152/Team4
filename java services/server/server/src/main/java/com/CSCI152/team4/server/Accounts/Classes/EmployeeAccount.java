@@ -1,12 +1,10 @@
 package com.CSCI152.team4.server.Accounts.Classes;
 
 import com.CSCI152.team4.server.Accounts.Settings.Permissions;
-
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,7 +26,13 @@ public class EmployeeAccount extends WorkerAccount {
     //No permissions passed
     public EmployeeAccount(String email, String password, String firstName, String lastName,
                            String jobTitle, Integer businessId) {
-        super(businessId, email, password, firstName, lastName, Timestamp.valueOf(LocalDateTime.now()), jobTitle);
+        super(businessId,
+                email,
+                password,
+                firstName,
+                lastName,
+                Timestamp.valueOf(LocalDateTime.now()),
+                jobTitle);
         this.accountId = UUID.randomUUID().toString();
         this.permissions_list = new ArrayList<>();
     }
