@@ -17,7 +17,7 @@ function AllList() {
     .slice(pagesVisited, pagesVisited + cardsPerPage)
     .map((profiles) => {
       return (
-        <div className="card txt-align-center" key={profiles.r_id} onClick={() => setIsOpen(true)}>
+        <div className="card txt-align-center card-margin" key={profiles.r_id} onClick={() => setIsOpen(true)}>
           <div>
             <p>ID: {profiles.r_id}</p>
             <p>{profiles.date}</p>
@@ -35,17 +35,6 @@ function AllList() {
               );
             })}
           </div>
-          {/*
-          <div className="nested">
-            {profiles.profile.map((item, i) => {
-              return (
-                <div className="nested" key={i}>
-                  {item.name} <br/><br/>
-                  {item.status}
-                </div>
-              );
-            })}
-          </div>*/}
 
           <p>{profiles.type}</p>
           <p>{profiles.location}</p>
@@ -69,9 +58,9 @@ function AllList() {
       <ReportModal open={isOpen} onClose={() => setIsOpen(false)}> </ReportModal>
       { <DashBtns />}
       <div className="searchBar">search</div>
-      <div className="card-label">
+      <div className="card-label txt-align-center card-margin">
         <div>Report Number</div>
-        <div>Involved Parties</div>
+        <div className="txt-align-left ">Involved Parties</div>
         <div>Type</div>
         <div>Location</div>
         <div>Attachments</div>

@@ -9,6 +9,7 @@ import Profiles from "./Profiles";
 import Admin from "./Admin";
 import NavBar from "./NavBar";
 import SignIn from "./SignIn";
+import Reg from "./Reg";
 
 const Header = () => {
   return (
@@ -43,15 +44,12 @@ const Footer = () => {
   return <footer className="area-padding">footer ret</footer>;
 };
 
-const signedIn={x:true};
-signedIn.x = true
-export default function App({signedIn}) {
-  return ( signedIn ?  <div className="txt-justify-center">{<SignIn/>}</div>
-  :<div id="app">
+export default function App() {
+  return (  
+  <div id="app">
         <Header />   
         <Main />
         <Footer />
   </div>
-  
   );
 }

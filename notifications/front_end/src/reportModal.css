@@ -59,6 +59,11 @@
     font-size: .75rem;
 }
 
+.row-3{
+    display: grid;
+    grid-template-rows: repeat(3, 1fr);
+}
+
 .row img{
     width: 8em;
     height: 8em;
@@ -69,7 +74,7 @@ h{
     margin: .5em .1em 1em;
     font-weight: bold;
     color: #666666;
-    font-size: 14px;
+    font-size: 1rem;
 }
 
 h1{
@@ -80,7 +85,7 @@ h.modal-header{
     display: flex;
     align-items: center;
     gap: .5em;
-    font-size: 18px;
+    font-size: 1rem;
 }
 
 .var-box{
