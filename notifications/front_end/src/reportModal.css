@@ -59,9 +59,9 @@
     font-size: .75rem;
 }
 
-.row-3{
+.row-4{
     display: grid;
-    grid-template-rows: repeat(3, 1fr);
+    grid-template-rows: .5fr repeat(3, auto);
 }
 
 .row img{

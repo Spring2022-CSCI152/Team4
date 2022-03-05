@@ -1,5 +1,5 @@
-import AllList from "./components/AllList";
 import React, { useState } from "react";
+import AllList from "./components/AllList";
 import { FaUserCircle } from "react-icons/fa";
 import logo from "./assets/logo.png";
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';

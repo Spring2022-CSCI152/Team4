@@ -26,7 +26,7 @@ function AllList() {
           <div>
             {profiles.profile.map((item, i) => {
               return (
-                <div key={i} className="nested" >
+                <div key={i} className="nested txt-align-left" >
                   <img src={item.url} />
                   {item.name}<br/>
                   {item.status}
