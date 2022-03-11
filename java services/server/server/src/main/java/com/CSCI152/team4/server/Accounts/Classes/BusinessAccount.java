@@ -14,6 +14,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "Business_Account")
+@SequenceGenerator(name="business_id_seq", initialValue = 100, allocationSize=899)
 public class BusinessAccount{
 
 
@@ -24,7 +25,7 @@ public class BusinessAccount{
 
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "business_id_seq")
     private Integer businessId;
 
     @NotEmpty

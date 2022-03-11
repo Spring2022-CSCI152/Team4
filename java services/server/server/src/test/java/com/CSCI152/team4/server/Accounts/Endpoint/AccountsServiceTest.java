@@ -1,6 +1,8 @@
 package com.CSCI152.team4.server.Accounts.Endpoint;
 
 import com.CSCI152.team4.server.Accounts.Classes.AdminAccount;
+import com.CSCI152.team4.server.Accounts.Classes.BusinessAccount;
+import com.CSCI152.team4.server.Accounts.Classes.BusinessRegistrationRequest;
 import com.CSCI152.team4.server.Accounts.Classes.EmployeeAccount;
 import com.CSCI152.team4.server.Accounts.Repos.AdminAccountRepo;
 import com.CSCI152.team4.server.Accounts.Repos.BusinessAccountRepo;
@@ -8,13 +10,20 @@ import com.CSCI152.team4.server.Accounts.Repos.EmployeeAccountRepo;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 class AccountsServiceTest {
 
@@ -25,6 +34,10 @@ class AccountsServiceTest {
     @Mock private EmployeeAccountRepo employeeAccountRepo;
     @Mock private AdminAccountRepo adminAccountRepo;
 
+    @Captor
+    ArgumentCaptor<BusinessAccount> businessAccountArgumentCaptor;
+    @Captor
+    ArgumentCaptor<AdminAccount> adminAccountArgumentCaptor;
 
     @BeforeEach
     void setUp() {
@@ -38,6 +51,11 @@ class AccountsServiceTest {
         return new AdminAccount("email", "password",
                 "fName", "lName",
                 "jobTitle", businessId);
+    }
+    AdminAccount generateAdminAccountWithoutBusinessId(){
+        return new AdminAccount("email", "password",
+                "fName", "lName",
+                "jobTitle");
     }
 
     EmployeeAccount generateEmployeeAccountWithDefaultPermissions(Integer businessId){
@@ -55,15 +73,15 @@ class AccountsServiceTest {
     @Test
     void itShouldShouldCreateANewBusinessAccount() {
         // Given
-        // Business Registration Request
-            //Contains BusinessAccount Info + AdminAccount Info
-        
+        String businessName = "Business";
+        AdminAccount adminAccount = generateAdminAccountWithoutBusinessId();
+        BusinessRegistrationRequest request =
+                new BusinessRegistrationRequest(businessName,
+                        adminAccount.getEmail(), adminAccount.getPassword(), ,
+                        adminAccount.getFirstName(), adminAccount.getLastName(),
+                        adminAccount.getJobTitle());
 
-        // When
-            //underTest.registerBusinessAccount(businessAccount, adminAccount)
-        // Then
-            //using 'spy' or something get the business id
-            //using argument captor, ensure the saved accounts are equal to current accounts
+
     }
 
 

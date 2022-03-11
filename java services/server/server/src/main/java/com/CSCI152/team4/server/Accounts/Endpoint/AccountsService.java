@@ -3,11 +3,14 @@ package com.CSCI152.team4.server.Accounts.Endpoint;
 import com.CSCI152.team4.server.Accounts.Classes.AdminAccount;
 import com.CSCI152.team4.server.Accounts.Classes.BusinessAccount;
 import com.CSCI152.team4.server.Accounts.Classes.BusinessRegistrationRequest;
+import com.CSCI152.team4.server.Accounts.Classes.WorkerAccount;
 import com.CSCI152.team4.server.Accounts.Repos.AdminAccountRepo;
 import com.CSCI152.team4.server.Accounts.Repos.BusinessAccountRepo;
 import com.CSCI152.team4.server.Accounts.Repos.EmployeeAccountRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class AccountsService {
@@ -24,12 +27,16 @@ public class AccountsService {
         this.businessAccountRepo = businessAccountRepo;
     }
 
-    public void registerBusinessAccount(BusinessRegistrationRequest request){
-        AdminAccount tempAdmin = this.buildAdminAccountFromRequest(request);
-        BusinessAccount tempBusinessAcc = this.buildBusinessAcctFromAdminAndName(tempAdmin.getAccountId(), request.getBusinessName());
+    public WorkerAccount registerBusinessAccount(BusinessRegistrationRequest request){
+        //TODO: Add Password hashing
+        AdminAccount returnableAccount = this.buildAdminAccountFromRequest(request);
+        BusinessAccount tempBusinessAcc = this.buildBusinessAcctFromAdminAndName(returnableAccount.getAccountId(), request.getBusinessName());
 
-        BusinessAccount businessIdHolder = businessAccountRepo.save(tempBusinessAcc);
-        tempAdmin.setBusinessId(businessIdHolder.getBusinessId());
+        this.saveBusinessAndAdminAccounts(tempBusinessAcc, returnableAccount);
+        this.clearPassword(returnableAccount);
+
+        return returnableAccount;
+
     }
 
     private AdminAccount buildAdminAccountFromRequest(BusinessRegistrationRequest request){
@@ -37,10 +44,26 @@ public class AccountsService {
     }
 
     private BusinessAccount buildBusinessAcctFromAdminAndName(String adminId, String businessName){
-        BusinessAccount tempAcct = new BusinessAccount(businessName);
-        tempAcct.addAdmin(adminId);
+        BusinessAccount returnableAccount = new BusinessAccount(businessName);
+        returnableAccount.addAdmin(adminId);
 
-        return tempAcct;
+        return returnableAccount;
+    }
+
+    private void saveBusinessAndAdminAccounts(BusinessAccount businessAccount, AdminAccount adminAccount){
+        Integer generatedBusinessId =
+                businessAccountRepo.save(businessAccount).getBusinessId();
+
+        if(generatedBusinessId == null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
+        adminAccount.setBusinessId(generatedBusinessId);
+        adminRepo.save(adminAccount);
+    }
+
+    private void clearPassword(WorkerAccount account){
+        if(account != null) account.setPassword("");
     }
     //BusinessAccount Creation
     public void createBusinessAccount(){}
