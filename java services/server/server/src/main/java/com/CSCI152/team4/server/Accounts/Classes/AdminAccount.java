@@ -23,6 +23,11 @@ public class AdminAccount extends WorkerAccount {
         this.accountId = UUID.randomUUID().toString();
     }
 
+    public AdminAccount(String email, String password,
+                        String firstName, String lastName, String jobTitle) {
+        super(email, password, firstName, lastName, Timestamp.valueOf(LocalDateTime.now()), jobTitle);
+        this.accountId = UUID.randomUUID().toString();
+    }
 
     public String getAccountId() {
         return accountId;

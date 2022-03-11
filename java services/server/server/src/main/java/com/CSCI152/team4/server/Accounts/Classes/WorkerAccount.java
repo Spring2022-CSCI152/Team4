@@ -41,6 +41,17 @@ public class WorkerAccount{
         this.timestamp = timestamp;
         this.jobTitle = jobTitle;
     }
+    public WorkerAccount(String email, String password,
+                         String firstName, String lastName,
+                         Timestamp timestamp,
+                         String jobTitle) {
+        this.email = email;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.timestamp = timestamp;
+        this.jobTitle = jobTitle;
+    }
 
     public Timestamp getTimestamp() {
         return timestamp;

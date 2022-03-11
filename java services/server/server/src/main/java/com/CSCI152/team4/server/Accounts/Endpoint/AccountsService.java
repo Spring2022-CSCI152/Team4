@@ -1,12 +1,15 @@
 package com.CSCI152.team4.server.Accounts.Endpoint;
 
+import com.CSCI152.team4.server.Accounts.Classes.AdminAccount;
+import com.CSCI152.team4.server.Accounts.Classes.BusinessAccount;
+import com.CSCI152.team4.server.Accounts.Classes.BusinessRegistrationRequest;
 import com.CSCI152.team4.server.Accounts.Repos.AdminAccountRepo;
 import com.CSCI152.team4.server.Accounts.Repos.BusinessAccountRepo;
 import com.CSCI152.team4.server.Accounts.Repos.EmployeeAccountRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-//@Service
+@Service
 public class AccountsService {
 
 
@@ -21,6 +24,24 @@ public class AccountsService {
         this.businessAccountRepo = businessAccountRepo;
     }
 
+    public void registerBusinessAccount(BusinessRegistrationRequest request){
+        AdminAccount tempAdmin = this.buildAdminAccountFromRequest(request);
+        BusinessAccount tempBusinessAcc = this.buildBusinessAcctFromAdminAndName(tempAdmin.getAccountId(), request.getBusinessName());
+
+        BusinessAccount businessIdHolder = businessAccountRepo.save(tempBusinessAcc);
+        tempAdmin.setBusinessId(businessIdHolder.getBusinessId());
+    }
+
+    private AdminAccount buildAdminAccountFromRequest(BusinessRegistrationRequest request){
+        return new AdminAccount(request.getEmail(), request.getPassword(), request.getFirstName(), request.getLastName(), request.getJobTitle());
+    }
+
+    private BusinessAccount buildBusinessAcctFromAdminAndName(String adminId, String businessName){
+        BusinessAccount tempAcct = new BusinessAccount(businessName);
+        tempAcct.addAdmin(adminId);
+
+        return tempAcct;
+    }
     //BusinessAccount Creation
     public void createBusinessAccount(){}
 
