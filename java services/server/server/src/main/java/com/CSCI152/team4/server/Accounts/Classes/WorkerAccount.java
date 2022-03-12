@@ -89,6 +89,9 @@ public class WorkerAccount{
         this.lastName = lastName;
     }
 
+    public Integer getBusinessId() {
+        return businessId;
+    }
 
     public void setBusinessId(Integer businessId) {
         this.businessId = businessId;
