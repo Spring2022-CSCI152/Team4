@@ -7,6 +7,7 @@ import com.CSCI152.team4.server.Accounts.Repos.EmployeeAccountRepo;
 import com.CSCI152.team4.server.Util.AccountAuthenticator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -16,17 +17,17 @@ import java.util.List;
 public class AccountsService {
 
 
-    private final AdminAccountRepo adminRepo;
+    private final AdminAccountRepo adminAccountRepo;
     private final EmployeeAccountRepo employeeAccountRepo;
     private final BusinessAccountRepo businessAccountRepo;
     private final AccountAuthenticator accountAuthenticator;
 
     @Autowired
-    public AccountsService(AdminAccountRepo adminRepo, EmployeeAccountRepo employeeAccountRepo, BusinessAccountRepo businessAccountRepo) {
-        this.adminRepo = adminRepo;
+    public AccountsService(AdminAccountRepo adminAccountRepo, EmployeeAccountRepo employeeAccountRepo, BusinessAccountRepo businessAccountRepo, AccountAuthenticator accountAuthenticator) {
+        this.adminAccountRepo = adminAccountRepo;
         this.employeeAccountRepo = employeeAccountRepo;
         this.businessAccountRepo = businessAccountRepo;
-        this.accountAuthenticator = new AccountAuthenticator();
+        this.accountAuthenticator = accountAuthenticator;
     }
 
     public WorkerAccount registerBusinessAccount(BusinessRegistrationRequest request){
@@ -43,7 +44,7 @@ public class AccountsService {
 
     private AdminAccount buildAdminAccountFromRequest(BusinessRegistrationRequest request){
         //TODO: Add Verification for all fields submitted
-        return new AdminAccount(request.getEmail(), request.getPassword(), request.getFirstName(), request.getLastName(), request.getJobTitle());
+        return new AdminAccount(request.getEmail(), hashPassword(request.getPassword()), request.getFirstName(), request.getLastName(), request.getJobTitle());
     }
 
     private BusinessAccount buildBusinessAcctFromAdminAndName(String adminId, String businessName){
@@ -68,7 +69,7 @@ public class AccountsService {
 
         //extracted for clarity. This line, and the above line can all be done in the same line
         adminAccount.setBusinessId(generatedBusinessId);
-        adminRepo.save(adminAccount);
+        adminAccountRepo.save(adminAccount);
     }
 
     private void clearPassword(WorkerAccount account){
@@ -89,23 +90,16 @@ public class AccountsService {
     * requesting Admin Account*/
     public String createAdminAccount(AdminAccountCreationRequest request){
         //TODO: Throw Error if cannot validate
-        accountAuthenticator.validateToken(request.getToken());
-
+        accountAuthenticator.validateToken(request.getToken(), request.getRequestingAccountId());
         //validate all fields of request are filled
         request.validate();
-
-        if(adminRepo.existsById(request.getRequestingAccountId())){
-
+        if(adminAccountRepo.existsById(request.getRequestingAccountId())){
             //Validation
             throwErrorIfInvalidBusinessIdForAdmin(request.getRequestingAccountId(), request.getBusinessId());
-
             createAndSaveAdminAccount(request.getAdminAccount());
-
             return "Account Creation Success";
         }
-
         return "Account Creation Failed";
-
     }
 
     private void throwErrorIfInvalidBusinessIdForAdmin(String adminAccountId, Integer businessId) throws ResponseStatusException
@@ -124,7 +118,7 @@ public class AccountsService {
 
     private void createAndSaveAdminAccount(AdminAccount newAccount){
         saveAdminAccountToBusiness(newAccount.getAccountId(), newAccount.getBusinessId());
-        adminRepo.save(newAccount);
+        adminAccountRepo.save(newAccount);
     }
 
     private void saveAdminAccountToBusiness(String accountId, Integer businessId){
@@ -139,21 +133,15 @@ public class AccountsService {
     //Employee Account Creation
     public String createEmployeeAccount(EmployeeAccountCreationRequest request){
         //TODO: Throw Error if cannot validate
-        accountAuthenticator.validateToken(request.getToken());
-
+        accountAuthenticator.validateToken(request.getToken(), request.getRequestingAccountId());
         //validate all fields of request are filled
         request.validate();
-
         if(employeeAccountRepo.existsById(request.getRequestingAccountId())){
-
             //Validation
             throwErrorIfInvalidBusinessIdForEmployee(request.getRequestingAccountId(), request.getBusinessId());
-
             createAndSaveEmployeeAccount(request.getEmployeeAccount());
-
             return "Account Creation Success";
         }
-
         return "Account Creation Failed";
 
     }
@@ -172,6 +160,8 @@ public class AccountsService {
     }
 
     private void createAndSaveEmployeeAccount(EmployeeAccount newAccount){
+        //Hash password to complete creation
+        newAccount.setPassword(hashPassword(newAccount.getPassword()));
         saveEmployeeAccountToBusiness(newAccount.getAccountId(), newAccount.getBusinessId());
         employeeAccountRepo.save(newAccount);
     }
@@ -185,6 +175,9 @@ public class AccountsService {
         }
     }
 
+    private String hashPassword(String plainTextPassword){
+        return BCrypt.hashpw(plainTextPassword, BCrypt.gensalt(10));
+    }
 
     //Save Report Format Information
     public void saveReportFormat(){}
@@ -196,15 +189,6 @@ public class AccountsService {
 
     //Account Info Retrieval
     public void getAccountInfo(){}
-
-
-    //Login
-    public void userLogin(){}
-
-
-    //Logout
-    public void userLogout(){}
-
 
 
     //Set Permissions

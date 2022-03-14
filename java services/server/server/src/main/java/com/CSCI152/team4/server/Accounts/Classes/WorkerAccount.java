@@ -2,6 +2,7 @@ package com.CSCI152.team4.server.Accounts.Classes;
 
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotBlank;
 import java.sql.Timestamp;
 import java.util.Objects;
@@ -21,6 +22,17 @@ public class WorkerAccount{
     private String lastName;
     private Timestamp timestamp;
     private String jobTitle;
+
+    @Transient
+    private String token;
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 
     public WorkerAccount(){}
 

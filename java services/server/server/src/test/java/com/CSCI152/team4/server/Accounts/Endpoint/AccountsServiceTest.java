@@ -49,7 +49,7 @@ class AccountsServiceTest {
         MockitoAnnotations.openMocks(this);
         underTest = new AccountsService(adminAccountRepo,
                                         employeeAccountRepo,
-                                        businessAccountRepo);
+                                        businessAccountRepo, accountAuthenticator);
     }
 
 
