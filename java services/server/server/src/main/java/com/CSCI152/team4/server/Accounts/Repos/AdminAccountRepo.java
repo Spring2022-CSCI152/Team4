@@ -11,7 +11,7 @@ import java.util.Optional;
 @Repository
 public interface AdminAccountRepo extends CrudRepository<AdminAccount, String> {
 
-    @Query("SELECT a FROM AdminAccountRepo a WHERE a.email = :email AND a.businessId = :businessId")
-    Optional<AdminAccount> findByEmailAndBusinessId(@Param("email") String gardenId, @Param("businessId") Integer businessId);
+
+    Optional<AdminAccount> findByEmailAndBusinessId(@Param("email") String email, @Param("businessId") Integer businessId);
 
 }

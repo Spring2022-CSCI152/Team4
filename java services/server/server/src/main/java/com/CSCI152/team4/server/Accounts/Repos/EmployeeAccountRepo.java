@@ -12,7 +12,7 @@ import java.util.Optional;
 @Repository
 public interface EmployeeAccountRepo extends CrudRepository<EmployeeAccount, String> {
 
-    @Query("SELECT a FROM EmployeeAccountRepo a WHERE a.email = :email AND a.businessId = :businessId")
-    Optional<EmployeeAccount> findByEmailAndBusinessId(@Param("email") String gardenId, @Param("businessId") Integer businessId);
+
+    Optional<EmployeeAccount> findByEmailAndBusinessId(@Param("email") String email, @Param("businessId") Integer businessId);
 
 }

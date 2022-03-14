@@ -48,6 +48,7 @@ public class BusinessAccount{
     public BusinessAccount(){}
 
     public BusinessAccount(String businessName){
+        this.businessName = businessName;
         this.admins = new ArrayList<>();
         this.employees = new ArrayList<>();
         this.buildDefaultReportFormat();
@@ -55,6 +56,7 @@ public class BusinessAccount{
     }
     public BusinessAccount(Integer id, String businessName) {
         this.businessId = id;
+        this.businessName = businessName;
         this.admins = new ArrayList<>();
         this.employees = new ArrayList<>();
         this.buildDefaultReportFormat();

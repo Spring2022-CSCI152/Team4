@@ -78,4 +78,17 @@ public class BusinessRegistrationRequest {
     public void setJobTitle(String jobTitle) {
         this.jobTitle = jobTitle;
     }
+
+    @Override
+    public String toString() {
+        return "BusinessRegistrationRequest{" +
+                "businessName='" + businessName + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", timestamp=" + timestamp +
+                ", jobTitle='" + jobTitle + '\'' +
+                '}';
+    }
 }

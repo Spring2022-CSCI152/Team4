@@ -39,12 +39,12 @@ public class AccountsService {
         this.clearPassword(returnableAccount);
 
         return returnableAccount;
-
     }
 
     private AdminAccount buildAdminAccountFromRequest(BusinessRegistrationRequest request){
         //TODO: Add Verification for all fields submitted
-        return new AdminAccount(request.getEmail(), hashPassword(request.getPassword()), request.getFirstName(), request.getLastName(), request.getJobTitle());
+        String hashedPassword = hashPassword(request.getPassword());
+        return new AdminAccount(request.getEmail(), hashedPassword, request.getFirstName(), request.getLastName(), request.getJobTitle());
     }
 
     private BusinessAccount buildBusinessAcctFromAdminAndName(String adminId, String businessName){
@@ -89,10 +89,11 @@ public class AccountsService {
     * As of V 0.0.1 this token will simply be the Account ID of the
     * requesting Admin Account*/
     public String createAdminAccount(AdminAccountCreationRequest request){
-        //TODO: Throw Error if cannot validate
-        accountAuthenticator.validateToken(request.getToken(), request.getRequestingAccountId());
         //validate all fields of request are filled
         request.validate();
+        //TODO: Throw Error if cannot validate
+        accountAuthenticator.validateToken(request.getToken(), request.getRequestingAccountId());
+
         if(adminAccountRepo.existsById(request.getRequestingAccountId())){
             //Validation
             throwErrorIfInvalidBusinessIdForAdmin(request.getRequestingAccountId(), request.getBusinessId());
@@ -117,6 +118,11 @@ public class AccountsService {
     }
 
     private void createAndSaveAdminAccount(AdminAccount newAccount){
+
+        //Finalizes Creation
+        newAccount.setPassword(hashPassword(newAccount.getPassword()));
+
+        //Saves Account
         saveAdminAccountToBusiness(newAccount.getAccountId(), newAccount.getBusinessId());
         adminAccountRepo.save(newAccount);
     }
@@ -162,6 +168,7 @@ public class AccountsService {
     private void createAndSaveEmployeeAccount(EmployeeAccount newAccount){
         //Hash password to complete creation
         newAccount.setPassword(hashPassword(newAccount.getPassword()));
+        //Save Account
         saveEmployeeAccountToBusiness(newAccount.getAccountId(), newAccount.getBusinessId());
         employeeAccountRepo.save(newAccount);
     }

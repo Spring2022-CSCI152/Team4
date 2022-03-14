@@ -1,5 +1,6 @@
 package com.CSCI152.team4.server.Accounts.Repos;
 
+import com.CSCI152.team4.server.Accounts.Classes.AdminAccount;
 import com.CSCI152.team4.server.Accounts.Classes.EmployeeAccount;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -100,5 +101,24 @@ class EmployeeAccountRepoTest {
         assertThat(optionalEmployeeAccount).hasValueSatisfying(c -> {
            assertThat(c.getPermissions_list()).usingRecursiveComparison().isEqualTo(perms);
         });
+    }
+
+    @Test
+    void itShouldFindByEmailAndBusinessId(){
+        Integer businessId = 127;
+        EmployeeAccount accountWNullPermission = new EmployeeAccount("email", "pass",
+                "fName", "lName", "title", null,
+                businessId);
+
+        underTest.save(accountWNullPermission);
+
+        Optional<EmployeeAccount> optionalEmployeeAccount = underTest.findByEmailAndBusinessId(accountWNullPermission.getEmail(), businessId);
+
+        assertThat(optionalEmployeeAccount).isPresent()
+                .hasValueSatisfying(c -> {
+                    //Timestamp ignored for Precision Issues on comparison
+                    assertThat(c).usingRecursiveComparison()
+                            .ignoringFields("timestamp").isEqualTo(accountWNullPermission);
+                });
     }
 }

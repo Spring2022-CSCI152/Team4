@@ -1,12 +1,9 @@
 package com.CSCI152.team4.server.Accounts.Classes;
 
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.sql.Timestamp;
 import java.util.Objects;
-import java.util.UUID;
 
 /*This class acts as an intermediary step between
 * Accounts and Admin/Employee Accounts to make
@@ -15,11 +12,14 @@ import java.util.UUID;
 public class WorkerAccount{
 
     @NotBlank
+    @Column(name = "businessId")
     private Integer businessId;
+    @Column(name = "email")
     private String email;
     private String password;
     private String firstName;
     private String lastName;
+
     private Timestamp timestamp;
     private String jobTitle;
 
@@ -64,6 +64,7 @@ public class WorkerAccount{
         this.timestamp = timestamp;
         this.jobTitle = jobTitle;
     }
+
 
     public Timestamp getTimestamp() {
         return timestamp;

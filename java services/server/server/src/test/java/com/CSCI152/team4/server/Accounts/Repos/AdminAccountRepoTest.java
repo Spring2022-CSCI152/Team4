@@ -67,7 +67,7 @@ class AdminAccountRepoTest {
                 "Admin", businessId);
 
         underTest.save(account);
-        System.out.println(account);
+
         //When
         account.setEmail("diffEmail@org.com");
         account.setFirstName("Joe");
@@ -77,6 +77,25 @@ class AdminAccountRepoTest {
 
         //Then
         Optional<AdminAccount> optionalAdminAccount = underTest.findById(account.getAccountId());
+        assertThat(optionalAdminAccount).isPresent()
+                .hasValueSatisfying(c -> {
+                    //Timestamp ignored for Precision Issues on comparison
+                    assertThat(c).usingRecursiveComparison()
+                            .ignoringFields("timestamp").isEqualTo(account);
+                });
+    }
+
+    @Test
+    void itShouldFindByEmailAndBusinessId(){
+        Integer businessId = 127;
+        AdminAccount account = new AdminAccount("admin@org.com", "password",
+                "FAdmin", "LAdmin",
+                "Admin", businessId);
+
+        underTest.save(account);
+
+        Optional<AdminAccount> optionalAdminAccount = underTest.findByEmailAndBusinessId(account.getEmail(), businessId);
+
         assertThat(optionalAdminAccount).isPresent()
                 .hasValueSatisfying(c -> {
                     //Timestamp ignored for Precision Issues on comparison

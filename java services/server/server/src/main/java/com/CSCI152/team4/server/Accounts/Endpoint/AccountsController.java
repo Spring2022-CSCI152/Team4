@@ -20,17 +20,18 @@ public class AccountsController {
         this.service = service;
     }
 
-    @PostMapping("api/v1/accounts/business_registration")
+    @PostMapping("/business_registration")
     public ResponseEntity<WorkerAccount> registerBusiness(@RequestBody BusinessRegistrationRequest request){
+        System.out.println(request);
         return new ResponseEntity<WorkerAccount>(service.registerBusinessAccount(request), HttpStatus.OK);
     }
 
-    @PostMapping("api/v1/accounts/admin_registration")
+    @PostMapping("/admin_registration")
     public ResponseEntity<String> registerAdminAccount(@RequestBody AdminAccountCreationRequest request){
         return  new ResponseEntity<String>(service.createAdminAccount(request), HttpStatus.OK);
     }
 
-    @PostMapping("api/v1/accounts/employee_registration")
+    @PostMapping("/employee_registration")
     public ResponseEntity<String> registerEmployeeAccount(@RequestBody EmployeeAccountCreationRequest request){
         return  new ResponseEntity<String>(service.createEmployeeAccount(request), HttpStatus.OK);
     }
