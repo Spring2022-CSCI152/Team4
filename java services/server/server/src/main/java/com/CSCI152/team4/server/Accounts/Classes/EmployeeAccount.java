@@ -1,12 +1,10 @@
 package com.CSCI152.team4.server.Accounts.Classes;
 
 import com.CSCI152.team4.server.Accounts.Settings.Permissions;
-
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,9 +16,6 @@ public class EmployeeAccount extends WorkerAccount {
     @Id
     private String accountId;
 
-    @Transient
-    private HashMap<String, Boolean> permissions;
-
     @Column(nullable = false)
     @ElementCollection
     private List<String> permissions_list;
@@ -31,67 +26,63 @@ public class EmployeeAccount extends WorkerAccount {
     //No permissions passed
     public EmployeeAccount(String email, String password, String firstName, String lastName,
                            String jobTitle, Integer businessId) {
-        super(businessId, email, password, firstName, lastName, Timestamp.valueOf(LocalDateTime.now()), jobTitle);
+        super(businessId,
+                email,
+                password,
+                firstName,
+                lastName,
+                Timestamp.valueOf(LocalDateTime.now()),
+                jobTitle);
         this.accountId = UUID.randomUUID().toString();
-        this.buildDefaultPermissions();
-        this.permissions_list = this.getPermissions();
+        this.permissions_list = new ArrayList<>();
     }
 
     //Permissions Passed
     public EmployeeAccount(String email, String password,
                            String firstName, String lastName,
-                           String jobTitle, HashMap<String, Boolean> permissions, int businessId) {
+                           String jobTitle, List<String> permissions, int businessId) {
         super(businessId, email, password, firstName, lastName, Timestamp.valueOf(LocalDateTime.now()), jobTitle);
-        this.buildPermissionsFromList(permissions);
-        this.permissions_list = this.getPermissions();
+        this.accountId = UUID.randomUUID().toString();
+        this.setPermissions_list(permissions);
     }
 
-    //Inherently Distrust the Permissions Map, and iterate over
-    //enum values and only pull those vals from the passed in map
-    private void buildPermissionsFromList(HashMap<String, Boolean> permissions) {
-        for(Permissions permission : Permissions.values()){
-            if(!this.permissions.containsKey(permission.toString())) {
-                this.permissions.put(permission.toString(),
-                                     permissions.get(permission.toString()));
-            }
-        }
-    }
-
-    //By Default, All permissions are turned off
-    private void buildDefaultPermissions() {
-
-        if(this.permissions == null){
-            this.permissions = new HashMap<String, Boolean>();
-        }
-        for(Permissions permission : Permissions.values()){
-            if(!this.permissions.containsKey(permission.toString())) {
-                this.permissions.put(permission.toString(), Boolean.valueOf(false));
-            }
-        }
-    }
-
-    //Not called, but needed for Persistence
-    private void setPermissions(HashMap<String, Boolean> permissions) {
-        this.permissions = permissions;
-    }
-
-    //Return a List containing the keys of permissions
-    //Design Decision to reduce data movement and allows
-    //easier portability with other modules and updates
-    public List<String> getPermissions() {
-        List<String> permissions = new ArrayList<>();
-        for(String key : this.permissions.keySet()){
-            if((Boolean) this.permissions.get(key))
-                permissions.add(key);
-        }
-        return permissions;
-    }
-
-    public String getAccountId() {
-        return accountId;
-    }
 
     public void setAccountId(String accountId) {
         this.accountId = accountId;
+    }
+
+    @Override
+    public String toString() {
+        return "EmployeeAccount{" +
+                "accountId='" + accountId + '\'' +
+                ", permissions_list=" + permissions_list +
+                ", email='" + this.getEmail() + '\'' +
+                ", password='" + this.getPassword() + '\'' +
+                ", firstName='" + this.getFirstName() + '\'' +
+                ", lastName='" + this.getLastName() + '\'' +
+                ", timestamp=" + this.getTimestamp() +
+                ", jobTitle='" + this.getJobTitle()+ '\'' +
+                '}';
+    }
+
+    public List<String> getPermissions_list() {
+        return permissions_list;
+    }
+
+    public void setPermissions_list(List<String> permissions_list) {
+
+        //clear array list
+        this.permissions_list = new ArrayList<>();
+        if(permissions_list == null) return; //cleared list == no permissions
+        //refill
+        for(Permissions p : Permissions.values()){
+            if(permissions_list.contains(p.toString())){
+                this.permissions_list.add(p.toString());
+            }
+        }
+    }
+
+    public String getAccountId() {
+        return this.accountId;
     }
 }

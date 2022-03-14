@@ -1,6 +1,7 @@
 package com.CSCI152.team4.server.Accounts.Classes;
 
 import com.CSCI152.team4.server.Accounts.Settings.ReportFormat;
+import com.CSCI152.team4.server.Accounts.Settings.ReportFormatBuilder;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -13,6 +14,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "Business_Account")
+@SequenceGenerator(name="business_id_seq", initialValue = 100, allocationSize=899)
 public class BusinessAccount{
 
 
@@ -20,13 +22,13 @@ public class BusinessAccount{
         return businessId;
     }
 
-    public ReportFormat getReportFormat() {
-        return reportFormat;
-    }
+
 
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "business_id_seq")
     private Integer businessId;
 
+    @NotEmpty
     private String businessName;
 
     @Embedded
@@ -45,10 +47,17 @@ public class BusinessAccount{
 
     public BusinessAccount(){}
 
+    public BusinessAccount(String businessName){
+        this.admins = new ArrayList<>();
+        this.employees = new ArrayList<>();
+        this.buildDefaultReportFormat();
+
+    }
     public BusinessAccount(Integer id, String businessName) {
         this.businessId = id;
         this.admins = new ArrayList<>();
         this.employees = new ArrayList<>();
+        this.buildDefaultReportFormat();
     }
 
     public BusinessAccount(Integer id, String businessName, String admin) {
@@ -59,6 +68,7 @@ public class BusinessAccount{
             this.admins.add(admin);
         }
         this.employees = new ArrayList<String>();
+        this.buildDefaultReportFormat();
     }
 
     public void addEmployee(String employeeId){
@@ -82,11 +92,17 @@ public class BusinessAccount{
 
     }
 
+    public ReportFormat getReportFormat() {
+        return reportFormat;
+    }
 
     public void setReportFormat(ReportFormat reportFormat){
         this.reportFormat = reportFormat;
     }
 
+    private void buildDefaultReportFormat(){
+        this.reportFormat = new ReportFormatBuilder().build();
+    }
     public List<String> getAdmins() {
         return admins;
     }

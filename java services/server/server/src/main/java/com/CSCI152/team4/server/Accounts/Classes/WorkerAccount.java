@@ -2,6 +2,7 @@ package com.CSCI152.team4.server.Accounts.Classes;
 
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotBlank;
 import java.sql.Timestamp;
 import java.util.Objects;
@@ -11,7 +12,7 @@ import java.util.UUID;
 * Accounts and Admin/Employee Accounts to make
 * inheritance issues easier to work with*/
 @MappedSuperclass
-public class WorkerAccount extends Account {
+public class WorkerAccount{
 
     @NotBlank
     private Integer businessId;
@@ -22,7 +23,19 @@ public class WorkerAccount extends Account {
     private Timestamp timestamp;
     private String jobTitle;
 
+    @Transient
+    private String token;
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
     public WorkerAccount(){}
+
 
     public void setTimestamp(Timestamp timestamp) {
         this.timestamp = timestamp;
@@ -33,6 +46,17 @@ public class WorkerAccount extends Account {
                          Timestamp timestamp,
                          String jobTitle) {
         this.businessId = businessId;
+        this.email = email;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.timestamp = timestamp;
+        this.jobTitle = jobTitle;
+    }
+    public WorkerAccount(String email, String password,
+                         String firstName, String lastName,
+                         Timestamp timestamp,
+                         String jobTitle) {
         this.email = email;
         this.password = password;
         this.firstName = firstName;
@@ -77,6 +101,9 @@ public class WorkerAccount extends Account {
         this.lastName = lastName;
     }
 
+    public Integer getBusinessId() {
+        return businessId;
+    }
 
     public void setBusinessId(Integer businessId) {
         this.businessId = businessId;

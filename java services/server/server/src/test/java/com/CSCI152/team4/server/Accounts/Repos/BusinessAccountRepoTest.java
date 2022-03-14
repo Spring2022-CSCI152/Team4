@@ -36,12 +36,17 @@ class BusinessAccountRepoTest {
     AdminAccount getAdminAccount(Integer businessAccId){
         return new AdminAccount("admin", "123", "admin", "admin", "admin", businessAccId);
     }
-    BusinessAccount buildBusinessAccount(Integer businessAccId){
-        AdminAccount admin = getAdminAccount(businessAccId);
-        BusinessAccount businessAccount = new BusinessAccount(businessAccId, "Business", admin.getAccountId());
-        addReportFormatAndProfileFormat(businessAccount);
 
-        return businessAccount;
+    AdminAccount getBlankAdminAccount(){
+        return new AdminAccount("admin", "123", "admin", "admin", "admin");
+    }
+    BusinessAccount buildEmptyBusinessAccount(){    return new BusinessAccount("Business"); }
+
+    BusinessAccount buildBusinessAccountWithAdmin(){
+        BusinessAccount acct = new BusinessAccount("Business");
+        AdminAccount admin = getBlankAdminAccount();
+        acct.addAdmin(admin.getAccountId());
+        return acct;
     }
 
     void addReportFormatAndProfileFormat(BusinessAccount acc){
@@ -55,13 +60,14 @@ class BusinessAccountRepoTest {
     @Test
     void itShouldSaveBusinessAccount() {
         // Given
-        Integer businessAccId = 127;
-        BusinessAccount businessAccount = buildBusinessAccount(businessAccId);
+        BusinessAccount businessAccount = buildEmptyBusinessAccount();
+        businessAccount.addAdmin(getBlankAdminAccount().getAccountId());
         // When
-        underTest.save(businessAccount);
-        Optional<BusinessAccount> optionalBusinessAccount = underTest.findById(businessAccId);
+        businessAccount.setBusinessId(underTest.save(businessAccount).getBusinessId());
+
 
         // Then
+        Optional<BusinessAccount> optionalBusinessAccount = underTest.findById(businessAccount.getBusinessId());
         assertThat(optionalBusinessAccount).isPresent()
                 .hasValueSatisfying(c -> {
                     assertThat(c).usingRecursiveComparison().isEqualTo(businessAccount);
@@ -85,13 +91,12 @@ class BusinessAccountRepoTest {
     @Test
     void itShouldSaveNewAdmin() {
         //Given
-        Integer businessAccId = 127;
-        BusinessAccount businessAccount = buildBusinessAccount(businessAccId);
-        AdminAccount admin2 = getAdminAccount(businessAccId);
+        BusinessAccount businessAccount = buildBusinessAccountWithAdmin();
+        AdminAccount admin2 = getBlankAdminAccount();
         businessAccount.addAdmin(admin2.getAccountId());
 
         // When
-        underTest.save(businessAccount);
+        Integer businessAccId = underTest.save(businessAccount).getBusinessId();
         Optional<BusinessAccount> optionalBusinessAccount = underTest.findById(businessAccId);
 
         // Then
@@ -105,13 +110,16 @@ class BusinessAccountRepoTest {
     @Test
     void itShouldSaveNewEmployee() {
         //Given
-        Integer businessAccId = 127;
-        BusinessAccount businessAccount = buildBusinessAccount(businessAccId);
+        BusinessAccount businessAccount = buildBusinessAccountWithAdmin();
+        Integer businessAccId = underTest.save(businessAccount).getBusinessId();
+
+        // When
+        businessAccount.setBusinessId(businessAccId);
         EmployeeAccount employeeAccount = new EmployeeAccount("employee",
                 "123", "emp", "emp", "scrub", businessAccId);
         businessAccount.addEmployee(employeeAccount.getAccountId());
-        // When
         underTest.save(businessAccount);
+
 
         // Then
         Optional<BusinessAccount> optionalBusinessAccount = underTest.findById(businessAccId);
@@ -127,11 +135,11 @@ class BusinessAccountRepoTest {
     @Test
     void isShouldSaveNewReportFormat(){
         //Given
-        Integer businessAccId = 130;
-        BusinessAccount businessAccount = buildBusinessAccount(businessAccId);
+        BusinessAccount businessAccount = buildBusinessAccountWithAdmin();
 
         ReportFormat oldFormat = businessAccount.getReportFormat();
-        underTest.save(businessAccount);
+        Integer businessId = underTest.save(businessAccount).getBusinessId();
+        businessAccount.setBusinessId(businessId);
 
         //When
         ReportFormat newFormat = new ReportFormatBuilder()
@@ -146,7 +154,7 @@ class BusinessAccountRepoTest {
         underTest.save(businessAccount);
 
         //Then
-        Optional<BusinessAccount> optionalBusinessAccount = underTest.findById(businessAccount.getBusinessId());
+        Optional<BusinessAccount> optionalBusinessAccount = underTest.findById(businessId);
 
         assertThat(optionalBusinessAccount).isPresent()
                 .hasValueSatisfying(c -> {
