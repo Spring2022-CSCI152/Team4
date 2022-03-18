@@ -1,9 +1,6 @@
 package com.CSCI152.team4.server.Accounts.Endpoint;
 
-import com.CSCI152.team4.server.Accounts.Classes.AdminAccount;
-import com.CSCI152.team4.server.Accounts.Classes.BusinessAccount;
-import com.CSCI152.team4.server.Accounts.Classes.BusinessRegistrationRequest;
-import com.CSCI152.team4.server.Accounts.Classes.EmployeeAccount;
+import com.CSCI152.team4.server.Accounts.Classes.*;
 import com.CSCI152.team4.server.Accounts.Repos.AdminAccountRepo;
 import com.CSCI152.team4.server.Accounts.Repos.BusinessAccountRepo;
 import com.CSCI152.team4.server.Accounts.Repos.EmployeeAccountRepo;
@@ -13,6 +10,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -38,11 +38,16 @@ class AccountsServiceTest {
     ArgumentCaptor<AdminAccount> adminAccountArgumentCaptor;
 
 
-    BusinessRegistrationRequest getRegistrationRequest(){
+    BusinessRegistrationRequest getBusinessRegistrationRequest(){
         return new BusinessRegistrationRequest("Business",
                 adminAccount.getEmail(), adminAccount.getPassword(),
                 adminAccount.getFirstName(), adminAccount.getLastName(),
                 adminAccount.getJobTitle());
+    }
+
+    AdminAccountCreationRequest getAdminCreationRequest(String token, String accountId, Integer businessId){
+        return new AdminAccountCreationRequest(token, accountId, businessId,
+                "email", "password", "fName", "lName", "jobTitle");
     }
     @BeforeEach
     void setUp() {
@@ -64,7 +69,7 @@ class AccountsServiceTest {
 
 
         //when
-        underTest.registerBusinessAccount(this.getRegistrationRequest());
+        underTest.registerBusinessAccount(this.getBusinessRegistrationRequest());
 
         //then
         verify(businessAccountRepo).save(businessAccountArgumentCaptor.capture());
@@ -95,6 +100,30 @@ class AccountsServiceTest {
 
     //Admin Account Creation
 
+    @Test
+    void itShouldCreateANewAdminAccount() {
+        // Given
+        Integer businessId = 127;
+        String accountId = "adminId";
+        given(businessAccountRepo.existsById(businessId)).willReturn(true);
+        given(businessAccountRepo.findById(any())).willReturn(Optional.of(businessAccount));
+        given(businessAccount.getAdmins()).willReturn(List.of(accountId));
+        given(businessAccount.getBusinessId()).willReturn(businessId);
+        given(adminAccountRepo.existsById(any())).willReturn(Boolean.valueOf(true));
+        given(adminAccount.getAccountId()).willReturn(accountId);
+
+        AdminAccountCreationRequest request = this.getAdminCreationRequest(accountId,accountId, businessId);
+        AdminAccount expected = new AdminAccount(request.getEmail(), request.getPassword(), request.getFirstName(),
+                request.getLastName(), request.getJobTitle(), request.getBusinessId());
+        // When
+        underTest.createAdminAccount(request);
+        verify(adminAccountRepo).save(adminAccountArgumentCaptor.capture());
+        // Then
+
+        assertThat(adminAccountArgumentCaptor.getValue()).usingRecursiveComparison()
+                .ignoringFields("accountId", "password", "timestamp") //Account ID gets auto generated, password gets hashed, timestamp has accuracy issues
+                .isEqualTo(expected);
+    }
 
 
     //Employee Account Creation
