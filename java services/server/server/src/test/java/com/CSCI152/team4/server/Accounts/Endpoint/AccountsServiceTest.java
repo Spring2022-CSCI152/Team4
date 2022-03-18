@@ -10,11 +10,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -66,8 +68,7 @@ class AccountsServiceTest {
         Integer businessId = 127;
         given(businessAccountRepo.save(any())).willReturn(businessAccount);
         given(businessAccount.getBusinessId()).willReturn(businessId);
-
-
+        given(adminAccount.getPassword()).willReturn("password");
         //when
         underTest.registerBusinessAccount(this.getBusinessRegistrationRequest());
 
@@ -99,7 +100,6 @@ class AccountsServiceTest {
 
 
     //Admin Account Creation
-
     @Test
     void itShouldCreateANewAdminAccount() {
         // Given
@@ -117,17 +117,60 @@ class AccountsServiceTest {
                 request.getLastName(), request.getJobTitle(), request.getBusinessId());
         // When
         underTest.createAdminAccount(request);
-        verify(adminAccountRepo).save(adminAccountArgumentCaptor.capture());
-        // Then
 
+        // Then
+        //The only time it should save an account is when every step is valid
+        verify(adminAccountRepo).save(adminAccountArgumentCaptor.capture());
         assertThat(adminAccountArgumentCaptor.getValue()).usingRecursiveComparison()
                 .ignoringFields("accountId", "password", "timestamp") //Account ID gets auto generated, password gets hashed, timestamp has accuracy issues
                 .isEqualTo(expected);
     }
 
+    @Test
+    void itShouldThrowAnErrorWhenCreatingAnAdminAccountWithInvalidAdminId() {
+        // Given
+        Integer businessId = 127;
+        String accountId = "adminId";
+        given(businessAccountRepo.existsById(businessId)).willReturn(true);
+        given(businessAccountRepo.findById(any())).willReturn(Optional.of(businessAccount));
+        given(businessAccount.getAdmins()).willReturn(List.of("125", "126", "127"));
+        given(businessAccount.getBusinessId()).willReturn(businessId);
+        given(adminAccountRepo.existsById(any())).willReturn(Boolean.valueOf(true));
+        given(adminAccount.getAccountId()).willReturn(accountId);
 
+        // When
+        AdminAccountCreationRequest request = this.getAdminCreationRequest(accountId,accountId, businessId);
+        // Then
+        Exception e = assertThrows(ResponseStatusException.class, () -> underTest.createAdminAccount(request));
+
+        assertThat(e).hasMessageContaining("This account is not registered with this business");
+
+    }
+
+
+    @Test
+    void itShouldThrowAnErrorWhenCreatingAnAdminAccountWithInvalidBusinessId() {
+        Integer businessId = 127;
+        String accountId = "adminId";
+        AdminAccountCreationRequest request = this.getAdminCreationRequest(accountId,accountId, businessId);
+        given(adminAccountRepo.existsById(any())).willReturn(true);
+        given(businessAccountRepo.existsById(any())).willReturn(false);
+
+        // When
+        // Then
+        Exception e = assertThrows(ResponseStatusException.class,
+                () -> underTest.createAdminAccount(request));
+
+        assertThat(e).hasMessageContaining("Business Account not found");
+    }
     //Employee Account Creation
 
+    @Test
+    void itShouldCreateAnEmployeeAccount() {
+        // Given
+        // When
+        // Then
+    }
 
 
     //Save Report Format Information
