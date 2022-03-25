@@ -57,6 +57,7 @@ public class EmployeeAccount extends WorkerAccount {
                 "accountId='" + accountId + '\'' +
                 ", permissions_list=" + permissions_list +
                 ", email='" + this.getEmail() + '\'' +
+                ", businessId='" + this.getBusinessId() + '\'' +
                 ", password='" + this.getPassword() + '\'' +
                 ", firstName='" + this.getFirstName() + '\'' +
                 ", lastName='" + this.getLastName() + '\'' +
@@ -82,6 +83,7 @@ public class EmployeeAccount extends WorkerAccount {
         }
     }
 
+    @Override
     public String getAccountId() {
         return this.accountId;
     }

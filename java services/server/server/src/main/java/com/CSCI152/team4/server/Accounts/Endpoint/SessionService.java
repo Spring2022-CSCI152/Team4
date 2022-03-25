@@ -62,26 +62,25 @@ public class SessionService {
     private String setAccountInfoAndReturnId(WorkerAccount account){
 
         Optional<AdminAccount> adminAccount =
-                adminAccountRepo.findByEmailAndBusinessId(account.getEmail(), account.getBusinessId());
+                adminAccountRepo.findFirstByEmailAndBusinessId(account.getEmail(), account.getBusinessId());
         Optional<EmployeeAccount> employeeAccount =
-                employeeAccountRepo.findByEmailAndBusinessId(account.getEmail(), account.getBusinessId());
-        String returnStr = "";
-        if(adminAccount.isPresent()){
-            AdminAccount persisted = adminAccount.get();
-            returnStr = persisted.getAccountId();
-            account.setPassword(persisted.getPassword());
+                employeeAccountRepo.findFirstByEmailAndBusinessId(account.getEmail(), account.getBusinessId());
 
+        WorkerAccount persisted;
+
+        if(adminAccount.isPresent()){
+            persisted = adminAccount.get();
         }
         else if(employeeAccount.isPresent()){
-            EmployeeAccount persisted = employeeAccount.get();
-            returnStr = persisted.getAccountId();
-            account.setPassword(persisted.getPassword());
+            persisted = employeeAccount.get();
         }
         else{
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
-        return returnStr;
+        account.setPassword(persisted.getPassword());
+
+        return persisted.getAccountId();
     }
 
     private boolean isValidPassword(String plainText, String hashedPassword){

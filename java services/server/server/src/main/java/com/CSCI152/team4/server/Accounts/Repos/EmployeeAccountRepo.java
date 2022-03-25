@@ -13,6 +13,6 @@ import java.util.Optional;
 public interface EmployeeAccountRepo extends CrudRepository<EmployeeAccount, String> {
 
 
-    Optional<EmployeeAccount> findByEmailAndBusinessId(@Param("email") String email, @Param("businessId") Integer businessId);
+    Optional<EmployeeAccount> findFirstByEmailAndBusinessId(@Param("email") String email, @Param("businessId") Integer businessId);
 
 }

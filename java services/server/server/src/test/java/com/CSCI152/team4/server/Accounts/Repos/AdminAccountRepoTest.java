@@ -94,7 +94,7 @@ class AdminAccountRepoTest {
 
         underTest.save(account);
 
-        Optional<AdminAccount> optionalAdminAccount = underTest.findByEmailAndBusinessId(account.getEmail(), businessId);
+        Optional<AdminAccount> optionalAdminAccount = underTest.findFirstByEmailAndBusinessId(account.getEmail(), businessId);
 
         assertThat(optionalAdminAccount).isPresent()
                 .hasValueSatisfying(c -> {

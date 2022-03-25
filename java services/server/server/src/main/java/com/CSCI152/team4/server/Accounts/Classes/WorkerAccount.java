@@ -131,6 +131,8 @@ public class WorkerAccount{
                 && Objects.equals(this.jobTitle, that.jobTitle);
     }
 
+    public String getAccountId(){return "";
+    }
     @Override
     public int hashCode() {
         return Objects.hash(email, password, firstName, lastName, timestamp, jobTitle);
@@ -140,6 +142,7 @@ public class WorkerAccount{
     public String toString() {
         return "WorkerAccount{" +
                 "email='" + email + '\'' +
+                ", businessId='" + businessId + '\'' +
                 ", password='" + password + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +

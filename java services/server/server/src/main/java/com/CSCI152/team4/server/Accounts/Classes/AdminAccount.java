@@ -29,6 +29,7 @@ public class AdminAccount extends WorkerAccount {
         this.accountId = UUID.randomUUID().toString();
     }
 
+    @Override
     public String getAccountId() {
         return accountId;
     }
@@ -42,6 +43,7 @@ public class AdminAccount extends WorkerAccount {
         return "AdminAccount{" +
                 "accountId='" + accountId + '\'' +
                 ", email='" + this.getEmail() + '\'' +
+                ", businessId='" + this.getBusinessId() + '\'' +
                 ", password='" + this.getPassword() + '\'' +
                 ", firstName='" + this.getFirstName() + '\'' +
                 ", lastName='" + this.getLastName() + '\'' +

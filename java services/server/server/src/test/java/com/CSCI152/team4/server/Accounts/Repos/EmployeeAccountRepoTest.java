@@ -112,7 +112,7 @@ class EmployeeAccountRepoTest {
 
         underTest.save(accountWNullPermission);
 
-        Optional<EmployeeAccount> optionalEmployeeAccount = underTest.findByEmailAndBusinessId(accountWNullPermission.getEmail(), businessId);
+        Optional<EmployeeAccount> optionalEmployeeAccount = underTest.findFirstByEmailAndBusinessId(accountWNullPermission.getEmail(), businessId);
 
         assertThat(optionalEmployeeAccount).isPresent()
                 .hasValueSatisfying(c -> {

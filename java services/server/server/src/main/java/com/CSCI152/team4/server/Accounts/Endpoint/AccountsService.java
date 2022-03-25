@@ -77,8 +77,7 @@ public class AccountsService {
     }
 
     private Integer saveBusinessAccountAndReturnId(BusinessAccount businessAccount){
-        Integer businessId = businessAccountRepo.save(businessAccount).getBusinessId();
-        return businessId;
+        return businessAccountRepo.save(businessAccount).getBusinessId();
     }
 
     //Admin Account Creation
