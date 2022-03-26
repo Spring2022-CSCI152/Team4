@@ -1,6 +1,6 @@
-package com.CSCI152.team4.server.AccountsReformat.Requests;
+package com.CSCI152.team4.server.Accounts.Requests;
 
-import com.CSCI152.team4.server.AccountsReformat.AccountClasses.AdminAccount;
+import com.CSCI152.team4.server.Accounts.Classes.AdminAccount;
 
 public class AdminRequest extends AccountCreationRequest{
 

@@ -1,4 +1,4 @@
-package com.CSCI152.team4.server.Accounts.Classes;
+package com.CSCI152.team4.server.Accounts.Requests;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
@@ -15,10 +15,13 @@ public class AccountCreationRequest {
     private String lastName;
     private String jobTitle;
 
-    public AccountCreationRequest(String token, String requestingAccountId, Integer businessId,
-                                       String email, String password,
-                                       String firstName, String lastName,
-                                       String jobTitle) {
+    public AccountCreationRequest(){}
+
+    public AccountCreationRequest(String token,
+                                  String requestingAccountId, Integer businessId,
+                                  String email, String password,
+                                  String firstName, String lastName,
+                                  String jobTitle) {
         this.token = token;
         this.requestingAccountId = requestingAccountId;
         this.businessId = businessId;
@@ -29,8 +32,15 @@ public class AccountCreationRequest {
         this.jobTitle = jobTitle;
     }
 
-    public AccountCreationRequest(){}
-
+    public AccountCreationRequest(String email, String password,
+                                  String firstName, String lastName,
+                                  String jobTitle) {
+        this.email = email;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.jobTitle = jobTitle;
+    }
 
     public String getToken() {
         return token;

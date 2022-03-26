@@ -2,152 +2,184 @@ package com.CSCI152.team4.server.Accounts.Classes;
 
 import com.CSCI152.team4.server.Accounts.Settings.ReportFormat;
 import com.CSCI152.team4.server.Accounts.Settings.ReportFormatBuilder;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
+@Entity
+@Table(name = "Business_Account")
+@SequenceGenerator(name = "business_id_seq", initialValue = 100, allocationSize = 899)
+public class BusinessAccount {
 
-//@Entity
-//@Table(name = "Business_Account")
-//@SequenceGenerator(name="business_id_seq", initialValue = 100, allocationSize=899)
-public class BusinessAccount{
-
-
-    public Integer getBusinessId() {
-        return businessId;
-    }
-
-
+    public static final String adminAccountType = "admin";
+    public static final String employeeAccountType = "employee";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "business_id_seq")
     private Integer businessId;
 
-    @NotEmpty
+    @NotBlank
     private String businessName;
+
+    @Column(nullable = false)
+    @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
+    @Size(min = 1)
+    private List<String> admins;
+
+    @Column(nullable = false)
+    @ElementCollection(targetClass = String.class, fetch = FetchType.LAZY)
+    private List<String> employees;
 
     @Embedded
     private ReportFormat reportFormat;
 
-    @Column(nullable = false)
-    @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
-    @NotEmpty(message = "Admin Accounts must not be empty!")
-    @Size(min = 1)
-    List<String> admins;
+    //@Embedded
+    //private ProfileFormat profileFormat;
 
-    @Column(nullable = false)
-    @ElementCollection(targetClass = String.class, fetch = FetchType.LAZY)
-    List<String> employees;
+    @Transient
+    private HashMap<String, String> accountMapper;
 
+    public BusinessAccount() {
+    }
 
-    public BusinessAccount(){}
-
-    public BusinessAccount(String businessName){
+    public BusinessAccount(String businessName, String adminId) {
         this.businessName = businessName;
-        this.admins = new ArrayList<>();
+        createEmployeeListsAndAddAdmin(adminId);
+        mapAccounts();
+        buildDefaultReportFormat();
+        buildDefaultProfileFormat();
+    }
+
+
+    private void createEmployeeListsAndAddAdmin(String adminId){
+        this.admins = new ArrayList<String>(Collections.singleton(adminId));
         this.employees = new ArrayList<>();
-        this.buildDefaultReportFormat();
-
-    }
-    public BusinessAccount(Integer id, String businessName) {
-        this.businessId = id;
-        this.businessName = businessName;
-        this.admins = new ArrayList<>();
-        this.employees = new ArrayList<>();
-        this.buildDefaultReportFormat();
     }
 
-    public BusinessAccount(Integer id, String businessName, String admin) {
-        this.businessId = id;
-        this.businessName = businessName;
-        if(admin != null) {
-            this.admins = new ArrayList<String>();
-            this.admins.add(admin);
-        }
-        this.employees = new ArrayList<String>();
-        this.buildDefaultReportFormat();
-    }
+    private void mapAccounts(){
 
-    public void addEmployee(String employeeId){
-        if(!this.employees.contains(employeeId)){
-            this.employees.add(employeeId);
-        }
-    }
+        this.accountMapper = new HashMap<>();
 
-    public void addAdmin(String adminId){
-        if(!this.admins.contains(adminId)){
-            this.admins.add(adminId);
+        for(String id : this.admins){
+            this.accountMapper.put(id, adminAccountType);
         }
 
-    }
-
-    public void removeEmployee(String employeeId){
-
-    }
-
-    public void removeAdmin(String adminId){
-
-    }
-
-    public ReportFormat getReportFormat() {
-        return reportFormat;
-    }
-
-    public void setReportFormat(ReportFormat reportFormat){
-        this.reportFormat = reportFormat;
+        for(String id : this.employees){
+            this.accountMapper.put(id, employeeAccountType);
+        }
     }
 
     private void buildDefaultReportFormat(){
         this.reportFormat = new ReportFormatBuilder().build();
     }
-    public List<String> getAdmins() {
-        return admins;
+
+    private void buildDefaultProfileFormat(){
+        //this.profileFormat = new ProfileFormatBuilder().build();
     }
 
-    public List<String> getEmployees() {
-        return employees;
-    }
-
-    public String getBusinessName() {
-        return businessName;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        BusinessAccount that = (BusinessAccount) o;
-        return businessId.equals(that.businessId)
-                && businessName.equals(that.businessName)
-                && reportFormat.equals(that.reportFormat)
-                && admins.equals(that.admins)
-                && employees.equals(that.employees);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(businessId, businessName, reportFormat, admins, employees);
+    public Integer getBusinessId() {
+        return businessId;
     }
 
     public void setBusinessId(Integer businessId) {
         this.businessId = businessId;
     }
 
-    public void setAdmins(List<String> admins) {
-        this.admins = admins;
-    }
-
-    public void setEmployees(List<String> employees) {
-        this.employees = employees;
+    public String getBusinessName() {
+        return businessName;
     }
 
     public void setBusinessName(String businessName) {
         this.businessName = businessName;
     }
-}
 
+    public List<String> getAdmins(){
+        return admins;
+    }
+
+    public List<String> getEmployees(){
+        return employees;
+    }
+
+    public ReportFormat getReportFormat() {
+        return reportFormat;
+    }
+
+    public void setReportFormat(ReportFormat reportFormat) {
+        this.reportFormat = reportFormat;
+    }
+
+    public String getAccountType(String accountId){
+        return this.accountMapper.get(accountId);
+    }
+
+    public void addAdmin(String accountId){
+        if(!this.admins.contains(accountId)){
+            this.admins.add(accountId);
+        }
+        mapAccounts();
+    }
+
+    public void addEmployee(String accountId){
+        if(!this.employees.contains(accountId)){
+            this.admins.add(accountId);
+        }
+        mapAccounts();
+    }
+
+    public void removeAdmin(String accountId){
+        this.admins.remove(accountId);
+        mapAccounts();
+    }
+
+    public void removeEmployee(String accountId){
+        this.employees.remove(accountId);
+        mapAccounts();
+    }
+
+    public void promote(String accountId){
+        if(this.accountMapper.get(accountId) == null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No account found!");
+        }
+
+        this.employees.remove(accountId);
+        this.admins.add(accountId);
+        mapAccounts();
+    }
+
+    public void demote(String accountId){
+        if(this.accountMapper.get(accountId) == null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No account found!");
+        }
+
+        this.admins.remove(accountId);
+        this.employees.add(accountId);
+        mapAccounts();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof BusinessAccount)) return false;
+        BusinessAccount that = (BusinessAccount) o;
+        return getBusinessId().equals(that.getBusinessId())
+                && getBusinessName().equals(that.getBusinessName())
+                && getAdmins().equals(that.getAdmins())
+                && Objects.equals(getEmployees(), that.getEmployees())
+                && Objects.equals(getReportFormat(), that.getReportFormat());
+
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getBusinessId(), getBusinessName(),
+                getAdmins(), getEmployees(), getReportFormat());
+    }
+}

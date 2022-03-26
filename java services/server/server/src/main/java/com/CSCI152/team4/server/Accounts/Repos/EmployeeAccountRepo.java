@@ -1,7 +1,7 @@
-package com.CSCI152.team4.server.AccountsReformat.Repos;
+package com.CSCI152.team4.server.Accounts.Repos;
 
-import com.CSCI152.team4.server.AccountsReformat.AccountClasses.AccountId;
-import com.CSCI152.team4.server.AccountsReformat.AccountClasses.EmployeeAccount;
+import com.CSCI152.team4.server.Accounts.Classes.AccountId;
+import com.CSCI152.team4.server.Accounts.Classes.EmployeeAccount;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

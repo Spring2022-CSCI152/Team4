@@ -1,6 +1,6 @@
-package com.CSCI152.team4.server.AccountsReformat.Requests;
+package com.CSCI152.team4.server.Accounts.Requests;
 
-import com.CSCI152.team4.server.AccountsReformat.AccountClasses.EmployeeAccount;
+import com.CSCI152.team4.server.Accounts.Classes.EmployeeAccount;
 
 public class EmployeeRequest extends AccountCreationRequest{
 

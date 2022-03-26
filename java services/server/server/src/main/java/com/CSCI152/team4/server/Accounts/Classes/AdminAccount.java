@@ -1,47 +1,68 @@
 package com.CSCI152.team4.server.Accounts.Classes;
 
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.Table;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
-//@Entity
-//@Table(name="Admin_Account")
-public class AdminAccount extends WorkerAccount {
+import static java.time.LocalDateTime.now;
 
-    @Id
-    private String accountId;
+@Entity
+@Table(name="Admin_Account")
+public class AdminAccount extends WorkerAccount{
+
+    @EmbeddedId
+    AccountId accountId;
 
     public AdminAccount() {
+        super();
+    }
+
+    public AdminAccount(Integer businessId,
+                        String email, String password,
+                        String firstName, String lastName,
+                        String jobTitle) {
+            super(businessId, email, password, firstName, lastName, Timestamp.valueOf(now()), jobTitle);
+            this.accountId = new AccountId(UUID.randomUUID().toString(), email, businessId);
     }
 
     public AdminAccount(String email, String password,
-                        String firstName, String lastName, String jobTitle, Integer businessId) {
-        super(businessId, email, password, firstName, lastName, Timestamp.valueOf(LocalDateTime.now()), jobTitle);
-        this.accountId = UUID.randomUUID().toString();
+                        String firstName, String lastName,
+                        String jobTitle) {
+        super(email, password, firstName, lastName, Timestamp.valueOf(now()), jobTitle);
+        this.accountId = new AccountId(UUID.randomUUID().toString(), email, null);
     }
 
-    public AdminAccount(String email, String password,
-                        String firstName, String lastName, String jobTitle) {
-        super(email, password, firstName, lastName, Timestamp.valueOf(LocalDateTime.now()), jobTitle);
-        this.accountId = UUID.randomUUID().toString();
+    public void setAccountId(String accountId){
+        this.accountId.setAccountId(accountId);
+    }
+
+    public AccountId getAccountId() { return this.accountId; }
+
+    @Override
+    public String getAccountIdString(){
+        return this.accountId.getAccountId();
     }
 
     @Override
-    public String getAccountId() {
-        return accountId;
+    public void setBusinessId(Integer businessId){
+        if(getBusinessId() == null){
+            super.setBusinessId(businessId);
+            this.accountId.setBusinessId(businessId);
+        }
     }
 
-    public void setAccountId(String accountId) {
-        this.accountId = accountId;
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o)
+                && this.getAccountIdString().equals(o);
     }
 
     @Override
     public String toString() {
         return "AdminAccount{" +
-                "accountId='" + accountId + '\'' +
+                "accountId=" + accountId.toString() +
                 ", email='" + this.getEmail() + '\'' +
                 ", businessId='" + this.getBusinessId() + '\'' +
                 ", password='" + this.getPassword() + '\'' +

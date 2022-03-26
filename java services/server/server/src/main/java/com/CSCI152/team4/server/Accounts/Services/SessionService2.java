@@ -1,9 +1,9 @@
-package com.CSCI152.team4.server.AccountsReformat.Services;
+package com.CSCI152.team4.server.Accounts.Services;
 
-import com.CSCI152.team4.server.AccountsReformat.AccountClasses.BusinessAccount;
-import com.CSCI152.team4.server.AccountsReformat.AccountClasses.WorkerAccount;
-import com.CSCI152.team4.server.AccountsReformat.Repos.RepoManager;
-import com.CSCI152.team4.server.AccountsReformat.Requests.LoginRequest;
+import com.CSCI152.team4.server.Accounts.Classes.BusinessAccount;
+import com.CSCI152.team4.server.Accounts.Classes.WorkerAccount;
+import com.CSCI152.team4.server.Accounts.Repos.RepoManager;
+import com.CSCI152.team4.server.Accounts.Requests.LoginRequest;
 import com.CSCI152.team4.server.Util.AccountAuthenticator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,9 +32,9 @@ public class SessionService2 {
 
         validatePassword(request.getPassword(), account.getPassword());
 
-        validateBusinessRelation(request.getBusinessId(), account.getAccountId());
+        validateBusinessRelation(request.getBusinessId(), account.getAccountIdString());
 
-        account.setToken(authenticator.getToken(account.getAccountId()));
+        account.setToken(authenticator.getToken(account.getAccountIdString()));
 
         return account;
     }

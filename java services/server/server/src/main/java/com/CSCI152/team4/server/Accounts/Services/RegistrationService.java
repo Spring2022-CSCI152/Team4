@@ -1,14 +1,14 @@
-package com.CSCI152.team4.server.AccountsReformat.Services;
+package com.CSCI152.team4.server.Accounts.Services;
 
-import com.CSCI152.team4.server.AccountsReformat.AccountClasses.AdminAccount;
-import com.CSCI152.team4.server.AccountsReformat.AccountClasses.BusinessAccount;
-import com.CSCI152.team4.server.AccountsReformat.AccountClasses.EmployeeAccount;
-import com.CSCI152.team4.server.AccountsReformat.AccountClasses.WorkerAccount;
-import com.CSCI152.team4.server.AccountsReformat.Repos.RepoManager;
-import com.CSCI152.team4.server.AccountsReformat.Requests.AccountCreationRequest;
-import com.CSCI152.team4.server.AccountsReformat.Requests.AdminRequest;
-import com.CSCI152.team4.server.AccountsReformat.Requests.BusinessRequest;
-import com.CSCI152.team4.server.AccountsReformat.Requests.EmployeeRequest;
+import com.CSCI152.team4.server.Accounts.Classes.AdminAccount;
+import com.CSCI152.team4.server.Accounts.Classes.BusinessAccount;
+import com.CSCI152.team4.server.Accounts.Classes.EmployeeAccount;
+import com.CSCI152.team4.server.Accounts.Classes.WorkerAccount;
+import com.CSCI152.team4.server.Accounts.Repos.RepoManager;
+import com.CSCI152.team4.server.Accounts.Requests.AccountCreationRequest;
+import com.CSCI152.team4.server.Accounts.Requests.AdminRequest;
+import com.CSCI152.team4.server.Accounts.Requests.BusinessRequest;
+import com.CSCI152.team4.server.Accounts.Requests.EmployeeRequest;
 import com.CSCI152.team4.server.Util.AccountAuthenticator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -68,7 +68,7 @@ public class RegistrationService {
 
         //2. Create the BusinessAccount using the AdminAccount ID
         BusinessAccount newBusinessAccount
-                = request.getBusinessAccount(returnable.getAccountId());
+                = request.getBusinessAccount(returnable.getAccountIdString());
 
         //3. Save BusinessAccount to retrieve generated ID
         Integer businessId
@@ -79,7 +79,7 @@ public class RegistrationService {
         repos.saveAdminAccount(returnable);
 
         //5. Get Token and Clear AdminAccount Password field
-        returnable.setToken(authenticator.getToken(returnable.getAccountId()));
+        returnable.setToken(authenticator.getToken(returnable.getAccountIdString()));
         returnable.setPassword("");
 
         //6. Return Account Info
@@ -97,7 +97,7 @@ public class RegistrationService {
         encryptPassword(newAdmin);
 
         assert businessAccount != null;
-        businessAccount.addAdmin(newAdmin.getAccountId());
+        businessAccount.addAdmin(newAdmin.getAccountIdString());
 
         repos.saveBusinessAccount(businessAccount);
         repos.saveAdminAccount(newAdmin);
@@ -118,7 +118,7 @@ public class RegistrationService {
         encryptPassword(newEmployee);
 
         assert businessAccount != null;
-        businessAccount.addEmployee(newEmployee.getAccountId());
+        businessAccount.addEmployee(newEmployee.getAccountIdString());
 
         repos.saveBusinessAccount(businessAccount);
         repos.saveEmployeeAccount(newEmployee);

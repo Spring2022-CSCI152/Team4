@@ -1,5 +1,6 @@
-package com.CSCI152.team4.server.AccountsReformat.AccountClasses;
+package com.CSCI152.team4.server.Accounts.Classes;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
@@ -9,7 +10,9 @@ public class AccountId implements Serializable {
 
 
     private String accountId;
+    @Column(insertable = false, updatable = false)
     private String email;
+    @Column(insertable = false, updatable = false)
     private Integer businessId;
 
     public AccountId() {
