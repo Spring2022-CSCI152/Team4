@@ -14,20 +14,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.TransactionSystemException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.validation.ConstraintViolationException;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doReturn;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+//@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@TestPropertySource(properties = {
+        "spring.datasource.url=jdbc:mysql://localhost:3306/frmw",
+        "spring.jpa.hibernate.ddl-auto=validate",
+        "spring.jpa.show-sql=false"
+})
 class BusinessAccountRepoTest {
 
     @Autowired
@@ -77,6 +86,20 @@ class BusinessAccountRepoTest {
                 .ignoringFields("accountMapper").isEqualTo(account)); //Account Mapper is transient
     }
 
+
+    @Test
+    void itShouldThrowExceptionOnNoAdmin(){
+        BusinessAccount account = getBusinessAccount();
+        account.removeAdmin(mockAdmin.getAccountIdString());
+
+
+        Exception e = assertThrows(TransactionSystemException.class,
+                () -> {
+                    underTest.save(account);
+//                    entityManager.flush();
+                });
+        assertTrue(e.getCause().getCause() instanceof ConstraintViolationException);
+    }
 
     @Test
     void itShouldAddAdmin(){

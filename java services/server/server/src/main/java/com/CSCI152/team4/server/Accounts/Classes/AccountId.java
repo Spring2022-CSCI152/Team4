@@ -2,6 +2,7 @@ package com.CSCI152.team4.server.Accounts.Classes;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -9,6 +10,7 @@ import java.util.Objects;
 public class AccountId implements Serializable {
 
 
+    @NotBlank
     private String accountId;
     @Column(insertable = false, updatable = false)
     private String email;

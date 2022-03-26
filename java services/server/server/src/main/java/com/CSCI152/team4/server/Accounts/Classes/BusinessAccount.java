@@ -25,7 +25,7 @@ public class BusinessAccount {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "business_id_seq")
     private Integer businessId;
 
-    @NotBlank
+    @NotEmpty
     private String businessName;
 
     @Column(nullable = false)

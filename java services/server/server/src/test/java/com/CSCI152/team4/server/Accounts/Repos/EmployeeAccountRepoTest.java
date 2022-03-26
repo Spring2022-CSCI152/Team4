@@ -10,10 +10,14 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.persistence.EntityManager;
+import javax.validation.ConstraintViolationException;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +30,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 //@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@TestPropertySource(properties = {
+        "spring.datasource.url=jdbc:mysql://localhost:3306/frmw",
+        "spring.jpa.hibernate.ddl-auto=validate",
+        "spring.jpa.show-sql=false"
+})
 class EmployeeAccountRepoTest {
 
     @Autowired
@@ -98,12 +107,15 @@ class EmployeeAccountRepoTest {
     void itShouldNotSaveWithNullIdParameters(){
         EmployeeAccount account = getEmployeeAccount(null);
 
+
         Exception e = assertThrows(org.springframework.dao.DataIntegrityViolationException.class, () -> {
             underTest.save(account);
-            entityManager.flush();
+//            entityManager.flush();
         });
+        assertThat(e).hasMessageContaining("could not execute statement");
 
-        assertThat(e).hasMessageContaining("could not execute statement;");
+
+
     }
 
     @Test

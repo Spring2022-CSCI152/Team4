@@ -16,11 +16,12 @@ import java.util.Objects;
 @MappedSuperclass
 public class WorkerAccount {
 
-    @NotBlank
-    @Column(insertable = false, updatable = false)
+
+    @Column(nullable = false, insertable = false, updatable = false)
     private Integer businessId;
-    @Column(insertable = false, updatable = false)
+    @Column(nullable = false, insertable = false, updatable = false)
     private String email;
+    @Column(nullable = false)
     private String password;
     private String firstName;
     private String lastName;
