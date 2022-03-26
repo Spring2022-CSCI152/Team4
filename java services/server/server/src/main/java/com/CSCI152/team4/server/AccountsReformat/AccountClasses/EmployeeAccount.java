@@ -2,9 +2,7 @@ package com.CSCI152.team4.server.AccountsReformat.AccountClasses;
 
 import com.CSCI152.team4.server.Accounts.Settings.Permissions;
 
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.EmbeddedId;
+import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +10,8 @@ import java.util.UUID;
 
 import static java.time.LocalDateTime.now;
 
+@Entity
+@Table(name="Employee_Account")
 public class EmployeeAccount extends WorkerAccount{
 
     @EmbeddedId

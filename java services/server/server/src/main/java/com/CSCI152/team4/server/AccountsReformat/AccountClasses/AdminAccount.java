@@ -1,11 +1,15 @@
 package com.CSCI152.team4.server.AccountsReformat.AccountClasses;
 
 import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.sql.Timestamp;
 import java.util.UUID;
 
 import static java.time.LocalDateTime.now;
 
+@Entity
+@Table(name="Admin_Account")
 public class AdminAccount extends WorkerAccount{
 
     @EmbeddedId

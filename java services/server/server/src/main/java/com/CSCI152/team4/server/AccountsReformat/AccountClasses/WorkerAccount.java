@@ -1,7 +1,6 @@
 package com.CSCI152.team4.server.AccountsReformat.AccountClasses;
 
 
-import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotBlank;
@@ -12,6 +11,7 @@ import java.util.Objects;
  * This class serves as the base for AdminAccounts and EmployeeAccounts.
  * It will be a mapped superclass to allow compatibility with Hibernate and
  * Data JPA*/
+
 @MappedSuperclass
 public class WorkerAccount {
 
