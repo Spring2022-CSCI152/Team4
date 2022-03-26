@@ -8,7 +8,7 @@ import java.util.Objects;
 /*This class acts as an intermediary step between
 * Accounts and Admin/Employee Accounts to make
 * inheritance issues easier to work with*/
-@MappedSuperclass
+//@MappedSuperclass
 public class WorkerAccount{
 
     @NotBlank

@@ -1,32 +1,31 @@
 package com.CSCI152.team4.server.Accounts.Endpoint;
 
 import com.CSCI152.team4.server.Accounts.Classes.*;
-import com.CSCI152.team4.server.Accounts.Repos.AdminAccountRepo;
-import com.CSCI152.team4.server.Accounts.Repos.BusinessAccountRepo;
-import com.CSCI152.team4.server.Accounts.Repos.EmployeeAccountRepo;
+import com.CSCI152.team4.server.Accounts.Repos.AdminAccountRepo2;
+import com.CSCI152.team4.server.Accounts.Repos.BusinessAccountRepo2;
+import com.CSCI152.team4.server.Accounts.Repos.EmployeeAccountRepo2;
 import com.CSCI152.team4.server.Util.AccountAuthenticator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
-@Service
+//@Service
 public class AccountsService {
 
 
-    private final AdminAccountRepo adminAccountRepo;
-    private final EmployeeAccountRepo employeeAccountRepo;
-    private final BusinessAccountRepo businessAccountRepo;
+    private final AdminAccountRepo2 adminAccountRepo2;
+    private final EmployeeAccountRepo2 employeeAccountRepo2;
+    private final BusinessAccountRepo2 businessAccountRepo2;
     private final AccountAuthenticator accountAuthenticator;
 
     @Autowired
-    public AccountsService(AdminAccountRepo adminAccountRepo, EmployeeAccountRepo employeeAccountRepo, BusinessAccountRepo businessAccountRepo, AccountAuthenticator accountAuthenticator) {
-        this.adminAccountRepo = adminAccountRepo;
-        this.employeeAccountRepo = employeeAccountRepo;
-        this.businessAccountRepo = businessAccountRepo;
+    public AccountsService(AdminAccountRepo2 adminAccountRepo2, EmployeeAccountRepo2 employeeAccountRepo2, BusinessAccountRepo2 businessAccountRepo2, AccountAuthenticator accountAuthenticator) {
+        this.adminAccountRepo2 = adminAccountRepo2;
+        this.employeeAccountRepo2 = employeeAccountRepo2;
+        this.businessAccountRepo2 = businessAccountRepo2;
         this.accountAuthenticator = accountAuthenticator;
     }
 
@@ -69,7 +68,7 @@ public class AccountsService {
 
         //extracted for clarity. This line, and the above line can all be done in the same line
         adminAccount.setBusinessId(generatedBusinessId);
-        adminAccountRepo.save(adminAccount);
+        adminAccountRepo2.save(adminAccount);
     }
 
     private void clearPassword(WorkerAccount account){
@@ -77,7 +76,7 @@ public class AccountsService {
     }
 
     private Integer saveBusinessAccountAndReturnId(BusinessAccount businessAccount){
-        return businessAccountRepo.save(businessAccount).getBusinessId();
+        return businessAccountRepo2.save(businessAccount).getBusinessId();
     }
 
     //Admin Account Creation
@@ -93,7 +92,7 @@ public class AccountsService {
         //TODO: Throw Error if cannot validate
         accountAuthenticator.validateToken(request.getToken(), request.getRequestingAccountId());
 
-        if(adminAccountRepo.existsById(request.getRequestingAccountId())){
+        if(adminAccountRepo2.existsById(request.getRequestingAccountId())){
             //Validation
             throwErrorIfInvalidBusinessIdForAdmin(request.getRequestingAccountId(), request.getBusinessId());
             createAndSaveAdminAccount(request.getAdminAccount());
@@ -104,8 +103,8 @@ public class AccountsService {
 
     private void throwErrorIfInvalidBusinessIdForAdmin(String adminAccountId, Integer businessId) throws ResponseStatusException
     {
-        if(businessAccountRepo.existsById(businessId)){
-            List<String> adminsInBusiness = businessAccountRepo.findById(businessId).get().getAdmins();
+        if(businessAccountRepo2.existsById(businessId)){
+            List<String> adminsInBusiness = businessAccountRepo2.findById(businessId).get().getAdmins();
 
             if(!adminsInBusiness.contains(adminAccountId)){
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This account is not registered with this business");
@@ -123,15 +122,15 @@ public class AccountsService {
 
         //Saves Account
         saveAdminAccountToBusiness(newAccount.getAccountId(), newAccount.getBusinessId());
-        adminAccountRepo.save(newAccount);
+        adminAccountRepo2.save(newAccount);
     }
 
     private void saveAdminAccountToBusiness(String accountId, Integer businessId){
-        if(businessAccountRepo.existsById(businessId)){
-            BusinessAccount businessAccount = businessAccountRepo.findById(businessId).get();
+        if(businessAccountRepo2.existsById(businessId)){
+            BusinessAccount businessAccount = businessAccountRepo2.findById(businessId).get();
             businessAccount.addAdmin(accountId);
 
-            businessAccountRepo.save(businessAccount);
+            businessAccountRepo2.save(businessAccount);
         }
     }
 
@@ -141,7 +140,7 @@ public class AccountsService {
         accountAuthenticator.validateToken(request.getToken(), request.getRequestingAccountId());
         //validate all fields of request are filled
         request.validate();
-        if(employeeAccountRepo.existsById(request.getRequestingAccountId())){
+        if(employeeAccountRepo2.existsById(request.getRequestingAccountId())){
             //Validation
             throwErrorIfInvalidBusinessIdForEmployee(request.getRequestingAccountId(), request.getBusinessId());
             createAndSaveEmployeeAccount(request.getEmployeeAccount());
@@ -152,8 +151,8 @@ public class AccountsService {
     }
     private void throwErrorIfInvalidBusinessIdForEmployee(String employeeAccountId, Integer businessId) throws ResponseStatusException
     {
-        if(businessAccountRepo.existsById(businessId)){
-            List<String> employeesInBusiness = businessAccountRepo.findById(businessId).get().getEmployees();
+        if(businessAccountRepo2.existsById(businessId)){
+            List<String> employeesInBusiness = businessAccountRepo2.findById(businessId).get().getEmployees();
 
             if(!employeesInBusiness.contains(employeeAccountId)){
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This account is not registered with this business");
@@ -169,15 +168,15 @@ public class AccountsService {
         newAccount.setPassword(hashPassword(newAccount.getPassword()));
         //Save Account
         saveEmployeeAccountToBusiness(newAccount.getAccountId(), newAccount.getBusinessId());
-        employeeAccountRepo.save(newAccount);
+        employeeAccountRepo2.save(newAccount);
     }
 
     private void saveEmployeeAccountToBusiness(String accountId, Integer businessId){
-        if(businessAccountRepo.existsById(businessId)){
-            BusinessAccount businessAccount = businessAccountRepo.findById(businessId).get();
+        if(businessAccountRepo2.existsById(businessId)){
+            BusinessAccount businessAccount = businessAccountRepo2.findById(businessId).get();
             businessAccount.addEmployee(accountId);
 
-            businessAccountRepo.save(businessAccount);
+            businessAccountRepo2.save(businessAccount);
         }
     }
 

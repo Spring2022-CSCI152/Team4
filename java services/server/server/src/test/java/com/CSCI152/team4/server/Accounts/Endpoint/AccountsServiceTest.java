@@ -1,9 +1,9 @@
 package com.CSCI152.team4.server.Accounts.Endpoint;
 
 import com.CSCI152.team4.server.Accounts.Classes.*;
-import com.CSCI152.team4.server.Accounts.Repos.AdminAccountRepo;
-import com.CSCI152.team4.server.Accounts.Repos.BusinessAccountRepo;
-import com.CSCI152.team4.server.Accounts.Repos.EmployeeAccountRepo;
+import com.CSCI152.team4.server.Accounts.Repos.AdminAccountRepo2;
+import com.CSCI152.team4.server.Accounts.Repos.BusinessAccountRepo2;
+import com.CSCI152.team4.server.Accounts.Repos.EmployeeAccountRepo2;
 import com.CSCI152.team4.server.Util.AccountAuthenticator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -26,9 +26,9 @@ class AccountsServiceTest {
     @Autowired
     private AccountsService underTest;
 
-    @Mock private BusinessAccountRepo businessAccountRepo;
-    @Mock private EmployeeAccountRepo employeeAccountRepo;
-    @Mock private AdminAccountRepo adminAccountRepo;
+    @Mock private BusinessAccountRepo2 businessAccountRepo2;
+    @Mock private EmployeeAccountRepo2 employeeAccountRepo2;
+    @Mock private AdminAccountRepo2 adminAccountRepo2;
     @Mock private BusinessAccount businessAccount;
     @Mock private AdminAccount adminAccount;
     @Mock private AccountAuthenticator accountAuthenticator;
@@ -54,9 +54,9 @@ class AccountsServiceTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        underTest = new AccountsService(adminAccountRepo,
-                                        employeeAccountRepo,
-                                        businessAccountRepo, accountAuthenticator);
+        underTest = new AccountsService(adminAccountRepo2,
+                employeeAccountRepo2,
+                businessAccountRepo2, accountAuthenticator);
     }
 
 
@@ -66,15 +66,15 @@ class AccountsServiceTest {
     void itShouldShouldCreateANewBusinessAccountWithCorrespondingAdminAccount() {
         // Given
         Integer businessId = 127;
-        given(businessAccountRepo.save(any())).willReturn(businessAccount);
+        given(businessAccountRepo2.save(any())).willReturn(businessAccount);
         given(businessAccount.getBusinessId()).willReturn(businessId);
         given(adminAccount.getPassword()).willReturn("password");
         //when
         underTest.registerBusinessAccount(this.getBusinessRegistrationRequest());
 
         //then
-        verify(businessAccountRepo).save(businessAccountArgumentCaptor.capture());
-        verify(adminAccountRepo).save(adminAccountArgumentCaptor.capture());
+        verify(businessAccountRepo2).save(businessAccountArgumentCaptor.capture());
+        verify(adminAccountRepo2).save(adminAccountArgumentCaptor.capture());
 
         /*
         * Given the registration function, a business account and an admin account
@@ -105,11 +105,11 @@ class AccountsServiceTest {
         // Given
         Integer businessId = 127;
         String accountId = "adminId";
-        given(businessAccountRepo.existsById(businessId)).willReturn(true);
-        given(businessAccountRepo.findById(any())).willReturn(Optional.of(businessAccount));
+        given(businessAccountRepo2.existsById(businessId)).willReturn(true);
+        given(businessAccountRepo2.findById(any())).willReturn(Optional.of(businessAccount));
         given(businessAccount.getAdmins()).willReturn(List.of(accountId));
         given(businessAccount.getBusinessId()).willReturn(businessId);
-        given(adminAccountRepo.existsById(any())).willReturn(Boolean.valueOf(true));
+        given(adminAccountRepo2.existsById(any())).willReturn(Boolean.valueOf(true));
         given(adminAccount.getAccountId()).willReturn(accountId);
 
         AdminAccountCreationRequest request = this.getAdminCreationRequest(accountId,accountId, businessId);
@@ -120,7 +120,7 @@ class AccountsServiceTest {
 
         // Then
         //The only time it should save an account is when every step is valid
-        verify(adminAccountRepo).save(adminAccountArgumentCaptor.capture());
+        verify(adminAccountRepo2).save(adminAccountArgumentCaptor.capture());
         assertThat(adminAccountArgumentCaptor.getValue()).usingRecursiveComparison()
                 .ignoringFields("accountId", "password", "timestamp") //Account ID gets auto generated, password gets hashed, timestamp has accuracy issues
                 .isEqualTo(expected);
@@ -131,11 +131,11 @@ class AccountsServiceTest {
         // Given
         Integer businessId = 127;
         String accountId = "adminId";
-        given(businessAccountRepo.existsById(businessId)).willReturn(true);
-        given(businessAccountRepo.findById(any())).willReturn(Optional.of(businessAccount));
+        given(businessAccountRepo2.existsById(businessId)).willReturn(true);
+        given(businessAccountRepo2.findById(any())).willReturn(Optional.of(businessAccount));
         given(businessAccount.getAdmins()).willReturn(List.of("125", "126", "127"));
         given(businessAccount.getBusinessId()).willReturn(businessId);
-        given(adminAccountRepo.existsById(any())).willReturn(Boolean.valueOf(true));
+        given(adminAccountRepo2.existsById(any())).willReturn(Boolean.valueOf(true));
         given(adminAccount.getAccountId()).willReturn(accountId);
 
         // When
@@ -153,8 +153,8 @@ class AccountsServiceTest {
         Integer businessId = 127;
         String accountId = "adminId";
         AdminAccountCreationRequest request = this.getAdminCreationRequest(accountId,accountId, businessId);
-        given(adminAccountRepo.existsById(any())).willReturn(true);
-        given(businessAccountRepo.existsById(any())).willReturn(false);
+        given(adminAccountRepo2.existsById(any())).willReturn(true);
+        given(businessAccountRepo2.existsById(any())).willReturn(false);
 
         // When
         // Then

@@ -12,9 +12,9 @@ import java.util.List;
 import java.util.Objects;
 
 
-@Entity
-@Table(name = "Business_Account")
-@SequenceGenerator(name="business_id_seq", initialValue = 100, allocationSize=899)
+//@Entity
+//@Table(name = "Business_Account")
+//@SequenceGenerator(name="business_id_seq", initialValue = 100, allocationSize=899)
 public class BusinessAccount{
 
 

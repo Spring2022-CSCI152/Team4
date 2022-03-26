@@ -24,10 +24,10 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class BusinessAccountRepoTest {
+class BusinessAccountRepo2Test {
 
     @Autowired
-    private BusinessAccountRepo underTest;
+    private BusinessAccountRepo2 underTest;
 
     @Autowired
     private EntityManager entityManager;

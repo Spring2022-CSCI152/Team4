@@ -13,13 +13,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
-public class SessionService {
+public class SessionService2 {
 
     private final AccountAuthenticator authenticator;
     private final RepoManager repos;
 
     @Autowired
-    public SessionService(AccountAuthenticator authenticator, RepoManager repos) {
+    public SessionService2(AccountAuthenticator authenticator, RepoManager repos) {
         this.authenticator = authenticator;
         this.repos = repos;
     }

@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("api/v1/accounts")
-public class AccountsController {
+public class AccountsController2 {
 
     /**
      * This controller will map to 3 services all related to accounts.

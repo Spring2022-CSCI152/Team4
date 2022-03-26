@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Entity
-@Table(name="Employee_Account")
+//@Entity
+//@Table(name="Employee_Account")
 public class EmployeeAccount extends WorkerAccount {
 
 

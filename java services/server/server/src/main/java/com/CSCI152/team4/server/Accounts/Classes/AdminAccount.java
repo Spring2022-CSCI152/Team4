@@ -7,8 +7,8 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Entity
-@Table(name="Admin_Account")
+//@Entity
+//@Table(name="Admin_Account")
 public class AdminAccount extends WorkerAccount {
 
     @Id

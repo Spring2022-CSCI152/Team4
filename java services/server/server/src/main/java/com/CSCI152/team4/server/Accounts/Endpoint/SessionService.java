@@ -4,35 +4,33 @@ import com.CSCI152.team4.server.Accounts.Classes.AdminAccount;
 import com.CSCI152.team4.server.Accounts.Classes.BusinessAccount;
 import com.CSCI152.team4.server.Accounts.Classes.EmployeeAccount;
 import com.CSCI152.team4.server.Accounts.Classes.WorkerAccount;
-import com.CSCI152.team4.server.Accounts.Repos.AdminAccountRepo;
-import com.CSCI152.team4.server.Accounts.Repos.BusinessAccountRepo;
-import com.CSCI152.team4.server.Accounts.Repos.EmployeeAccountRepo;
+import com.CSCI152.team4.server.Accounts.Repos.AdminAccountRepo2;
+import com.CSCI152.team4.server.Accounts.Repos.BusinessAccountRepo2;
+import com.CSCI152.team4.server.Accounts.Repos.EmployeeAccountRepo2;
 import com.CSCI152.team4.server.Util.AccountAuthenticator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
 import static org.springframework.security.crypto.bcrypt.BCrypt.checkpw;
 
-@Service
+//@Service
 public class SessionService {
 
-    private final AdminAccountRepo adminAccountRepo;
-    private final EmployeeAccountRepo employeeAccountRepo;
-    private final BusinessAccountRepo businessAccountRepo;
+    private final AdminAccountRepo2 adminAccountRepo2;
+    private final EmployeeAccountRepo2 employeeAccountRepo2;
+    private final BusinessAccountRepo2 businessAccountRepo2;
     private final AccountAuthenticator accountAuthenticator;
 
     @Autowired
-    public SessionService(AdminAccountRepo adminRepo, EmployeeAccountRepo employeeAccountRepo,
-                          BusinessAccountRepo businessAccountRepo, AccountAuthenticator accountAuthenticator) {
-        this.adminAccountRepo = adminRepo;
-        this.employeeAccountRepo = employeeAccountRepo;
-        this.businessAccountRepo = businessAccountRepo;
+    public SessionService(AdminAccountRepo2 adminRepo, EmployeeAccountRepo2 employeeAccountRepo2,
+                          BusinessAccountRepo2 businessAccountRepo2, AccountAuthenticator accountAuthenticator) {
+        this.adminAccountRepo2 = adminRepo;
+        this.employeeAccountRepo2 = employeeAccountRepo2;
+        this.businessAccountRepo2 = businessAccountRepo2;
         this.accountAuthenticator = accountAuthenticator;
     }
 
@@ -62,9 +60,9 @@ public class SessionService {
     private String setAccountInfoAndReturnId(WorkerAccount account){
 
         Optional<AdminAccount> adminAccount =
-                adminAccountRepo.findFirstByEmailAndBusinessId(account.getEmail(), account.getBusinessId());
+                adminAccountRepo2.findFirstByEmailAndBusinessId(account.getEmail(), account.getBusinessId());
         Optional<EmployeeAccount> employeeAccount =
-                employeeAccountRepo.findFirstByEmailAndBusinessId(account.getEmail(), account.getBusinessId());
+                employeeAccountRepo2.findFirstByEmailAndBusinessId(account.getEmail(), account.getBusinessId());
 
         WorkerAccount persisted;
 
@@ -89,7 +87,7 @@ public class SessionService {
 
     private boolean verifyBusinessConnection(Integer businessId, String accountId){
 
-        Optional<BusinessAccount> optional = businessAccountRepo.findById(businessId);
+        Optional<BusinessAccount> optional = businessAccountRepo2.findById(businessId);
 
         if(optional.isPresent()){
             BusinessAccount businessAccount = optional.get();

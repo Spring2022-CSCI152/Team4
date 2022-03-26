@@ -1,6 +1,7 @@
 package com.CSCI152.team4.server.AccountsReformat.AccountClasses;
 
 
+import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotBlank;
@@ -16,7 +17,9 @@ import java.util.Objects;
 public class WorkerAccount {
 
     @NotBlank
+    @Column(insertable = false, updatable = false)
     private Integer businessId;
+    @Column(insertable = false, updatable = false)
     private String email;
     private String password;
     private String firstName;

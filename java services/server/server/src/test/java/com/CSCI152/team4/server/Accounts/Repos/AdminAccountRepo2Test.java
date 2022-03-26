@@ -19,10 +19,10 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class AdminAccountRepoTest {
+class AdminAccountRepo2Test {
 
     @Autowired
-    AdminAccountRepo underTest;
+    AdminAccountRepo2 underTest;
 
     @Autowired
     private EntityManager entityManager;
