@@ -7,6 +7,7 @@ import java.util.Objects;
 @Embeddable
 public class AccountId implements Serializable {
 
+
     private String accountId;
     private String email;
     private Integer businessId;

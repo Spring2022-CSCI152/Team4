@@ -43,11 +43,12 @@ public class RegistrationService {
      * 2. Create the BusinessAccount using the AdminAccount ID
      * 3. Save BusinessAccount to retrieve generated ID
      * 4. Set AdminAccount's businessId and Save
-     * 5. Clear AdminAccount Password field and return
+     * 5. Get Token and Clear AdminAccount Password field
+     * 6. Return Account info
      * @param request The request holding the admin account information and business
      *                name
      *
-     * @returns AdminAccount containing the accounts information and am empty
+     * @return AdminAccount containing the accounts information and am empty
      * password field*/
     public AdminAccount registerBusiness(BusinessRequest request){
         /*
@@ -58,6 +59,8 @@ public class RegistrationService {
         *
         * As a token of my apology, see the comments below
         * */
+
+        request.validate();
 
         //1. Extract the AdminAccount and encrypt the Password
         AdminAccount returnable = request.getAdminAccount();
@@ -75,14 +78,18 @@ public class RegistrationService {
         returnable.setBusinessId(businessId);
         repos.saveAdminAccount(returnable);
 
-        //5. Clear AdminAccount Password field and return
+        //5. Get Token and Clear AdminAccount Password field
+        returnable.setToken(authenticator.getToken(returnable.getAccountId()));
         returnable.setPassword("");
+
+        //6. Return Account Info
         return returnable;
     }
 
     public ResponseEntity<Enum<HttpStatus>> registerAdmin(AdminRequest request){
 
         validateRequest(request);
+        checkForPriorRegistration(request);
 
         BusinessAccount businessAccount = getBusinessAccountIfValid(request);
 
@@ -103,6 +110,7 @@ public class RegistrationService {
     public ResponseEntity<Enum<HttpStatus>> registerEmployee(EmployeeRequest request){
 
         validateRequest(request);
+        checkForPriorRegistration(request);
 
         BusinessAccount businessAccount = getBusinessAccountIfValid(request);
 
@@ -128,6 +136,12 @@ public class RegistrationService {
         request.validate();
     }
 
+    private void checkForPriorRegistration(AccountCreationRequest request){
+        if(repos.getAccountByEmailAndBusinessId(
+                request.getEmail(), request.getBusinessId()) != null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+    }
     private BusinessAccount getBusinessAccountIfValid(AccountCreationRequest request){
 
         BusinessAccount returnable = repos.getBusinessIfExists(request.getBusinessId());

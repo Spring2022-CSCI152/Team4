@@ -1,10 +1,7 @@
 package com.CSCI152.team4.server.AccountsReformat.Repos;
 
 
-import com.CSCI152.team4.server.AccountsReformat.AccountClasses.AccountId;
-import com.CSCI152.team4.server.AccountsReformat.AccountClasses.AdminAccount;
-import com.CSCI152.team4.server.AccountsReformat.AccountClasses.BusinessAccount;
-import com.CSCI152.team4.server.AccountsReformat.AccountClasses.EmployeeAccount;
+import com.CSCI152.team4.server.AccountsReformat.AccountClasses.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -105,5 +102,22 @@ public class RepoManager {
         return null;
     }
 
+    public WorkerAccount getAccountByEmailAndBusinessId(String email, Integer businessId){
+
+        Optional returnable = Optional.empty();
+        if(employees.existsByEmailAndBusinessId(email, businessId)){
+            returnable =
+                     employees.findTopByEmailAndBusinessId(email, businessId);
+        }
+        else if(admins.existsByEmailAndBusinessId(email, businessId)){
+            returnable =
+                    admins.findTopByEmailAndBusinessId(email, businessId);
+        }
+
+        if(returnable != null && returnable.isPresent()){
+            return (WorkerAccount) returnable.get();
+        }
+        return null;
+    }
 
 }
