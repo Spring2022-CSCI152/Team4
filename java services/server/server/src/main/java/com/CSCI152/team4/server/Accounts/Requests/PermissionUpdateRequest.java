@@ -75,11 +75,11 @@ public class PermissionUpdateRequest {
     }
 
     public String getRequestAccountIdString(){
-        return requestingAccountId.getAccountId();
+        return requestingAccountId.getAccountIdString();
     }
 
     public String getAccountToUpdateIdString(){
-        return accountToUpdateId.getAccountId();
+        return accountToUpdateId.getAccountIdString();
     }
 
     @Override

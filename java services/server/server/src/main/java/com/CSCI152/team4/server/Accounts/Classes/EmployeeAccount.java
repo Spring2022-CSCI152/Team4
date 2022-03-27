@@ -63,14 +63,14 @@ public class EmployeeAccount extends WorkerAccount{
     }
 
     public void setAccountId(String accountId){
-        this.accountId.setAccountId(accountId);
+        this.accountId.setAccountIdString(accountId);
     }
 
     public AccountId getAccountId() { return this.accountId; }
 
     @Override
     public String getAccountIdString(){
-        return this.accountId.getAccountId();
+        return this.accountId.getAccountIdString();
     }
 
     @Override

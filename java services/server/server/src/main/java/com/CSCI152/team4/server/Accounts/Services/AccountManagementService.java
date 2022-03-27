@@ -110,27 +110,27 @@ public class AccountManagementService {
     }
 
     public AdminAccount getAdminAccountInfo(String token, AccountId accountId){
-        authenticator.validateToken(token, accountId.getAccountId());
+        authenticator.validateToken(token, accountId.getAccountIdString());
 
         return (AdminAccount) getReturnableIfAdminExists(accountId,
                 () -> getReturnableAdmin(accountId));
     }
 
     public EmployeeAccount getEmployeeAccountInfo(String token, AccountId accountId){
-        authenticator.validateToken(token, accountId.getAccountId());
+        authenticator.validateToken(token, accountId.getAccountIdString());
 
         return (EmployeeAccount) getReturnableIfEmployeeExists(accountId,
                 () -> getReturnableEmployee(accountId));
     }
 
     public AdminAccount getAdminAccountFromAdmin(String token, AccountId requestingAccount, AccountId targetAccount){
-        authenticator.validateToken(token, requestingAccount.getAccountId());
+        authenticator.validateToken(token, requestingAccount.getAccountIdString());
         return (AdminAccount) getReturnableIfAdminExists(requestingAccount,
                 () -> getReturnableAdmin(targetAccount));
     }
 
     public EmployeeAccount getEmployeeAccountFromAdmin(String token, AccountId requestingAccount, AccountId targetAccount){
-        authenticator.validateToken(token, requestingAccount.getAccountId());
+        authenticator.validateToken(token, requestingAccount.getAccountIdString());
 
         return (EmployeeAccount) getReturnableIfAdminExists(requestingAccount,
                 () -> getReturnableEmployee(targetAccount));

@@ -11,7 +11,7 @@ public class AccountId implements Serializable {
 
 
     @NotBlank
-    private String accountId;
+    private String accountIdString;
     @Column(insertable = false, updatable = false)
     private String email;
     @Column(insertable = false, updatable = false)
@@ -20,18 +20,18 @@ public class AccountId implements Serializable {
     public AccountId() {
     }
 
-    public AccountId(String accountId, String email, Integer businessId) {
-        this.accountId = accountId;
+    public AccountId(String accountIdString, String email, Integer businessId) {
+        this.accountIdString = accountIdString;
         this.email = email;
         this.businessId = businessId;
     }
 
-    public String getAccountId() {
-        return accountId;
+    public String getAccountIdString() {
+        return accountIdString;
     }
 
-    public void setAccountId(String accountId) {
-        this.accountId = accountId;
+    public void setAccountIdString(String accountIdString) {
+        this.accountIdString = accountIdString;
     }
 
     public String getEmail() {
@@ -55,20 +55,20 @@ public class AccountId implements Serializable {
         if (this == o) return true;
         if (!(o instanceof AccountId)) return false;
         AccountId accountId1 = (AccountId) o;
-        return getAccountId().equals(accountId1.getAccountId())
+        return getAccountIdString().equals(accountId1.getAccountIdString())
                 && getEmail().equals(accountId1.getEmail())
                 && getBusinessId().equals(accountId1.getBusinessId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getAccountId(), getEmail(), getBusinessId());
+        return Objects.hash(getAccountIdString(), getEmail(), getBusinessId());
     }
 
     @Override
     public String toString() {
         return "AccountId{" +
-                "accountId='" + accountId + '\'' +
+                "accountId='" + accountIdString + '\'' +
                 ", email='" + email + '\'' +
                 ", businessId=" + businessId +
                 '}';
