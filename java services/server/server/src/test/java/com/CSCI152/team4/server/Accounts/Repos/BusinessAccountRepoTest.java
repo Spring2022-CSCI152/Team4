@@ -11,17 +11,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.TransactionSystemException;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.validation.ConstraintViolationException;
-
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -224,4 +220,26 @@ class BusinessAccountRepoTest {
 
 
     /*Remaining Tests are for Report Format and Profile Format adjustments*/
+    @Test
+    void itShouldSaveNonBasicReportFormat(){
+        //Given
+        BusinessAccount account = getBusinessAccount();
+        account.setReportFormat(new ReportFormatBuilder()
+                .enableReportId()
+                .enableAttachments()
+                .enableAuthor()
+                .enableChangeLog()
+                .enableProfiles()
+                .enableType().build());
+        //When
+        account.setBusinessId(underTest.save(account).getBusinessId());
+
+        Optional<BusinessAccount> optionalBusinessAccount =
+                underTest.findById(account.getBusinessId());
+
+        assertThat(optionalBusinessAccount).isPresent()
+                .hasValueSatisfying(c -> assertThat(c).usingRecursiveComparison()
+                        .ignoringFields("accountMapper").isEqualTo(account));
+    }
+
 }

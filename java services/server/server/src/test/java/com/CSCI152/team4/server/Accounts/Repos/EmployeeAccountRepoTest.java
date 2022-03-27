@@ -10,15 +10,11 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.persistence.EntityManager;
-import javax.validation.ConstraintViolationException;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -217,32 +213,4 @@ class EmployeeAccountRepoTest {
         );
     }
 
-    @Test
-    void itShouldNotSaveInvalidPermission(){
-        EmployeeAccount account = getEmployeeAccount(127);
-
-        List<String> invalidPermissions = List.of("Not A Valid Permission", "CR", "ER");
-        List<String> expectedPermissions = List.of("CR", "ER");
-
-        underTest.save(account);
-        Optional<EmployeeAccount> optionalEmployeeAccount = underTest.findById(account.getAccountId());
-        assertThat(optionalEmployeeAccount).isPresent()
-                .hasValueSatisfying(c -> {
-                    //Timestamp ignored for Precision Issues on comparison
-                    assertThat(c).usingRecursiveComparison()
-                            .ignoringFields("timestamp").isEqualTo(account);
-                });
-        //When
-        account.setPermissionsList(invalidPermissions);
-        underTest.save(account);
-
-        optionalEmployeeAccount = Optional.empty();
-        optionalEmployeeAccount = underTest.findById(account.getAccountId());
-        assertThat(optionalEmployeeAccount).isPresent()
-                .hasValueSatisfying(c -> {
-                    //Timestamp ignored for Precision Issues on comparison
-                    assertThat(c.getPermissionsList()).asList().usingRecursiveComparison()
-                            .ignoringFields("timestamp").isEqualTo(expectedPermissions);
-                });
-    }
 }

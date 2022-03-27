@@ -6,10 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.*;
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.*;
 
@@ -47,6 +44,8 @@ public class BusinessAccount {
     private HashMap<String, String> accountMapper;
 
     public BusinessAccount() {
+        this.admins = new ArrayList<>();
+        this.employees = new ArrayList<>();
     }
 
     public BusinessAccount(String businessName, String adminId) {
@@ -59,7 +58,7 @@ public class BusinessAccount {
 
 
     private void createEmployeeListsAndAddAdmin(String adminId){
-        this.admins = new ArrayList<String>(Collections.singleton(adminId));
+        this.admins = new ArrayList<>(Collections.singleton(adminId));
         this.employees = new ArrayList<>();
     }
 
@@ -129,7 +128,7 @@ public class BusinessAccount {
 
     public void addEmployee(String accountId){
         if(!this.employees.contains(accountId)){
-            this.admins.add(accountId);
+            this.employees.add(accountId);
         }
         mapAccounts();
     }

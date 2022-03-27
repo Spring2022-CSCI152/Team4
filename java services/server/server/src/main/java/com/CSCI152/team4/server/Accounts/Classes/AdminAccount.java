@@ -54,6 +54,13 @@ public class AdminAccount extends WorkerAccount{
     }
 
     @Override
+    public void setEmail(String email){
+        if(getEmail() == null){
+            super.setEmail(email);
+            this.accountId.setEmail(email);
+        }
+    }
+    @Override
     public boolean equals(Object o) {
         return super.equals(o)
                 && this.getAccountIdString().equals(o);
