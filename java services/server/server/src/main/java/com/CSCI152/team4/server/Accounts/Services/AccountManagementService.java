@@ -1,9 +1,6 @@
 package com.CSCI152.team4.server.Accounts.Services;
 
-import com.CSCI152.team4.server.Accounts.Classes.AccountId;
-import com.CSCI152.team4.server.Accounts.Classes.AdminAccount;
-import com.CSCI152.team4.server.Accounts.Classes.EmployeeAccount;
-import com.CSCI152.team4.server.Accounts.Classes.WorkerAccount;
+import com.CSCI152.team4.server.Accounts.Classes.*;
 import com.CSCI152.team4.server.Accounts.Repos.RepoManager;
 import com.CSCI152.team4.server.Accounts.Requests.PermissionUpdateRequest;
 import com.CSCI152.team4.server.Util.AccountAuthenticator;
@@ -109,14 +106,32 @@ public class AccountManagementService {
         }
     }
 
-    public AdminAccount getAdminAccountInfo(String token, AccountId accountId){
+    public WorkerAccount getAccountInfo(WorkerAccount account){
+
+        if(repos.businessExists(account.getBusinessId())){
+            BusinessAccount businessAccount = repos.getBusinessIfExists(account.getBusinessId());
+
+            if(businessAccount.getAccountType(account.getAccountIdString())
+                    .equals(BusinessAccount.adminAccountType)){
+                return getAdminAccountInfo(account.getToken(), account.getAccountId());
+            } else if(businessAccount.getAccountType(account.getAccountIdString())
+                    .equals(BusinessAccount.employeeAccountType)) {
+                return getEmployeeAccountInfo(account.getToken(), account.getAccountId());
+            }
+        }
+
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+
+    }
+
+    private AdminAccount getAdminAccountInfo(String token, AccountId accountId){
         authenticator.validateToken(token, accountId.getAccountIdString());
 
         return (AdminAccount) getReturnableIfAdminExists(accountId,
                 () -> getReturnableAdmin(accountId));
     }
 
-    public EmployeeAccount getEmployeeAccountInfo(String token, AccountId accountId){
+    private EmployeeAccount getEmployeeAccountInfo(String token, AccountId accountId){
         authenticator.validateToken(token, accountId.getAccountIdString());
 
         return (EmployeeAccount) getReturnableIfEmployeeExists(accountId,

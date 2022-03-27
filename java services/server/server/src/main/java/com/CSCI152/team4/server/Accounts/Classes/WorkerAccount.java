@@ -145,4 +145,6 @@ public class WorkerAccount {
                 getFirstName(), getLastName(),
                 getJobTitle());
     }
+
+    public AccountId getAccountId(){ return null;}
 }
