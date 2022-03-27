@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 @Service
 public class AccountManagementService {
@@ -45,10 +46,8 @@ public class AccountManagementService {
     public AdminAccount updateAdminAccount(AdminAccount account){
         authenticator.validateToken(account.getToken(), account.getAccountIdString());
 
-        if(repos.adminExists(account.getAccountId())){
-            return updateAndSaveAdminAccount(account);
-        }
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        return (AdminAccount) getReturnableIfAdminExists(account.getAccountId(),
+                () -> updateAndSaveAdminAccount(account));
     }
 
     private AdminAccount updateAndSaveAdminAccount(AdminAccount account){
@@ -76,10 +75,9 @@ public class AccountManagementService {
     public EmployeeAccount updateEmployeeAccount(EmployeeAccount account){
         authenticator.validateToken(account.getToken(), account.getAccountIdString());
 
-        if(repos.employeeExists(account.getAccountId())){
-            return updateAndSaveEmployeeAccount(account);
-        }
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        return (EmployeeAccount) getReturnableIfEmployeeExists(account.getAccountId(),
+                () -> updateAndSaveEmployeeAccount(account));
+
     }
 
     private EmployeeAccount updateAndSaveEmployeeAccount(EmployeeAccount account){
@@ -88,6 +86,7 @@ public class AccountManagementService {
         updateMutableAccountFields(account, accountToSave);
 
         repos.saveEmployeeAccount(accountToSave);
+
         return getReturnableEmployee(account.getAccountId());
     }
 
@@ -113,37 +112,28 @@ public class AccountManagementService {
     public AdminAccount getAdminAccountInfo(String token, AccountId accountId){
         authenticator.validateToken(token, accountId.getAccountId());
 
-        if(repos.adminExists(accountId)){
-            return getReturnableAdmin(accountId);
-        }
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        return (AdminAccount) getReturnableIfAdminExists(accountId,
+                () -> getReturnableAdmin(accountId));
     }
 
     public EmployeeAccount getEmployeeAccountInfo(String token, AccountId accountId){
         authenticator.validateToken(token, accountId.getAccountId());
 
-        if(repos.employeeExists(accountId)){
-            return getReturnableEmployee(accountId);
-        }
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        return (EmployeeAccount) getReturnableIfEmployeeExists(accountId,
+                () -> getReturnableEmployee(accountId));
     }
 
     public AdminAccount getAdminAccountFromAdmin(String token, AccountId requestingAccount, AccountId targetAccount){
         authenticator.validateToken(token, requestingAccount.getAccountId());
-
-        if(repos.adminExists(requestingAccount)){
-            return getReturnableAdmin(targetAccount);
-        }
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        return (AdminAccount) getReturnableIfAdminExists(requestingAccount,
+                () -> getReturnableAdmin(targetAccount));
     }
 
     public EmployeeAccount getEmployeeAccountFromAdmin(String token, AccountId requestingAccount, AccountId targetAccount){
         authenticator.validateToken(token, requestingAccount.getAccountId());
 
-        if(repos.adminExists(requestingAccount)){
-            return getReturnableEmployee(targetAccount);
-        }
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        return (EmployeeAccount) getReturnableIfAdminExists(requestingAccount,
+                () -> getReturnableEmployee(targetAccount));
     }
 
     private AdminAccount getReturnableAdmin(AccountId accountId){
@@ -157,6 +147,7 @@ public class AccountManagementService {
         if (returnable != null) returnable.setPassword("");
         return returnable;
     }
+
     public ResponseEntity<Enum<HttpStatus>> updateEmployeePermissions(PermissionUpdateRequest request){
         authenticator.validateToken(request.getToken(), request.getRequestAccountIdString());
 
@@ -173,4 +164,17 @@ public class AccountManagementService {
         repos.saveEmployeeAccount(accountToUpdate);
     }
 
+    private WorkerAccount getReturnableIfAdminExists(AccountId adminAccountId, Supplier<WorkerAccount> toReturn){
+        if(repos.adminExists(adminAccountId)){
+            return toReturn.get();
+        }
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+    }
+
+    private WorkerAccount getReturnableIfEmployeeExists(AccountId employeeAccountId, Supplier<WorkerAccount> toReturn){
+        if(repos.employeeExists(employeeAccountId)){
+            return toReturn.get();
+        }
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+    }
 }
