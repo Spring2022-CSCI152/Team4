@@ -7,6 +7,7 @@ import com.CSCI152.team4.server.Util.AccountAuthenticator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -58,10 +59,10 @@ public class AccountManagementService {
         return  getReturnableAdmin(account.getAccountId());
     }
 
-    public ResponseEntity<Enum<HttpStatus>> updateEmployeeAccountFromAdmin(AdminAccount account, EmployeeAccount update){
-        authenticator.validateToken(account.getToken(), account.getAccountIdString());
+    public ResponseEntity<Enum<HttpStatus>> updateEmployeeAccountFromAdmin(String token, AccountId adminAccountId, EmployeeAccount update){
+        authenticator.validateToken(token, adminAccountId.getAccountIdString());
 
-        if(repos.adminExists(account.getAccountId())){
+        if(repos.adminExists(adminAccountId)){
             updateAndSaveEmployeeAccount(update);
             return new ResponseEntity<>(HttpStatus.OK);
         }
@@ -92,6 +93,7 @@ public class AccountManagementService {
         String fNameToUpdate = newInfo.getFirstName();
         String lNameToUpdate = newInfo.getLastName();
         String jobTitleToUpdate = newInfo.getJobTitle();
+        String newPassword = newInfo.getPassword();
 
         if(!fNameToUpdate.isBlank()){
             originalInfo.setFirstName(fNameToUpdate);
@@ -103,6 +105,11 @@ public class AccountManagementService {
 
         if(!jobTitleToUpdate.isBlank()){
             originalInfo.setJobTitle(jobTitleToUpdate);
+        }
+
+        if(!newPassword.isBlank()){
+            String encryptedPassword = BCrypt.hashpw(newPassword, BCrypt.gensalt(10));
+            originalInfo.setPassword(encryptedPassword);
         }
     }
 

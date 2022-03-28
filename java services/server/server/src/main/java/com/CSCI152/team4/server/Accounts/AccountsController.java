@@ -4,12 +4,15 @@ import com.CSCI152.team4.server.Accounts.Classes.AccountId;
 import com.CSCI152.team4.server.Accounts.Classes.AdminAccount;
 import com.CSCI152.team4.server.Accounts.Classes.EmployeeAccount;
 import com.CSCI152.team4.server.Accounts.Classes.WorkerAccount;
-import com.CSCI152.team4.server.Accounts.Requests.BusinessRequest;
+import com.CSCI152.team4.server.Accounts.Requests.*;
 import com.CSCI152.team4.server.Accounts.Services.AccountManagementService;
 import com.CSCI152.team4.server.Accounts.Services.RegistrationService;
 import com.CSCI152.team4.server.Accounts.Services.SessionService;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -90,5 +93,63 @@ public class AccountsController {
     @PostMapping("/register_business")
     public AdminAccount registerBusinessAccount(@RequestBody BusinessRequest request){
         return registrationService.registerBusiness(request);
+    }
+
+    @PostMapping("/register_admin")
+    public ResponseEntity<Enum<HttpStatus>> registerAdmin(@RequestBody AdminRequest request){
+        return registrationService.registerAdmin(request);
+    }
+
+    @PostMapping("/register_employee")
+    public ResponseEntity<Enum<HttpStatus>> registerEmployee(@RequestBody EmployeeRequest request){
+        return registrationService.registerEmployee(request);
+    }
+
+    @PostMapping("/update_admin_account_info")
+    public AdminAccount updateAdminAccountInfo(@RequestBody AdminAccount request){
+        return managementService.updateAdminAccount(request);
+    }
+
+    @PostMapping("/update_employee_account_info")
+    public EmployeeAccount updateEmployeeAccountInfo(@RequestBody EmployeeAccount request){
+        return managementService.updateEmployeeAccount(request);
+    }
+
+    @PostMapping("/update_employee_account_from_admin")
+    public ResponseEntity<Enum<HttpStatus>> updateEmployeeFromAdmin(@RequestBody ObjectNode request){
+
+        AccountId adminAccountId = getAccountIdFor("adminAccount", request);
+
+        return managementService.updateEmployeeAccountFromAdmin(request.get("token").asText(),
+                adminAccountId, getEmployeeAccount(request.get("employee")));
+    }
+
+    private EmployeeAccount getEmployeeAccount(JsonNode request){
+        String email, firstName, lastName, jobTitle;
+        Integer businessId;
+
+        email = request.get("email").asText();
+        firstName = request.get("firstName").asText();
+        lastName = request.get("lastName").asText();
+        jobTitle = request.get("jobTitle").asText();
+        businessId = request.get("businessId").asInt();
+
+        return new EmployeeAccount(businessId,email, "", firstName, lastName, jobTitle);
+    }
+
+    @PostMapping("/update_permissions")
+    public ResponseEntity<Enum<HttpStatus>> updateEmployeePermissions(@RequestBody PermissionUpdateRequest request){
+        return managementService.updateEmployeePermissions(request);
+    }
+
+    @PostMapping("/login")
+    public WorkerAccount login(@RequestBody LoginRequest request){
+        return sessionService.login(request);
+    }
+
+    @PostMapping
+    public ResponseEntity<Enum<HttpStatus>> logout(@RequestBody ObjectNode request){
+        AccountId account = getAccountIdFor("account", request);
+        return sessionService.logout(request.get("token").asText(), account);
     }
 }

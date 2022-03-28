@@ -1,5 +1,6 @@
 package com.CSCI152.team4.server.Accounts.Services;
 
+import com.CSCI152.team4.server.Accounts.Classes.AccountId;
 import com.CSCI152.team4.server.Accounts.Classes.BusinessAccount;
 import com.CSCI152.team4.server.Accounts.Classes.WorkerAccount;
 import com.CSCI152.team4.server.Accounts.Repos.RepoManager;
@@ -67,9 +68,9 @@ public class SessionService {
 
     }
 
-    public ResponseEntity<Enum<HttpStatus>> logout(WorkerAccount account){
+    public ResponseEntity<Enum<HttpStatus>> logout(String token, AccountId accountId){
 
-        authenticator.invalidateToken(account.getToken());
+        authenticator.invalidateToken(token, accountId.getAccountIdString());
 
         return new ResponseEntity<Enum<HttpStatus>>(HttpStatus.OK);
     }

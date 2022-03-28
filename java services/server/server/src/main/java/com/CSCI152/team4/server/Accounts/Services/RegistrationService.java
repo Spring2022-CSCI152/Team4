@@ -142,6 +142,7 @@ public class RegistrationService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
     }
+
     private BusinessAccount getBusinessAccountIfValid(AccountCreationRequest request){
 
         BusinessAccount returnable = repos.getBusinessIfExists(request.getBusinessId());

@@ -24,7 +24,7 @@ public class AccountAuthenticator implements Authenticator {
     }
 
     @Override
-    public void invalidateToken(String token) {
+    public void invalidateToken(String token, String requestAccountId) {
         //TODO: Make call to Auth endpoint to invalidate token
     }
 

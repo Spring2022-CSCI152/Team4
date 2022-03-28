@@ -7,5 +7,5 @@ public interface Authenticator {
 
     String getToken(String accountId);
 
-    void invalidateToken(String token);
+    void invalidateToken(String token, String requestingAccountId);
 }
