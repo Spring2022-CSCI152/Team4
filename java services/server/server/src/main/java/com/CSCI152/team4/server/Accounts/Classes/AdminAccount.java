@@ -36,6 +36,13 @@ public class AdminAccount extends WorkerAccount{
 
     public void setAccountId(String accountId){
         this.accountId.setAccountIdString(accountId);
+        this.accountId.setEmail(getEmail());
+        this.accountId.setBusinessId(getBusinessId());
+    }
+
+    public void setAccountId(AccountId accountId)
+    {
+        this.accountId = accountId;
     }
 
     @Override

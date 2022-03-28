@@ -31,6 +31,7 @@ public class RepoManager {
     }
 
     public AdminAccount saveAdminAccount(AdminAccount account){
+        System.out.println(account.toString());
         return admins.save(account);
     }
 

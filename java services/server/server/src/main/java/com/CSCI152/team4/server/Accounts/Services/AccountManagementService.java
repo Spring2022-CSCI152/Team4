@@ -106,17 +106,18 @@ public class AccountManagementService {
         }
     }
 
-    public WorkerAccount getAccountInfo(WorkerAccount account){
+    public WorkerAccount getAccountInfo(String token, AccountId account){
 
         if(repos.businessExists(account.getBusinessId())){
             BusinessAccount businessAccount = repos.getBusinessIfExists(account.getBusinessId());
 
+            System.out.println(account.getAccountIdString());
             if(businessAccount.getAccountType(account.getAccountIdString())
                     .equals(BusinessAccount.adminAccountType)){
-                return getAdminAccountInfo(account.getToken(), account.getAccountId());
+                return getAdminAccountInfo(token, account);
             } else if(businessAccount.getAccountType(account.getAccountIdString())
                     .equals(BusinessAccount.employeeAccountType)) {
-                return getEmployeeAccountInfo(account.getToken(), account.getAccountId());
+                return getEmployeeAccountInfo(token, account);
             }
         }
 

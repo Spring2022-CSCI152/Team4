@@ -115,7 +115,28 @@ public class BusinessAccount {
         this.reportFormat = reportFormat;
     }
 
+    public void setAdmins(List<String> admins) {
+        this.admins = admins;
+    }
+
+    public void setEmployees(List<String> employees) {
+        this.employees = employees;
+    }
+
+    public HashMap<String, String> getAccountMapper() {
+        mapAccounts();
+        return accountMapper;
+    }
+
+    public void setAccountMapper(HashMap<String, String> accountMapper) {
+        this.accountMapper = accountMapper;
+    }
+
     public String getAccountType(String accountId){
+        mapAccounts();
+        System.out.println(accountId);
+        System.out.println(this.accountMapper.toString());
+        System.out.println(this.accountMapper.get(accountId));
         return this.accountMapper.get(accountId);
     }
 

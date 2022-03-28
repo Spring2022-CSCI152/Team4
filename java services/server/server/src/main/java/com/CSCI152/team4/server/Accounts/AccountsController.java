@@ -4,14 +4,13 @@ import com.CSCI152.team4.server.Accounts.Classes.AccountId;
 import com.CSCI152.team4.server.Accounts.Classes.AdminAccount;
 import com.CSCI152.team4.server.Accounts.Classes.EmployeeAccount;
 import com.CSCI152.team4.server.Accounts.Classes.WorkerAccount;
+import com.CSCI152.team4.server.Accounts.Requests.BusinessRequest;
 import com.CSCI152.team4.server.Accounts.Services.AccountManagementService;
 import com.CSCI152.team4.server.Accounts.Services.RegistrationService;
 import com.CSCI152.team4.server.Accounts.Services.SessionService;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/v1/accounts")
@@ -54,22 +53,42 @@ public class AccountsController {
     }
 
     @GetMapping("/my_account_info")
-    public WorkerAccount getMyInfo(@RequestBody WorkerAccount account){
+    public WorkerAccount getMyInfo(@RequestBody ObjectNode request){
 
-        return managementService.getAccountInfo(account);
+        AccountId account = getAccountIdFor("account", request);
+        return managementService.getAccountInfo(request.get("token").asText(), account);
     }
 
     @GetMapping("/get_admin_account_info")
-    public AdminAccount getAdminAccountInfo(@RequestBody String token,
-                                            @RequestBody AccountId requestingAccount,
-                                            @RequestBody AccountId targetAccount){
-        return managementService.getAdminAccountFromAdmin(token, requestingAccount, targetAccount);
+    public AdminAccount getAdminAccountInfo(@RequestBody ObjectNode request){
+
+        AccountId requestingAccount = getAccountIdFor("requestingAccount", request);
+        AccountId targetAccount = getAccountIdFor("targetAccount", request);
+
+        return managementService
+                .getAdminAccountFromAdmin(request
+                    .get("token").asText(), requestingAccount, targetAccount);
     }
 
     @GetMapping("/get_employee_account_info")
-    public EmployeeAccount getEmployeeAccountInfo(@RequestBody String token,
-                                               @RequestBody AccountId requestingAccount,
-                                               @RequestBody AccountId targetAccount){
-        return managementService.getEmployeeAccountFromAdmin(token, requestingAccount, targetAccount);
+    public EmployeeAccount getEmployeeAccountInfo(@RequestBody ObjectNode request){
+
+        AccountId requestingAccount = getAccountIdFor("requestingAccount", request);
+        AccountId targetAccount = getAccountIdFor("targetAccount", request);
+
+        return managementService
+                .getEmployeeAccountFromAdmin(request
+                        .get("token").asText(),requestingAccount, targetAccount);
+    }
+
+    private AccountId getAccountIdFor(String target, ObjectNode request){
+        return new AccountId(request.get(target).get("accountIdString").asText(),
+                request.get(target).get("email").asText(),
+                request.get(target).get("businessId").asInt());
+    }
+
+    @PostMapping("/register_business")
+    public AdminAccount registerBusinessAccount(@RequestBody BusinessRequest request){
+        return registrationService.registerBusiness(request);
     }
 }
