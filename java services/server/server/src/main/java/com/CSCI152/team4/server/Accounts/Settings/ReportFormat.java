@@ -5,7 +5,7 @@ package com.CSCI152.team4.server.Accounts.Settings;
 import javax.persistence.*;
 
 
-//@Embeddable
+@Embeddable
 //@Table(name = "report_format")
 public class ReportFormat {
 

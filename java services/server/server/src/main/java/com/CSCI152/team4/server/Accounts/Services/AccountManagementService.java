@@ -167,7 +167,7 @@ public class AccountManagementService {
 
     private EmployeeAccount getReturnableEmployee(AccountId accountId){
         EmployeeAccount returnable = repos.getEmployeeIfExists(accountId);
-        if (returnable != null) returnable.setPassword("");
+        if (returnable != null) returnable.setPassword(null);
         return returnable;
     }
 
