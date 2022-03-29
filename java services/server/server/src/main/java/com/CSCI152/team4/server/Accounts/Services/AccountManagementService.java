@@ -1,9 +1,9 @@
 package com.CSCI152.team4.server.Accounts.Services;
 
 import com.CSCI152.team4.server.Accounts.Classes.*;
-import com.CSCI152.team4.server.Accounts.Repos.RepoManager;
+import com.CSCI152.team4.server.Util.AccountsRepoManager;
 import com.CSCI152.team4.server.Accounts.Requests.PermissionUpdateRequest;
-import com.CSCI152.team4.server.Util.AccountAuthenticator;
+import com.CSCI152.team4.server.Util.TokenManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,11 +32,11 @@ public class AccountManagementService {
      *
      */
 
-    private final RepoManager repos;
-    private final AccountAuthenticator authenticator;
+    private final AccountsRepoManager repos;
+    private final TokenManager authenticator;
 
     @Autowired
-    public AccountManagementService(RepoManager repos, AccountAuthenticator authenticator) {
+    public AccountManagementService(AccountsRepoManager repos, TokenManager authenticator) {
         this.repos = repos;
         this.authenticator = authenticator;
     }

@@ -4,12 +4,12 @@ import com.CSCI152.team4.server.Accounts.Classes.AdminAccount;
 import com.CSCI152.team4.server.Accounts.Classes.BusinessAccount;
 import com.CSCI152.team4.server.Accounts.Classes.EmployeeAccount;
 import com.CSCI152.team4.server.Accounts.Classes.WorkerAccount;
-import com.CSCI152.team4.server.Accounts.Repos.RepoManager;
+import com.CSCI152.team4.server.Util.AccountsRepoManager;
 import com.CSCI152.team4.server.Accounts.Requests.AccountCreationRequest;
 import com.CSCI152.team4.server.Accounts.Requests.AdminRequest;
 import com.CSCI152.team4.server.Accounts.Requests.BusinessRequest;
 import com.CSCI152.team4.server.Accounts.Requests.EmployeeRequest;
-import com.CSCI152.team4.server.Util.AccountAuthenticator;
+import com.CSCI152.team4.server.Util.TokenManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,11 +28,11 @@ import org.springframework.web.server.ResponseStatusException;
 @Service
 public class RegistrationService {
 
-    private final RepoManager repos;
-    private final AccountAuthenticator authenticator;
+    private final AccountsRepoManager repos;
+    private final TokenManager authenticator;
 
     @Autowired
-    public RegistrationService(RepoManager repos, AccountAuthenticator authenticator) {
+    public RegistrationService(AccountsRepoManager repos, TokenManager authenticator) {
         this.repos = repos;
         this.authenticator = authenticator;
     }

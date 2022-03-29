@@ -1,7 +1,10 @@
-package com.CSCI152.team4.server.Accounts.Repos;
+package com.CSCI152.team4.server.Util;
 
 
 import com.CSCI152.team4.server.Accounts.Classes.*;
+import com.CSCI152.team4.server.Accounts.Repos.AdminAccountRepo;
+import com.CSCI152.team4.server.Accounts.Repos.BusinessAccountRepo;
+import com.CSCI152.team4.server.Accounts.Repos.EmployeeAccountRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -16,7 +19,7 @@ import java.util.Optional;
  * increase overall code cohesion.
  * */
 @Service
-public class RepoManager {
+public class AccountsRepoManager {
 
     private final BusinessAccountRepo business;
     private final EmployeeAccountRepo employees;
@@ -24,7 +27,7 @@ public class RepoManager {
 
 
     @Autowired
-    RepoManager(BusinessAccountRepo business, EmployeeAccountRepo employees, AdminAccountRepo admins){
+    AccountsRepoManager(BusinessAccountRepo business, EmployeeAccountRepo employees, AdminAccountRepo admins){
         this.business = business;
         this.admins = admins;
         this.employees = employees;
