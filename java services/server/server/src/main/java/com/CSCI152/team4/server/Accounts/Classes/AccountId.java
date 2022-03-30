@@ -11,6 +11,7 @@ public class AccountId implements Serializable {
 
 
     @NotBlank
+    @Column(insertable = false, updatable = false)
     private String accountIdString;
     @Column(insertable = false, updatable = false)
     private String email;

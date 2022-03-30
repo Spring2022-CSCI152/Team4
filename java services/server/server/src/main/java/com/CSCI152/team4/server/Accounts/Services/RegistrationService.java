@@ -80,7 +80,7 @@ public class RegistrationService {
 
         //5. Get Token and Clear AdminAccount Password field
         returnable.setToken(authenticator.getToken(returnable.getAccountIdString()));
-        returnable.setPassword("");
+        returnable.setPassword(null);
 
         //6. Return Account Info
         return returnable;
@@ -139,7 +139,7 @@ public class RegistrationService {
     private void checkForPriorRegistration(AccountCreationRequest request){
         if(repos.getAccountByEmailAndBusinessId(
                 request.getEmail(), request.getBusinessId()) != null){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Account already registered!");
         }
     }
 
@@ -154,7 +154,7 @@ public class RegistrationService {
             }
         }
         catch(Exception e){
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid Request, User not Admin!");
         }
         return null;
     }

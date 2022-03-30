@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static java.time.LocalDateTime.now;
@@ -21,14 +22,14 @@ public class TokenManager implements Authenticator {
 
     private final String secret;
 
-    private final Integer expirationInMilli;
+    private final Integer expirationInMins;
 
 
     @Autowired
     public TokenManager(TokenRepo repo, @Value("${frmw.secret}") String secret, @Value("${frmw.expirationTimeInMinutes}") Integer expirationInMinutes) {
         this.repo = repo;
         this.secret = secret;
-        expirationInMilli = (60 * 1000 * expirationInMinutes);
+        this.expirationInMins = expirationInMinutes;
     }
 
     @Override
@@ -39,7 +40,7 @@ public class TokenManager implements Authenticator {
         if(persistedToken.isExpired()
             || !persistedToken.getAccountId().equals(requestAccountId)){
 
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Token has been invalidated!");
         }
 
     }
@@ -54,8 +55,7 @@ public class TokenManager implements Authenticator {
         String token = DigestUtils.sha256Hex(accountId + secret);
         Token persist = new Token(token, accountId,
                 Timestamp.valueOf(now()),
-                Timestamp.valueOf(String.valueOf(System.currentTimeMillis()
-                        + expirationInMilli)));
+                Timestamp.valueOf(LocalDateTime.now().plusMinutes(expirationInMins)));
 
         repo.save(persist);
 
@@ -64,12 +64,11 @@ public class TokenManager implements Authenticator {
 
     @Override
     public void invalidateToken(String token, String requestAccountId) {
-
-            Token t = getTokenIfExists(token);
-            if(t.getAccountId().equals(requestAccountId)
-                    || t.isExpired()){
-                repo.delete(t);
-            }
+        Token t = getTokenIfExists(token);
+        if(t.getAccountId().equals(requestAccountId)
+                || t.isExpired()){
+            repo.delete(t);
+        }
     }
 
     public void refreshToken(String token, String accountId){
@@ -77,14 +76,13 @@ public class TokenManager implements Authenticator {
         Token toRefresh = getTokenIfExists(token);
 
         if(toRefresh.getAccountId().equals(accountId) && !toRefresh.isExpired()){
-            toRefresh.setExp(Timestamp.valueOf(String.valueOf(System.currentTimeMillis()
-                    + expirationInMilli)));
+            toRefresh.setExp(Timestamp.valueOf(LocalDateTime.now().plusMinutes(expirationInMins)));
 
             repo.save(toRefresh);
 
         }
 
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unable to refresh token!");
     }
 
     private Token getTokenIfExists(String token){
@@ -94,7 +92,7 @@ public class TokenManager implements Authenticator {
             return optional.get();
         }
 
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No token found!");
     }
 
 }

@@ -1,5 +1,6 @@
 package com.CSCI152.team4.server.Accounts.Classes;
 
+import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -12,8 +13,9 @@ import static java.time.LocalDateTime.now;
 @Table(name="Admin_Account")
 public class AdminAccount extends WorkerAccount{
 
+    @Column(nullable = false)
     @EmbeddedId
-    AccountId accountId;
+    AccountId accountId = new AccountId();
 
     public AdminAccount() {
         super();
