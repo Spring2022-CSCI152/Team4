@@ -56,6 +56,7 @@ body {
   align-self: center;
   align-content: center;
   align-items: center;
+  justify-self: center;
 }
 
 
@@ -112,11 +113,24 @@ li a:hover {
 .card {
   display: grid;
   font-size: .85rem;
+  color: #666666;
   border-radius: 2px;
   border: 1px solid #acacac;
   transition: all .1s ease-in-out;
   box-shadow: inset .5em 0em #d6d6d6;
   overflow: hidden;
+}
+
+.card.acct{
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+  width: 50rem;
+}
+
+.card.acct img{
+  width: 3em;
+  height: 3em;
 }
 
 .card-margin{
@@ -131,8 +145,7 @@ li a:hover {
   display:flex;
   flex-direction: row;
   gap: 1em;
-  align-items:center;
-  justify-content: left;
+  align-items: center;
   height: 100%;
 }
 
@@ -145,6 +158,7 @@ li a:hover {
 
 .card:hover {
   transform: scale(1.01);
+  color:#000000;
   border: 1px solid #000000;
   box-shadow: inset 0.5em 0em #000000;
 }
@@ -186,7 +200,6 @@ li a:hover {
 
 .btn.green {
   background-color: #00f200;
-
 }
 
 .btn.green:hover {
@@ -240,14 +253,13 @@ li a:hover {
   .nested {
     grid-template-rows: 1fr 1fr;
     white-space:normal;
-    overflow:visible;
+    overflow: visible;
   }
 
   .card img {
     width: 8em;
     height: 8em;
     grid-template-rows: 1fr 1fr;
-
   }
 
 }

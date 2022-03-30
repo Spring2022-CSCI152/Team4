@@ -1,6 +1,10 @@
+<<<<<<< HEAD
 import AllList from "./components/AllList";
 import NavBar from "./NavBar";
+=======
+>>>>>>> c3651358103b8412def25fa6d9a374e265b8c543
 import React, { useState } from "react";
+import AllList from "./components/AllList";
 import { FaUserCircle } from "react-icons/fa";
 import logo from "./assets/logo.png";
 
