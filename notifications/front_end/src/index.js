@@ -6,6 +6,6 @@ import './signIn.css';
 
 ReactDOM.render(
      <App />,
-  document.getElementById('root') //render App div root in /public/index.html
+  document.getElementById('app') //render App div root in /public/index.html
 );
 
