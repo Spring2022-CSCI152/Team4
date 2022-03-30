@@ -126,7 +126,7 @@ public class RegistrationService {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    public void encryptPassword(WorkerAccount account){
+    private void encryptPassword(WorkerAccount account){
         account.setPassword(BCrypt.hashpw(account.getPassword(),
                 BCrypt.gensalt(10)));
     }
