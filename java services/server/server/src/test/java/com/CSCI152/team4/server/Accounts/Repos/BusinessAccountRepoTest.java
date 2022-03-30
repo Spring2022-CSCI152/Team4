@@ -3,170 +3,243 @@ package com.CSCI152.team4.server.Accounts.Repos;
 import com.CSCI152.team4.server.Accounts.Classes.AdminAccount;
 import com.CSCI152.team4.server.Accounts.Classes.BusinessAccount;
 import com.CSCI152.team4.server.Accounts.Classes.EmployeeAccount;
-import com.CSCI152.team4.server.Accounts.Settings.ReportFormat;
 import com.CSCI152.team4.server.Accounts.Settings.ReportFormatBuilder;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
+import org.springframework.transaction.TransactionSystemException;
 
 import javax.persistence.EntityManager;
-import java.util.List;
+import javax.validation.ConstraintViolationException;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.doReturn;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+//@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@TestPropertySource(properties = {
+        "spring.datasource.url=jdbc:mysql://localhost:3306/frmw",
+        "spring.jpa.hibernate.ddl-auto=validate",
+        "spring.jpa.show-sql=false"
+})
 class BusinessAccountRepoTest {
 
     @Autowired
-    private BusinessAccountRepo underTest;
+    BusinessAccountRepo underTest;
 
     @Autowired
-    private EntityManager entityManager;
+    EntityManager entityManager;
 
+    @Mock
+    AdminAccount mockAdmin;
 
-    AdminAccount getAdminAccount(Integer businessAccId){
-        return new AdminAccount("admin", "123", "admin", "admin", "admin", businessAccId);
+    @Mock
+    EmployeeAccount mockEmployee;
+
+    AutoCloseable mockOpener;
+
+    @BeforeEach
+    void setUp(){
+        mockOpener = MockitoAnnotations.openMocks(this);
+        doReturn("adminId").when(mockAdmin).getAccountIdString();
+        doReturn("employeeId").when(mockEmployee).getAccountIdString();
     }
 
-    AdminAccount getBlankAdminAccount(){
-        return new AdminAccount("admin", "123", "admin", "admin", "admin");
-    }
-    BusinessAccount buildEmptyBusinessAccount(){    return new BusinessAccount("Business"); }
-
-    BusinessAccount buildBusinessAccountWithAdmin(){
-        BusinessAccount acct = new BusinessAccount("Business");
-        AdminAccount admin = getBlankAdminAccount();
-        acct.addAdmin(admin.getAccountId());
-        return acct;
-    }
-
-    void addReportFormatAndProfileFormat(BusinessAccount acc){
-
-        ReportFormatBuilder reportFormatBuilder = new ReportFormatBuilder();
-        acc.setReportFormat(reportFormatBuilder.build());
-        //ProfileFormatBuilder profileFormatBuilder = new ProfileFormatBuilder(acc.getBusinessId());
-        //acc.setProfileFormat(profileFormatBuilder.build());
-    }
-
-    @Test
-    void itShouldSaveBusinessAccount() {
-        // Given
-        BusinessAccount businessAccount = buildEmptyBusinessAccount();
-        businessAccount.addAdmin(getBlankAdminAccount().getAccountId());
-        // When
-        businessAccount.setBusinessId(underTest.save(businessAccount).getBusinessId());
-
-
-        // Then
-        Optional<BusinessAccount> optionalBusinessAccount = underTest.findById(businessAccount.getBusinessId());
-        assertThat(optionalBusinessAccount).isPresent()
-                .hasValueSatisfying(c -> {
-                    assertThat(c).usingRecursiveComparison().isEqualTo(businessAccount);
-                });
-    }
-
-    @Test
-    void itShouldThrowExceptionWhenSavedWithEmptyAdmin() {
-        // Given
-        Integer businessAccId = 128;
-        BusinessAccount businessAccount = new BusinessAccount(businessAccId, "Business", null);
-        addReportFormatAndProfileFormat(businessAccount);
-
-        // When
-        // Then
-        assertThrows(javax.persistence.TransactionRequiredException.class,
-                () -> { underTest.save(businessAccount); entityManager.flush();});
-
-    }
-
-    @Test
-    void itShouldSaveNewAdmin() {
-        //Given
-        BusinessAccount businessAccount = buildBusinessAccountWithAdmin();
-        AdminAccount admin2 = getBlankAdminAccount();
-        businessAccount.addAdmin(admin2.getAccountId());
-
-        // When
-        Integer businessAccId = underTest.save(businessAccount).getBusinessId();
-        Optional<BusinessAccount> optionalBusinessAccount = underTest.findById(businessAccId);
-
-        // Then
-        assertThat(optionalBusinessAccount).isPresent()
-                .hasValueSatisfying(c -> {
-                    assertThat(c.getAdmins()).asList().containsExactlyElementsOf(businessAccount.getAdmins());
-                });
-
-    }
-
-    @Test
-    void itShouldSaveNewEmployee() {
-        //Given
-        BusinessAccount businessAccount = buildBusinessAccountWithAdmin();
-        Integer businessAccId = underTest.save(businessAccount).getBusinessId();
-
-        // When
-        businessAccount.setBusinessId(businessAccId);
-        EmployeeAccount employeeAccount = new EmployeeAccount("employee",
-                "123", "emp", "emp", "scrub", businessAccId);
-        businessAccount.addEmployee(employeeAccount.getAccountId());
-        underTest.save(businessAccount);
-
-
-        // Then
-        Optional<BusinessAccount> optionalBusinessAccount = underTest.findById(businessAccId);
-
-        assertThat(optionalBusinessAccount).isPresent();
-        if(optionalBusinessAccount.isPresent()){
-            assertThat(optionalBusinessAccount.get().getEmployees())
-                    .asList()
-                    .containsExactlyElementsOf(List.of(employeeAccount.getAccountId()));
+    @AfterEach
+    void tearDown(){
+        for(BusinessAccount a : underTest.findAll()){
+            underTest.delete(a);
         }
     }
 
+    BusinessAccount getBusinessAccount(){
+        return new BusinessAccount("TestBusiness", mockAdmin.getAccountIdString());
+    }
+
     @Test
-    void isShouldSaveNewReportFormat(){
+    void itShouldSaveNewAccount(){
+
         //Given
-        BusinessAccount businessAccount = buildBusinessAccountWithAdmin();
-
-        ReportFormat oldFormat = businessAccount.getReportFormat();
-        Integer businessId = underTest.save(businessAccount).getBusinessId();
-        businessAccount.setBusinessId(businessId);
-
+        BusinessAccount account = getBusinessAccount();
         //When
-        ReportFormat newFormat = new ReportFormatBuilder()
-                .enableReportId()
-                .enableAuthor()
-                .enableBox1()
-                .enableBox2()
-                .nameBox1("Source of Activity")
-                .nameBox2("Description")
-                .build();
-        businessAccount.setReportFormat(newFormat);
-        underTest.save(businessAccount);
+        account.setBusinessId(underTest.save(account).getBusinessId());
 
         //Then
-        Optional<BusinessAccount> optionalBusinessAccount = underTest.findById(businessId);
-
+        Optional<BusinessAccount> optionalBusinessAccount = underTest.findById(account.getBusinessId());
         assertThat(optionalBusinessAccount).isPresent()
-                .hasValueSatisfying(c -> {
-                    assertThat(c.getReportFormat()).usingRecursiveComparison().isEqualTo(newFormat);
+        .hasValueSatisfying(c -> assertThat(c).usingRecursiveComparison()
+                .ignoringFields("accountMapper").isEqualTo(account)); //Account Mapper is transient
+    }
+
+
+    @Test
+    void itShouldThrowExceptionOnNoAdmin(){
+        BusinessAccount account = getBusinessAccount();
+        account.removeAdmin(mockAdmin.getAccountIdString());
+
+
+        Exception e = assertThrows(TransactionSystemException.class,
+                () -> {
+                    underTest.save(account);
+//                    entityManager.flush();
                 });
+        assertTrue(e.getCause().getCause() instanceof ConstraintViolationException);
+    }
+
+    @Test
+    void itShouldAddAdmin(){
+        //Given
+        BusinessAccount account = getBusinessAccount();
+        account.setBusinessId(underTest.save(account).getBusinessId());
+
+        Optional<BusinessAccount> optionalBusinessAccount = underTest.findById(account.getBusinessId());
+        assertThat(optionalBusinessAccount).isPresent()
+                .hasValueSatisfying(c -> assertThat(c).usingRecursiveComparison()
+                        .ignoringFields("accountMapper").isEqualTo(account)); //Account Mapper is transient
+        //When
+        account.addAdmin(mockAdmin.getAccountIdString() + "2");
+        underTest.save(account);
+
+        //Then
+        optionalBusinessAccount = Optional.empty();
+        optionalBusinessAccount = underTest.findById(account.getBusinessId());
+        assertThat(optionalBusinessAccount).isPresent()
+                .hasValueSatisfying(c -> assertThat(c).usingRecursiveComparison()
+                        .ignoringFields("accountMapper").isEqualTo(account)); //Account Mapper is transient
+    }
+
+    @Test
+    void itShouldAddEmployee(){
+        //Given
+        BusinessAccount account = getBusinessAccount();
+        account.setBusinessId(underTest.save(account).getBusinessId());
+
+        Optional<BusinessAccount> optionalBusinessAccount = underTest.findById(account.getBusinessId());
+        assertThat(optionalBusinessAccount).isPresent()
+                .hasValueSatisfying(c -> assertThat(c).usingRecursiveComparison()
+                        .ignoringFields("accountMapper").isEqualTo(account)); //Account Mapper is transient
+        //When
+        account.addAdmin(mockEmployee.getAccountIdString() + "2");
+        underTest.save(account);
+
+        //Then
+        optionalBusinessAccount = Optional.empty();
+        optionalBusinessAccount = underTest.findById(account.getBusinessId());
+        assertThat(optionalBusinessAccount).isPresent()
+                .hasValueSatisfying(c -> assertThat(c).usingRecursiveComparison()
+                        .ignoringFields("accountMapper").isEqualTo(account)); //Account Mapper is transient
 
     }
 
     @Test
-    void isShouldSaveNewProfileFormat(){
+    void itShouldRemoveAdmin(){
+        //Given
+        BusinessAccount account = getBusinessAccount();
+        account.addAdmin(mockAdmin.getAccountIdString() + "2");
+
+        account.setBusinessId(underTest.save(account).getBusinessId());
+
+        Optional<BusinessAccount> optionalBusinessAccount = underTest.findById(account.getBusinessId());
+        assertThat(optionalBusinessAccount).isPresent()
+                .hasValueSatisfying(c -> assertThat(c).usingRecursiveComparison()
+                        .ignoringFields("accountMapper").isEqualTo(account)); //Account Mapper is transient
+        //When
+        account.removeAdmin(mockAdmin.getAccountIdString());
+        underTest.save(account);
+
+        //Then
+        optionalBusinessAccount = Optional.empty();
+        optionalBusinessAccount = underTest.findById(account.getBusinessId());
+        assertThat(optionalBusinessAccount).isPresent()
+                .hasValueSatisfying(c -> assertThat(c).usingRecursiveComparison()
+                        .ignoringFields("accountMapper").isEqualTo(account)); //Account Mapper is transient
+
+    }
+
+    @Test
+    void itShouldRemoveEmployee(){
+        //Given
+        BusinessAccount account = getBusinessAccount();
+        account.addEmployee(mockEmployee.getAccountIdString() + "2");
+
+        account.setBusinessId(underTest.save(account).getBusinessId());
+
+        Optional<BusinessAccount> optionalBusinessAccount = underTest.findById(account.getBusinessId());
+        assertThat(optionalBusinessAccount).isPresent()
+                .hasValueSatisfying(c -> assertThat(c).usingRecursiveComparison()
+                        .ignoringFields("accountMapper").isEqualTo(account)); //Account Mapper is transient
+        //When
+        account.removeEmployee(mockEmployee.getAccountIdString());
+        underTest.save(account);
+
+        //Then
+        optionalBusinessAccount = Optional.empty();
+        optionalBusinessAccount = underTest.findById(account.getBusinessId());
+        assertThat(optionalBusinessAccount).isPresent()
+                .hasValueSatisfying(c -> assertThat(c).usingRecursiveComparison()
+                        .ignoringFields("accountMapper").isEqualTo(account)); //Account Mapper is transient
+
+    }
+
+    @Test
+    void itShouldPromoteAndDemote(){
+        //Given
+        BusinessAccount account = getBusinessAccount();
+        account.addAdmin(mockAdmin.getAccountIdString() + "2");
+        account.addEmployee(mockEmployee.getAccountIdString() + "2");
+
+        account.setBusinessId(underTest.save(account).getBusinessId());
+
+        Optional<BusinessAccount> optionalBusinessAccount = underTest.findById(account.getBusinessId());
+        assertThat(optionalBusinessAccount).isPresent()
+                .hasValueSatisfying(c -> assertThat(c).usingRecursiveComparison()
+                        .ignoringFields("accountMapper").isEqualTo(account)); //Account Mapper is transient
+        //When
+        account.removeAdmin(mockEmployee.getAccountIdString());
+        underTest.save(account);
+
+        //Then
+        optionalBusinessAccount = Optional.empty();
+        optionalBusinessAccount = underTest.findById(account.getBusinessId());
+        assertThat(optionalBusinessAccount).isPresent()
+                .hasValueSatisfying(c -> assertThat(c).usingRecursiveComparison()
+                        .ignoringFields("accountMapper").isEqualTo(account)); //Account Mapper is transient
+
+    }
 
 
+    /*Remaining Tests are for Report Format and Profile Format adjustments*/
+    @Test
+    void itShouldSaveNonBasicReportFormat(){
+        //Given
+        BusinessAccount account = getBusinessAccount();
+        account.setReportFormat(new ReportFormatBuilder()
+                .enableReportId()
+                .enableAttachments()
+                .enableAuthor()
+                .enableChangeLog()
+                .enableProfiles()
+                .enableType().build());
+        //When
+        account.setBusinessId(underTest.save(account).getBusinessId());
+
+        Optional<BusinessAccount> optionalBusinessAccount =
+                underTest.findById(account.getBusinessId());
+
+        assertThat(optionalBusinessAccount).isPresent()
+                .hasValueSatisfying(c -> assertThat(c).usingRecursiveComparison()
+                        .ignoringFields("accountMapper").isEqualTo(account));
     }
 
 }

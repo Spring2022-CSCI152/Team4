@@ -1,50 +1,40 @@
 package com.CSCI152.team4.server.Accounts.Classes;
 
-import javax.persistence.Id;
+
+import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
-import javax.validation.constraints.NotBlank;
 import java.sql.Timestamp;
 import java.util.Objects;
-import java.util.UUID;
 
-/*This class acts as an intermediary step between
-* Accounts and Admin/Employee Accounts to make
-* inheritance issues easier to work with*/
+/**
+ * This class serves as the base for AdminAccounts and EmployeeAccounts.
+ * It will be a mapped superclass to allow compatibility with Hibernate and
+ * Data JPA*/
+
 @MappedSuperclass
-public class WorkerAccount{
+public class WorkerAccount {
 
-    @NotBlank
+
+    @Column(nullable = false, insertable = false, updatable = false)
     private Integer businessId;
+    @Column(nullable = false, insertable = false, updatable = false)
     private String email;
+    @Column(nullable = false)
     private String password;
     private String firstName;
     private String lastName;
+
     private Timestamp timestamp;
     private String jobTitle;
 
     @Transient
     private String token;
 
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public WorkerAccount(){}
-
-
-    public void setTimestamp(Timestamp timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    public WorkerAccount(Integer businessId, String email, String password,
+    public WorkerAccount(Integer businessId,
+                         String email, String password,
                          String firstName, String lastName,
-                         Timestamp timestamp,
-                         String jobTitle) {
+                         Timestamp timestamp, String jobTitle) {
         this.businessId = businessId;
         this.email = email;
         this.password = password;
@@ -53,9 +43,10 @@ public class WorkerAccount{
         this.timestamp = timestamp;
         this.jobTitle = jobTitle;
     }
-    public WorkerAccount(String email, String password,
-                         String firstName, String lastName,
-                         Timestamp timestamp,
+
+    public WorkerAccount(String email,
+                         String password, String firstName,
+                         String lastName, Timestamp timestamp,
                          String jobTitle) {
         this.email = email;
         this.password = password;
@@ -65,8 +56,15 @@ public class WorkerAccount{
         this.jobTitle = jobTitle;
     }
 
-    public Timestamp getTimestamp() {
-        return timestamp;
+    public WorkerAccount() {
+    }
+
+    public Integer getBusinessId() {
+        return businessId;
+    }
+
+    public void setBusinessId(Integer businessId) {
+        this.businessId = businessId;
     }
 
     public String getEmail() {
@@ -101,12 +99,12 @@ public class WorkerAccount{
         this.lastName = lastName;
     }
 
-    public Integer getBusinessId() {
-        return businessId;
+    public Timestamp getTimestamp() {
+        return timestamp;
     }
 
-    public void setBusinessId(Integer businessId) {
-        this.businessId = businessId;
+    public void setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
     }
 
     public String getJobTitle() {
@@ -117,33 +115,36 @@ public class WorkerAccount{
         this.jobTitle = jobTitle;
     }
 
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public String getAccountIdString(){return "";}
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof WorkerAccount)) return false;
         WorkerAccount that = (WorkerAccount) o;
-        return this.email.equals(that.email)
-                && this.password.equals(that.password)
-                && Objects.equals(this.firstName, that.firstName)
-                && Objects.equals(this.lastName, that.lastName)
-                && Objects.equals(this.timestamp, that.timestamp)
-                && Objects.equals(this.jobTitle, that.jobTitle);
+        return getBusinessId().equals(that.getBusinessId())
+                && getEmail().equals(that.getEmail())
+                && getPassword().equals(that.getPassword())
+                && getFirstName().equals(that.getFirstName())
+                && getLastName().equals(that.getLastName())
+                && getJobTitle().equals(that.getJobTitle());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(email, password, firstName, lastName, timestamp, jobTitle);
+        return Objects.hash(getBusinessId(),
+                getEmail(), getPassword(),
+                getFirstName(), getLastName(),
+                getJobTitle());
     }
 
-    @Override
-    public String toString() {
-        return "WorkerAccount{" +
-                "email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", timestamp=" + timestamp +
-                ", jobTitle='" + jobTitle + '\'' +
-                '}';
-    }
+    public AccountId getAccountId(){ return null;}
 }
