@@ -15,16 +15,16 @@ const Admin = () => {
 
   return (
     <div className="row-4 login-inner area-padding">
-      <h className="modal-header">
-        <RiKeyFill size="1.5em" style={{ fill: "#00f200" }} />
-        Admin Dashboard
-      </h>
+      <h6>
+        <RiKeyFill size="1.5em" style={{ fill: "#00f200" }}/> {"Admin Dashboard"}
+      </h6>
       <div className="txt-align-center">
         <button className="btn green round"><RiUserAddFill /> Create Account</button>
         <button className="btn green round"><RiFileCopy2Fill /> Report Template</button>
         <button className="btn green round"><RiProfileFill /> Profile Template</button>
-        <hr className="green txt-align-center" style={{ width: "75%", align: "right" }}                                   ></hr>
-      </div>
+        <hr className="green txt-align-center"></hr>
+      </div>        
+
         <p>Search Account</p>
       <div className="txt-align-center">{AcctSrcResult}</div>
     </div>

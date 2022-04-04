@@ -15,7 +15,7 @@ body {
     "footer";
 }
 
-#app > header {
+header {
   grid-area: header;
   display: grid;
   grid-template-columns: 1fr 10fr 1fr;
@@ -60,7 +60,7 @@ body {
 }
 
 
-/* lists */
+/* lists 
 ul {
   list-style-type: none;
   margin: 0;
@@ -90,7 +90,9 @@ li.b {
 .active {
   background-color: #000000;
   color: #ffffff;
-}
+}*/
+
+
 
 li a:hover {
   color: #ffffff;
@@ -104,21 +106,37 @@ li a:hover {
 }
 
 /* card */
+.row{
+  border-top: none;
+  font-size: .85rem;
+}
+
+.Stack{
+  font-size: .85rem;
+}
+
 .card-label {
   font-size: .85rem;
   color: #999999;
   display: grid;
 }
 
+
 .card {
-  display: grid;
-  font-size: .85rem;
-  color: #666666;
+  color: #000000;
   border-radius: 2px;
   border: 1px solid #acacac;
   transition: all .1s ease-in-out;
   box-shadow: inset .5em 0em #d6d6d6;
   overflow: hidden;
+}
+
+
+.card-margin{
+  grid-template-columns: 1fr 3.25fr .75fr .75fr 2fr 1fr;
+  grid-gap: 1em;
+  margin:  0 1rem .5rem;
+  padding-left: 2em;
 }
 
 .card.acct{
@@ -133,27 +151,16 @@ li a:hover {
   height: 3em;
 }
 
-.card-margin{
-  grid-template-columns: 1fr 2fr 1fr 1fr 1fr .5fr;
-  grid-gap: 1em;
-  margin:  0 1rem .5rem;
-  padding: .5rem;
-  padding-left: 2em; 
-}
-
 .nested{
-  display:flex;
-  flex-direction: row;
-  gap: 1em;
   align-items: center;
-  height: 100%;
+  background-color: #ffc8c8;
 }
 
-.card img {
+.row img {
   width: 4em;
   height: 4em;
-  margin: .15em;
   object-fit: cover;
+  margin: .5em;
 }
 
 .card:hover {
