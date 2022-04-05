@@ -1,6 +1,8 @@
 import React from "react";
 import logo from "./assets/logo.png";
 import { useNavigate } from "react-router-dom";
+import { Form, FormGroup, Card} from "react-bootstrap";
+import CardHeader from "react-bootstrap/esm/CardHeader";
 
 
 const SignIn = ({authenticate}) => {
@@ -11,21 +13,25 @@ const SignIn = ({authenticate}) => {
       navigate("Reports");
   };
   return (
-    <div id="login">
+    <div className="col-2 m-5 justify-content-center">
+ 
       {/* Logo */}
-      <div className="txt-align-center">
-        <img src={logo} />
-        <h1>FR Most Wanted</h1>
-      </div>
-      {/* Register Header */}
-      <div className="">
-        <div>
-          <h4>Sign In</h4>
-          <hr className="green"></hr>
-          <div className="var-box">Email</div> 
-          <div className="var-box">Password</div>
-          <div className="var-box"> Business Number</div>
-        </div>    
+
+      <div>
+        <img src={logo} className="justify-content-center"/><br/>  
+        <h2>FR Most Wanted</h2>
+      </div>  
+   
+    
+        <h4>Sign In</h4>
+        <hr className="green"></hr>
+        <Form.Group className="col p-3" >
+      
+          <Form.Control className ="m-3" type="email" placeholder="Enter email" />
+          <Form.Control className ="m-3"type="email" placeholder="Password" />
+          <Form.Control className ="m-3"type="email" placeholder=" Business Number" />
+   
+        </Form.Group>    
 
         <div className="txt-align-center">      
         <button onClick={signIn} type="button" className="btn btn-dark btn-lg">Sign In</button>   
@@ -33,7 +39,7 @@ const SignIn = ({authenticate}) => {
         <button type="button" className="btn btn-light">Register new business</button>
       
         </div>
-      </div>
+  
     </div>
   );
 };

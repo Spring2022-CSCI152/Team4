@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import { Navbar, Nav, Container, Button } from "react-bootstrap";
 import logo_white from '../assets/logo_white.png'
 import { Link } from "react-router-dom";
