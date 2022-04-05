@@ -1,19 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
-import NavBarComp from './NavBarComp';
-import './reportDashboard.css';
-import './signIn.css';
+import App from './App'
+import { BrowserRouter } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './reportDashboard.css';
+import './utility.css';
+
 
 ReactDOM.render(
- <NavBarComp/>,
-document.getElementById('nav') //render App div root in /public/index.html
+    <BrowserRouter> 
+        <App/>
+    </BrowserRouter>   ,
+document.getElementById('root') 
 );
 
-ReactDOM.render(
-    <App />,
-  document.getElementById('app') //render App div root in /public/index.html
-);
 
 

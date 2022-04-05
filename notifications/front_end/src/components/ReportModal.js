@@ -10,59 +10,61 @@ const ReportModal = ({ open, onClose }) => {
   return createPortal(
     <div className="view-report-overlay">
       <div className="view-report-inner">
-        <button className="close-btn" onClick={onClose}>
+        <button className="close-btn" fixed="top" onClick={onClose}>
           X
         </button>
 
-        <h className= "modal-header">
-          <BsFillExclamationCircleFill
-            size="1.5em"
-            style={{ fill: "#00f200" }}
-          />
-          Security Incident Report
-        </h>
-        <div className="col-5">
-          <p>
-            Report Number:<br/>
-            {mockData[0].r_id}
-          </p>
-          <p>
-            Date/Time:<br/>
-            {mockData[0].date}
-          </p>
-          <p>
-            Incident Date/Time:<br/>
-            {mockData[0].date}
-          </p>
-          <p>
-            Location:<br/>
-            {mockData[0].location}
-          </p>
-          <p>
-            Incident Type:<br/>
-            {mockData[0].type}
-          </p>
-        </div>
+
         <div className="row">
-          <div>
-            <h>Involved parties</h>
-            {mockData[0].profile.map((customer) => (
-              <div className="col-4">
-                <img src={customer.url} />
-                <div>
-                  <b>Name:</b> {customer.name}<br/>
-                  <b>Status:</b> {customer.status}<br/>
-                  <b>Eyes:</b>
-                </div>
-                <div><b>Ban Start:</b> somedate</div>
-                <div><b>Ban End:</b> never</div>
-                <div>
-                  <b>Something else:</b> Something
-                </div>
-              </div>
-            ))}
+          <div className="col-1 p-1"> <BsFillExclamationCircleFill size="2rem" style={{ fill: "#00f200" }} /> 
+        </div>
+          <div className="col-10 p-1"><h3 className="text-align-left ml-3">Security Incident Report</h3>
           </div>
         </div>
+
+        <div className="row">
+          <div className="col">
+              <b>Report Number:</b><br/>
+              {mockData[0].r_id}
+          </div>
+          <div className="col">
+          <b>Date/Time:</b><br/>
+              {mockData[0].date}
+          </div>
+
+          <div className="col">
+          <b>Incident Date/Time:</b><br/>
+              {mockData[0].date}
+          </div>
+          <div className="col">
+          <b>Location:</b><br/>
+              {mockData[0].location}
+          </div>
+          <div className="col">
+          <b>Incident Type:</b><br/>
+              {mockData[0].type}
+          </div>
+        </div>
+ 
+        <div className= "container">    
+        <h6>Involved parties:</h6>
+          <div className="row p-1">
+              {mockData[0].profile.map((customer) => (
+              
+              <div className="col">
+                    <div className="col-3"><img src={customer.url} /></div>
+                    <div className="col"><b>Name:</b> {customer.name}</div>
+                    <div className="col"><b>Status:</b> {customer.status}</div>
+                    <div className="col"><b>Eyes:</b></div>
+                    <div className="col"><b>Ban Start:</b> somedate</div>
+                    <div className="col"><b>Ban End:</b> never</div>
+                    <div className="co1"><b>Something else:</b> Something</div>
+              </div>
+            ))}
+          </div> 
+        </div>  
+
+
         <div className="row">
             {mockData[0].boxes.map((boxes,i) => (
             <div key={i}>

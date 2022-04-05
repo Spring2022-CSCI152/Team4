@@ -1,7 +1,7 @@
 import React from "react";
 import logo from "./assets/logo.png";
 
-const Reg = () => {
+const Register = () => {
   return (
     <div id="login">
       {/* Logo */}
@@ -33,4 +33,4 @@ const Reg = () => {
   );
 };
 
-export default Reg;
+export default Register;

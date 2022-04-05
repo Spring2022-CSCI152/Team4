@@ -4,12 +4,10 @@ import ReactPaginate from "react-paginate";
 import { FaPen, FaCaretLeft, FaCaretRight } from "react-icons/fa";
 import DashBtns from "./DashBtns";
 import ReportModal from "./ReportModal";
-import { Card, CardGroup, Stack } from "react-bootstrap";
+import { Card, Stack } from "react-bootstrap";
 
 function AllList() {
-  {
-    /* Cards display and page calculation */
-  }
+  {/* Cards display and page calculation */}
 
   const [profiles, setProfiles] = useState(mockData);
   const [pageNum, setPageNum] = useState(0);
@@ -19,23 +17,19 @@ function AllList() {
     .slice(pagesVisited, pagesVisited + cardsPerPage)
     .map((profiles) => {
       return (
-        <Card
-          className="card-margin"
-          key={profiles.r_id}
-          onClick={() => setIsOpen(true)}
-        >
-          <div className="row p-1  d-flex align-items-center">
-            <div class="col-1 p-1">
+        <Card className="card-margin" key={profiles.r_id} onClick={() => setIsOpen(true)}>
+          <div className="row p-1 d-flex align-items-center">
+            <div className="col-1 p-1">
               <p>ID: {profiles.r_id}</p>
               <p>{profiles.date}</p>
             </div>
 
-            <div class="col-5  p-1">
-              <div class="col s p-1 ">
-                <div class="col-12  p-1">
+            <div className="col-5 p-1">
+              <div className="col p-1">
+                <div className="col-12  p-1">
                   {profiles.profile.map((item, i) => {
                     return (
-                      <div key={i} class="d-flex justify-content-end">
+                      <div key={i} className="d-flex justify-content-end">
                         <img src={item.url} />
                       </div>
                     );
@@ -43,7 +37,7 @@ function AllList() {
                 </div>
               </div>
 
-              <div class="col-12 p-1 d-flex align-content-around flex-wrap">
+              <div className="col-12 p-1 d-flex align-content-around flex-wrap">
                 {profiles.profile.map((item, i) => {
                   return (
                     <div key={i}>
@@ -58,10 +52,10 @@ function AllList() {
               </div>
             </div>
 
-            <div class="col-1 p-1"> {profiles.type} </div>
-            <div class="col-2 p-1"> {profiles.location} </div>
-            <div class="col-1 p-1"> {profiles.attachements}</div>
-            <div class="col-1 p-1">
+            <div className="col-1 p-1"> {profiles.type} </div>
+            <div className="col-2 p-1"> {profiles.location} </div>
+            <div className="col-1 p-1"> {profiles.attachements}</div>
+            <div className="col-1 p-1">
               <button className="btn sm round">
                 {""}edit <FaPen size="1em" />
                 {""}
