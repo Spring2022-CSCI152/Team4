@@ -97,12 +97,6 @@ li a:hover {
   background-color: #ffc8c8;
 }
 
-.row img {
-  width: 4em;
-  height: 4em;
-  object-fit: cover;
-  margin: .5em;
-}
 
 .card:hover {
   transform: scale(1.01);

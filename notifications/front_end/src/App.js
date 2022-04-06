@@ -6,10 +6,13 @@ import Notifications from "./Notifications";
 import Profiles from "./Profiles";
 import Admin from "./Admin";
 import SignIn from "./SignIn";
+import Register from "./Register";
 import NavBarComp from "./components/NavBarComp";
 
 const App = () => {
   const [user, setUser] = useState(null);
+  const [reg, setReg] = useState(null);
+
 
   const Layout = () => (
     <>
@@ -19,6 +22,7 @@ const App = () => {
   );
 
   return (
+
     <Routes>
       {!user && (
         <>
@@ -33,8 +37,7 @@ const App = () => {
             <Route path="/Profiles" element={<Profiles />} />
             <Route path="/Admin" element={<Admin />} />
             <Route
-              path="*"
-              element={<Navigate to={user ? "/Reports" : "/"} />}
+              path="*" element={<Navigate to={user ? "/Reports" : "/"} />}
             />
           </Route>
         </>

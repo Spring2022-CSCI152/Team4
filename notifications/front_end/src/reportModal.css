@@ -63,10 +63,12 @@
     grid-template-rows: .5fr repeat(3, auto);
 }
 
-.row img{
+.report-img{
     width: 8em;
     height: 8em;
     object-fit: cover;
+   
+
 }
 
 

@@ -10,8 +10,6 @@ import { useNavigate } from "react-router-dom";
   const signOut = () => {
     authenticate();
     navigate("/");
-    
-    
 };
    
   return (

@@ -1,46 +1,55 @@
 import React from "react";
 import logo from "./assets/logo.png";
-import { useNavigate } from "react-router-dom";
-import { Form, FormGroup, Card} from "react-bootstrap";
-import CardHeader from "react-bootstrap/esm/CardHeader";
+import { Link, useNavigate } from "react-router-dom";
+import { Form} from "react-bootstrap";
+import Register from "./Register";
 
 
-const SignIn = ({authenticate}) => {
+const SignIn = ({authenticate}, {regToggle}) => {
+
   const navigate = useNavigate();
 
-  const signIn = () => {  
+  const signInTrigger = () => {  
       authenticate();
       navigate("Reports");
   };
+
+  const regToggleTrigger = () => {  
+    console.log("regToggle triggered")
+    navigate("Register")
+  };
+
   return (
-    <div className="col-2 m-5 justify-content-center">
- 
-      {/* Logo */}
+    <div className="row justify-content-center">
+      <div className="col"></div>
+      <div className="col">
+        <div className="txt-align-center mt-5 mb-5">
+          <img src={logo} /><br/>
+          <h2>FR Most Wanted</h2>  
+        </div>    
+        
+            <h4>Sign In</h4>
+            <hr className="green"></hr>
+        
+            <Form.Group >     
+              <Form.Control className ="mb-3" type="email" placeholder="Enter email" />
+              <Form.Control className ="mb-3" type="email" placeholder="Password" />
+              <Form.Control className ="mb-3" type="email" placeholder="Business Number" />
+            </Form.Group>
+            
+            <div className=" d-flex justify-content-center">
+              <button onClick={signInTrigger} type="button" className="btn btn-dark btn-lg btn-block ">Sign In</button>   
+            </div>
 
-      <div>
-        <img src={logo} className="justify-content-center"/><br/>  
-        <h2>FR Most Wanted</h2>
-      </div>  
-   
-    
-        <h4>Sign In</h4>
-        <hr className="green"></hr>
-        <Form.Group className="col p-3" >
-      
-          <Form.Control className ="m-3" type="email" placeholder="Enter email" />
-          <Form.Control className ="m-3"type="email" placeholder="Password" />
-          <Form.Control className ="m-3"type="email" placeholder=" Business Number" />
-   
-        </Form.Group>    
-
-        <div className="txt-align-center">      
-        <button onClick={signIn} type="button" className="btn btn-dark btn-lg">Sign In</button>   
-                <hr className="green"></hr>
-        <button type="button" className="btn btn-light">Register new business</button>
-      
-        </div>
-  
-    </div>
+            <hr className="green"></hr>
+            <Link as={Link} to={<Register/>}>Register </Link>
+            <div className=" d-flex justify-content-center">
+              <button type="button" className="btn btn-light">Register new business</button>
+            </div>
+           
+      </div>
+      <div className="col"></div>
+      </div>
   );
 };
 

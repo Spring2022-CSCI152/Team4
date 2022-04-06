@@ -25,3 +25,15 @@ hr.green{
     justify-self: center;
 }
 
+.row img {
+    object-fit: cover;
+}
+
+.card img {
+    width: 4em;
+    height: 4em;
+    object-fit: cover;
+    margin: .5em;
+}
+  
+

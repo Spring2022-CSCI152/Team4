@@ -52,7 +52,7 @@ const ReportModal = ({ open, onClose }) => {
               {mockData[0].profile.map((customer) => (
               
               <div className="col">
-                    <div className="col-3"><img src={customer.url} /></div>
+                    <div className="col-3"><img src={customer.url} className="report-img"/></div>
                     <div className="col"><b>Name:</b> {customer.name}</div>
                     <div className="col"><b>Status:</b> {customer.status}</div>
                     <div className="col"><b>Eyes:</b></div>
