@@ -129,16 +129,16 @@ li a:hover {
   border-radius: 5px;
 }
 
-.btn.blk:hover {
-  color: #ffffff;
-  background:#333333;
+.btn-dark:hover {
+  color: #000000;
+  background:#00f200;
   
 }
 
 
-.btn:hover {
-  /*background-color: #d6d6d6;*/
+.btn-link:hover {
   color: #000000;
+ 
 }
 
 

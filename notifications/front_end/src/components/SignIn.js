@@ -2,20 +2,16 @@ import React from "react";
 import {useNavigate} from "react-router-dom";
 import { Form} from "react-bootstrap";
 
-
-
 const SignIn = ({authenticate}) => {
-
   const navigate = useNavigate();
   const signInTrigger = () => {  
       authenticate();
       navigate("Reports");
   };
 
-
   return (
     <div className="row justify-content-center">
-      <div className="col">
+
         <div className="txt-align-center mt-5 mb-5">
           </div>    
         
@@ -34,7 +30,7 @@ const SignIn = ({authenticate}) => {
             <hr className="green"></hr>
            
         </div>
-      </div>
+    
   );
 };
 
