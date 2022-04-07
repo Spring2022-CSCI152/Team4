@@ -135,10 +135,12 @@ li a:hover {
   
 }
 
+
 .btn:hover {
-  background-color: #d6d6d6;
+  /*background-color: #d6d6d6;*/
   color: #000000;
 }
+
 
 .btn.green {
   background-color: #00f200;

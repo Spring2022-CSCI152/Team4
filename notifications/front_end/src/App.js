@@ -5,13 +5,13 @@ import Reports from "./Reports";
 import Notifications from "./Notifications";
 import Profiles from "./Profiles";
 import Admin from "./Admin";
-import SignIn from "./SignIn";
-import Register from "./Register";
+import SignIn from "./components/SignIn";
+import Register from "./components/Register";
+import SplashPage from "./SplashPage";
 import NavBarComp from "./components/NavBarComp";
 
 const App = () => {
   const [user, setUser] = useState(null);
-  const [reg, setReg] = useState(null);
 
 
   const Layout = () => (
@@ -26,7 +26,8 @@ const App = () => {
     <Routes>
       {!user && (
         <>
-          <Route path="/"element={<SignIn authenticate={() => setUser(true)} />}/>
+          <Route path="/"element={<SplashPage authenticate={() => setUser(true)} />}/>
+          <Route path="/Register"element={<Register/>}/>
         </>
       )}
       {user && (
