@@ -1,4 +1,4 @@
-package com.CSCI152.team4.server.Util;
+package com.CSCI152.team4.server.Util.Interfaces;
 
 import com.CSCI152.team4.server.Accounts.Classes.*;
 
