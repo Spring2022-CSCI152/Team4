@@ -2,9 +2,9 @@ package com.CSCI152.team4.server.Util;
 
 
 import com.CSCI152.team4.server.Accounts.Classes.*;
-import com.CSCI152.team4.server.Accounts.Repos.AdminAccountRepo;
-import com.CSCI152.team4.server.Accounts.Repos.BusinessAccountRepo;
-import com.CSCI152.team4.server.Accounts.Repos.EmployeeAccountRepo;
+import com.CSCI152.team4.server.Repos.AdminAccountRepo;
+import com.CSCI152.team4.server.Repos.BusinessAccountRepo;
+import com.CSCI152.team4.server.Repos.EmployeeAccountRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -19,7 +19,7 @@ import java.util.Optional;
  * increase overall code cohesion.
  * */
 @Service
-public class AccountsRepoManager {
+public class AccountsRepoManager implements AccountsRepoInterface{
 
     private final BusinessAccountRepo business;
     private final EmployeeAccountRepo employees;

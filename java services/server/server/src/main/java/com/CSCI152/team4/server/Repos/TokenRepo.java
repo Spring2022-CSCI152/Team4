@@ -1,4 +1,4 @@
-package com.CSCI152.team4.server.Auth.Repos;
+package com.CSCI152.team4.server.Repos;
 
 import com.CSCI152.team4.server.Auth.Classes.Token;
 import org.springframework.data.repository.CrudRepository;

@@ -1,4 +1,4 @@
-package com.CSCI152.team4.server.Accounts.Repos;
+package com.CSCI152.team4.server.Repos;
 
 import com.CSCI152.team4.server.Accounts.Classes.AccountId;
 import com.CSCI152.team4.server.Accounts.Classes.EmployeeAccount;

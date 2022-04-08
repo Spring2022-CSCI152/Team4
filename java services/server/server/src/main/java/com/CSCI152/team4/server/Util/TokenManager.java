@@ -1,7 +1,7 @@
 package com.CSCI152.team4.server.Util;
 
 import com.CSCI152.team4.server.Auth.Classes.Token;
-import com.CSCI152.team4.server.Auth.Repos.TokenRepo;
+import com.CSCI152.team4.server.Repos.TokenRepo;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
