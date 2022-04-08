@@ -35,6 +35,9 @@ public class ReportFormat {
     //Needed for Persistence Provider
     public ReportFormat(){}
 
+    public ReportFormat(Integer businessId){
+        this.businessId = businessId;
+    }
     @Override
     public String toString() {
         return "ReportFormat{" +

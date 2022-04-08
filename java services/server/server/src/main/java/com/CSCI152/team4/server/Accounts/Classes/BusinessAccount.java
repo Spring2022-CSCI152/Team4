@@ -1,7 +1,6 @@
 package com.CSCI152.team4.server.Accounts.Classes;
 
 import com.CSCI152.team4.server.Accounts.Settings.ReportFormat;
-import com.CSCI152.team4.server.Util.Builders.ReportFormatBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
