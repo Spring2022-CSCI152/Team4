@@ -4,7 +4,7 @@ import { Form } from "react-bootstrap";
 const Register = () => {
   return (
     <div className="row justify-content-center">
-      <div className="txt-align-center mt-5 mb-5"></div>
+      <div className="txt-align-center"></div>
       <h4>Register</h4>
       <hr className="green"></hr>
       <Form.Group>
