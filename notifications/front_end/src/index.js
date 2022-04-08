@@ -1,10 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
-import './report_dashboard.css';
+import App from './App'
+import { BrowserRouter } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './reportDashboard.css';
+import './utility.css';
+
 
 ReactDOM.render(
-     <App />,
-  document.getElementById('root') //render App div root in /public/index.html
+    <BrowserRouter> 
+        <App/>
+    </BrowserRouter>   ,
+document.getElementById('root') 
 );
+
+
 

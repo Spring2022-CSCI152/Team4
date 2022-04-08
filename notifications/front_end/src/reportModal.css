@@ -1,4 +1,3 @@
-
 .view-report-overlay{
     position: fixed;
     top: 0;
@@ -11,7 +10,7 @@
 
 .view-report-inner {
     display: grid;
-    grid-template-rows: .25fr.5fr 1.5fr 3fr 1fr .5fr ;
+    grid-template-rows: .25fr .5fr 1.5fr 3fr 1fr .5fr ;
     grid-gap: 5px;
     position: fixed;
     top: 50%;
@@ -59,30 +58,25 @@
     font-size: .75rem;
 }
 
-.row img{
+.row-4{
+    display: grid;
+    grid-template-rows: .5fr repeat(3, auto);
+}
+
+.report-img{
     width: 8em;
     height: 8em;
     object-fit: cover;
+   
+
 }
 
-h{
-    margin: .5em .1em 1em;
-    font-weight: bold;
-    color: #666666;
-    font-size: 14px;
-}
-
-h.modal-header{
-    display: flex;
-    align-items: center;
-    gap: .5em;
-}
 
 .var-box{
-border: solid 1px #666666;
+border: solid 1px #acacac;
 padding: 1em;
 margin: .5em .1em 2em;
-
+border-radius: 5px;
 }
 
 

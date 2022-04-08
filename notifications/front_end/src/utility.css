@@ -1,0 +1,39 @@
+hr.green{
+    border: solid 2px #00f200;
+}
+
+.area-padding{
+    padding: 0.5em;
+  }
+  
+.txt-align-right {
+    text-align: right;
+}
+  
+.txt-align-left {
+    text-align: left;
+    align-self: left;
+    align-content: left;
+    align-items: left;
+}
+  
+.txt-align-center{
+    text-align: center;
+    align-self: center;
+    align-content: center;
+    align-items: center;
+    justify-self: center;
+}
+
+.row img {
+    object-fit: cover;
+}
+
+.card img {
+    width: 4em;
+    height: 4em;
+    object-fit: cover;
+    margin: .5em;
+}
+  
+

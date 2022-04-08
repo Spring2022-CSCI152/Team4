@@ -11,7 +11,7 @@ const mockData=
       {
         "name": "Ryan Anderson",
         "status": "Watch",
-        "url": "https://cdn.discordapp.com/attachments/827666575489368097/946650059355881472/unknown.png"
+        "url": "https://cdn.discordapp.com/attachments/827666575489368097/961056360995381338/ryan.png"
       },
       {
         "name": "Marc Bantay",
