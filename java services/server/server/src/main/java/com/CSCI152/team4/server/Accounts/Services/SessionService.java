@@ -5,7 +5,7 @@ import com.CSCI152.team4.server.Accounts.Classes.BusinessAccount;
 import com.CSCI152.team4.server.Accounts.Classes.WorkerAccount;
 import com.CSCI152.team4.server.Util.InstanceClasses.AccountsRepoManager;
 import com.CSCI152.team4.server.Accounts.Requests.LoginRequest;
-import com.CSCI152.team4.server.Util.InstanceClasses.TokenManager;
+import com.CSCI152.team4.server.Util.InstanceClasses.TokenAuthenticator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,11 +16,11 @@ import org.springframework.web.server.ResponseStatusException;
 @Service
 public class SessionService {
 
-    private final TokenManager authenticator;
+    private final TokenAuthenticator authenticator;
     private final AccountsRepoManager repos;
 
     @Autowired
-    public SessionService(TokenManager authenticator, AccountsRepoManager repos) {
+    public SessionService(TokenAuthenticator authenticator, AccountsRepoManager repos) {
         this.authenticator = authenticator;
         this.repos = repos;
     }

@@ -12,7 +12,7 @@ import com.CSCI152.team4.server.Accounts.Requests.AdminRequest;
 import com.CSCI152.team4.server.Accounts.Requests.BusinessRequest;
 import com.CSCI152.team4.server.Accounts.Requests.EmployeeRequest;
 import com.CSCI152.team4.server.Util.InstanceClasses.SettingsRepoManager;
-import com.CSCI152.team4.server.Util.InstanceClasses.TokenManager;
+import com.CSCI152.team4.server.Util.InstanceClasses.TokenAuthenticator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,11 +32,11 @@ import org.springframework.web.server.ResponseStatusException;
 public class RegistrationService {
 
     private final AccountsRepoManager repos;
-    private final TokenManager authenticator;
+    private final TokenAuthenticator authenticator;
     private final SettingsRepoManager settings;
 
     @Autowired
-    public RegistrationService(AccountsRepoManager repos, TokenManager authenticator, SettingsRepoManager settings) {
+    public RegistrationService(AccountsRepoManager repos, TokenAuthenticator authenticator, SettingsRepoManager settings) {
         this.repos = repos;
         this.authenticator = authenticator;
         this.settings = settings;

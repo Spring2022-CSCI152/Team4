@@ -5,7 +5,7 @@ import com.CSCI152.team4.server.Accounts.Classes.AdminAccount;
 import com.CSCI152.team4.server.Accounts.Classes.BusinessAccount;
 import com.CSCI152.team4.server.Accounts.Classes.EmployeeAccount;
 import com.CSCI152.team4.server.Util.InstanceClasses.AccountsRepoManager;
-import com.CSCI152.team4.server.Util.InstanceClasses.TokenManager;
+import com.CSCI152.team4.server.Util.InstanceClasses.TokenAuthenticator;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,7 +25,7 @@ class RegistrationServiceTest {
     AccountsRepoManager repoManager;
 
     @Mock
-    TokenManager tokenManager;
+    TokenAuthenticator tokenAuthenticator;
 
     @Mock
     BusinessAccount businessAccount;
@@ -66,8 +66,8 @@ class RegistrationServiceTest {
     }
 
     private void setTokenManagerStubs(){
-        doReturn("someToken").when(tokenManager).getToken(any());
-        doNothing().when(tokenManager).validateToken(any(), any());
+        doReturn("someToken").when(tokenAuthenticator).getToken(any());
+        doNothing().when(tokenAuthenticator).validateToken(any(), any());
     }
 
     private void setBusinessAccountStubs(){

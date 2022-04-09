@@ -50,7 +50,6 @@ public class ReportValidator {
         CustomerProfileFormat profileFormat =
                 settingsRepoManager.getCustomerProfileIfExists(profile.getBusinessId());
 
-
         profile.setName((profileFormat.isName()) ? profile.getName() : null);
         profile.setStatus((profileFormat.isStatus()) ? profile.getStatus() : null);
         profile.setAddress((profileFormat.isAddress()) ? profile.getAddress() : null);
