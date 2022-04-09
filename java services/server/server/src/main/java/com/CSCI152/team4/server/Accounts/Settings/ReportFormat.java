@@ -41,7 +41,7 @@ public class ReportFormat {
     @Override
     public String toString() {
         return "ReportFormat{" +
-//                "businessId=" + businessId +
+                "businessId=" + businessId +
                 ", reportId=" + reportId +
                 ", profiles=" + profiles +
                 ", date=" + date +

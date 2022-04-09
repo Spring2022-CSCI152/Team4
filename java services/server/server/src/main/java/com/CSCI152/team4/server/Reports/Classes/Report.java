@@ -20,10 +20,12 @@ public class Report {
     private ReportId reportId;
 
     //Profile Ids
+    @Column(nullable = false)
+    @ElementCollection(targetClass = String.class, fetch = FetchType.LAZY)
     private List<String> profiles;
     //Submission Time
     private Timestamp date;
-    //A String representation of the time that report occured
+    //A String representation of the time that report occurred
     private String time;
     private String author;
     private String type;

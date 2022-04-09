@@ -30,6 +30,17 @@ public class ReportValidator {
         }
         ReportFormat reportFormat =
                 settingsRepoManager.getReportFormatIfExists(report.getBusinessId());
+
+        report.setProfiles((reportFormat.isProfiles()) ? report.getProfiles() : null);
+        report.setDate((reportFormat.isDate()) ? report.getDate() : null);
+        report.setTime((reportFormat.isTime()) ? report.getTime() : null);
+        report.setAuthor((reportFormat.isAuthor()) ? report.getAuthor() : null);
+        report.setType((reportFormat.isType()) ? report.getType() : null);
+        report.setBox1((reportFormat.isBox1()) ? report.getBox1() : null);
+        report.setBox2((reportFormat.isBox2()) ? report.getBox2() : null);
+        report.setBox3((reportFormat.isBox3()) ? report.getBox3() : null);
+        report.setBox4((reportFormat.isBox4()) ? report.getBox4() : null);
+        report.setBox5((reportFormat.isBox5()) ? report.getBox5() : null);
     }
 
     public void validateProfile(Profile profile){
@@ -47,5 +58,5 @@ public class ReportValidator {
         }
     }
 
-    
+
 }
