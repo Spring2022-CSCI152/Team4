@@ -49,6 +49,17 @@ public class ReportValidator {
         }
         CustomerProfileFormat profileFormat =
                 settingsRepoManager.getCustomerProfileIfExists(profile.getBusinessId());
+
+
+        profile.setName((profileFormat.isName()) ? profile.getName() : null);
+        profile.setStatus((profileFormat.isStatus()) ? profile.getStatus() : null);
+        profile.setAddress((profileFormat.isAddress()) ? profile.getAddress() : null);
+        profile.setBanDuration((profileFormat.isBanDuration()) ? profile.getBanDuration() : null);
+        profile.setAttributes((profileFormat.isAttributes()) ? profile.getAttributes() : null);
+        profile.setImageName((profileFormat.isImageName()) ? profile.getImageName() : null);
+        profile.setInvolvement((profileFormat.isInvolvement()) ? profile.getInvolvement() : null);
+        profile.setReports((profileFormat.isReports()) ? profile.getReports() : null);
+
     }
 
     public void validateProfiles(List<Profile> profileList){
