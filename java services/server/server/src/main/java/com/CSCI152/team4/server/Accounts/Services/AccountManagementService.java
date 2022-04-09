@@ -1,9 +1,9 @@
 package com.CSCI152.team4.server.Accounts.Services;
 
 import com.CSCI152.team4.server.Accounts.Classes.*;
-import com.CSCI152.team4.server.Util.AccountsRepoManager;
+import com.CSCI152.team4.server.Util.InstanceClasses.AccountsRepoManager;
 import com.CSCI152.team4.server.Accounts.Requests.PermissionUpdateRequest;
-import com.CSCI152.team4.server.Util.TokenManager;
+import com.CSCI152.team4.server.Util.InstanceClasses.TokenManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

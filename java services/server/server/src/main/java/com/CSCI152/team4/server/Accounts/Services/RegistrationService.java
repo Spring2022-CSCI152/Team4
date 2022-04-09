@@ -4,12 +4,15 @@ import com.CSCI152.team4.server.Accounts.Classes.AdminAccount;
 import com.CSCI152.team4.server.Accounts.Classes.BusinessAccount;
 import com.CSCI152.team4.server.Accounts.Classes.EmployeeAccount;
 import com.CSCI152.team4.server.Accounts.Classes.WorkerAccount;
-import com.CSCI152.team4.server.Util.AccountsRepoManager;
+import com.CSCI152.team4.server.Accounts.Settings.CustomerProfileFormat;
+import com.CSCI152.team4.server.Accounts.Settings.ReportFormat;
+import com.CSCI152.team4.server.Util.InstanceClasses.AccountsRepoManager;
 import com.CSCI152.team4.server.Accounts.Requests.AccountCreationRequest;
 import com.CSCI152.team4.server.Accounts.Requests.AdminRequest;
 import com.CSCI152.team4.server.Accounts.Requests.BusinessRequest;
 import com.CSCI152.team4.server.Accounts.Requests.EmployeeRequest;
-import com.CSCI152.team4.server.Util.TokenManager;
+import com.CSCI152.team4.server.Util.InstanceClasses.SettingsRepoManager;
+import com.CSCI152.team4.server.Util.InstanceClasses.TokenManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,11 +33,13 @@ public class RegistrationService {
 
     private final AccountsRepoManager repos;
     private final TokenManager authenticator;
+    private final SettingsRepoManager settings;
 
     @Autowired
-    public RegistrationService(AccountsRepoManager repos, TokenManager authenticator) {
+    public RegistrationService(AccountsRepoManager repos, TokenManager authenticator, SettingsRepoManager settings) {
         this.repos = repos;
         this.authenticator = authenticator;
+        this.settings = settings;
     }
 
     /**
@@ -44,7 +49,8 @@ public class RegistrationService {
      * 3. Save BusinessAccount to retrieve generated ID
      * 4. Set AdminAccount's businessId and Save
      * 5. Get Token and Clear AdminAccount Password field
-     * 6. Return Account info
+     * 6. Create Default Formats for Reports and Profiles
+     * 7. Return Account info
      * @param request The request holding the admin account information and business
      *                name
      *
@@ -74,15 +80,20 @@ public class RegistrationService {
         Integer businessId
                 = repos.saveBusinessAccount(newBusinessAccount).getBusinessId();
 
+
         //4. Set AdminAccount's businessId and Save
         returnable.setBusinessId(businessId);
         repos.saveAdminAccount(returnable);
 
-        //5. Get Token and Clear AdminAccount Password field
+        //5. Build Corresponding Report and Profile Settings to defaults
+        settings.saveReportFormat(new ReportFormat(businessId));
+        settings.saveCustomerProfileFormat(new CustomerProfileFormat(businessId));
+
+        //6. Get Token and Clear AdminAccount Password field
         returnable.setToken(authenticator.getToken(returnable.getAccountIdString()));
         returnable.setPassword(null);
 
-        //6. Return Account Info
+        //7. Return Account Info
         return returnable;
     }
 

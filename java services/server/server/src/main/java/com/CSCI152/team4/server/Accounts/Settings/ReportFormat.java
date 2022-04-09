@@ -5,13 +5,13 @@ package com.CSCI152.team4.server.Accounts.Settings;
 import javax.persistence.*;
 
 
-@Embeddable
-//@Table(name = "report_format")
+@Entity
+@Table(name = "report_format")
 public class ReportFormat {
 
-//    @Id
-//    @Column(nullable = false)
-//    private Integer businessId;
+    @Id
+    @Column(nullable = false)
+    private Integer businessId;
 
     private boolean reportId;
     private boolean profiles;
@@ -35,6 +35,9 @@ public class ReportFormat {
     //Needed for Persistence Provider
     public ReportFormat(){}
 
+    public ReportFormat(Integer businessId){
+        this.businessId = businessId;
+    }
     @Override
     public String toString() {
         return "ReportFormat{" +
@@ -61,13 +64,13 @@ public class ReportFormat {
     }
 
     /*Getters and Setters Needed for Persistence*/
-//    public int getBusinessId() {
-//        return businessId;
-//    }
+    public int getBusinessId() {
+        return businessId;
+    }
 
-//    public void setBusinessId(Integer businessId) {
-//        this.businessId = businessId;
-//    }
+    public void setBusinessId(Integer businessId) {
+        this.businessId = businessId;
+    }
 
     public boolean isReportId() {
         return reportId;

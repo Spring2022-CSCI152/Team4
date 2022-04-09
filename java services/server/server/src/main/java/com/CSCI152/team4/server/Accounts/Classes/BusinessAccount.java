@@ -1,7 +1,7 @@
 package com.CSCI152.team4.server.Accounts.Classes;
 
+import com.CSCI152.team4.server.Accounts.Settings.CustomerProfileFormat;
 import com.CSCI152.team4.server.Accounts.Settings.ReportFormat;
-import com.CSCI152.team4.server.Accounts.Settings.ReportFormatBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -34,11 +34,11 @@ public class BusinessAccount {
     @ElementCollection(targetClass = String.class, fetch = FetchType.LAZY)
     private List<String> employees;
 
-    @Embedded
+    @OneToOne
     private ReportFormat reportFormat;
 
-    //@Embedded
-    //private ProfileFormat profileFormat;
+    @OneToOne
+    private CustomerProfileFormat profileFormat;
 
     @Transient
     private HashMap<String, String> accountMapper;
@@ -76,11 +76,11 @@ public class BusinessAccount {
     }
 
     private void buildDefaultReportFormat(){
-        this.reportFormat = new ReportFormatBuilder().build();
+        this.reportFormat = new ReportFormat(businessId);
     }
 
     private void buildDefaultProfileFormat(){
-        //this.profileFormat = new ProfileFormatBuilder().build();
+        this.profileFormat = new CustomerProfileFormat(businessId);
     }
 
     public Integer getBusinessId() {

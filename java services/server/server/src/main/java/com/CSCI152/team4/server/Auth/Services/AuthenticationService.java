@@ -1,6 +1,6 @@
 package com.CSCI152.team4.server.Auth.Services;
 
-import com.CSCI152.team4.server.Util.TokenManager;
+import com.CSCI152.team4.server.Util.InstanceClasses.TokenManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
