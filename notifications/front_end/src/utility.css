@@ -77,6 +77,7 @@ hr.green {
 
 .btn.green {
   background-color: #00f200;
+  color: #000000;
 }
 
 .btn.green:hover {
@@ -95,8 +96,8 @@ hr.green {
     background-color: transparent;
   }
 
-li a {
-  list-style-type: none;
-
+  a {
+    color: #000000;
+    text-decoration: none;
 }
-  
+

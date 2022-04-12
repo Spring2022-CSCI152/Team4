@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import mockData from "../mockData.js";
 import ReactPaginate from "react-paginate";
 import { FaPen, FaCaretLeft, FaCaretRight } from "react-icons/fa";
-import DashBtns from "./DashBtns";
 import ReportModal from "./ReportModal";
-import { Card, Stack, nav } from "react-bootstrap";
+import { Card, Stack } from "react-bootstrap";
+
 
 function AllList() {
   {
@@ -79,7 +79,6 @@ function AllList() {
     <main>
       <ReportModal open={isOpen} onClose={() => setIsOpen(false)}>
       </ReportModal>
-      {<DashBtns />}
       <div className="searchBar">search</div>
       <div className="card-label txt-align-left card-margin">
         <div>Report Number</div>

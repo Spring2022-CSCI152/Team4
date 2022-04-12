@@ -8,6 +8,9 @@ import Admin from "./Admin";
 import Register from "./components/Register";
 import SplashPage from "./SplashPage";
 import NavBarComp from "./components/NavBarComp";
+import AddReport from "./components/AddReport";
+import UpdatedLogs from "./components/UpdatedLogs"
+import AllList from "./components/AllList";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -34,7 +37,12 @@ const App = () => {
         //if user, route to reports and provide routes to following pages, otherwise route to splash
         <>
           <Route element={<Layout />}>
-            <Route path="/Reports" element={<Reports />} />
+            <Route path="/Reports" element={<Reports />}>
+                <Route index element ={<AllList/>}/>
+                <Route path="AllList" element={<AllList />}/>
+                <Route path="AddReport" element={<AddReport />}/>
+                <Route path="UpdatedLogs" element={<UpdatedLogs />}/>
+            </Route>
             <Route path="/Notifications" element={<Notifications />} />
             <Route path="/Profiles" element={<Profiles />} />
             <Route path="/Admin" element={<Admin />} />
