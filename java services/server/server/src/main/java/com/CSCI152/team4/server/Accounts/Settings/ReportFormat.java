@@ -64,7 +64,7 @@ public class ReportFormat {
     }
 
     /*Getters and Setters Needed for Persistence*/
-    public int getBusinessId() {
+    public Integer getBusinessId() {
         return businessId;
     }
 

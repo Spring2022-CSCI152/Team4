@@ -134,9 +134,6 @@ public class BusinessAccount {
 
     public String getAccountType(String accountId){
         mapAccounts();
-        System.out.println(accountId);
-        System.out.println(this.accountMapper.toString());
-        System.out.println(this.accountMapper.get(accountId));
         return this.accountMapper.get(accountId);
     }
 
