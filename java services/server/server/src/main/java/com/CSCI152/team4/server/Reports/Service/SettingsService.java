@@ -2,8 +2,8 @@ package com.CSCI152.team4.server.Reports.Service;
 
 import com.CSCI152.team4.server.Accounts.Settings.ReportFormat;
 import com.CSCI152.team4.server.Reports.Requests.ReportFormatUpdateRequest;
-import com.CSCI152.team4.server.Repos.ReportFormatRepo;
 import com.CSCI152.team4.server.Util.InstanceClasses.AccountsRepoManager;
+import com.CSCI152.team4.server.Util.InstanceClasses.Request;
 import com.CSCI152.team4.server.Util.InstanceClasses.SettingsRepoManager;
 import com.CSCI152.team4.server.Util.InstanceClasses.TokenAuthenticator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +25,20 @@ public class SettingsService {
     }
 
     public void setReportFormat(ReportFormatUpdateRequest request){
-        authenticator.validateToken(request.getToken(), request.getRequestingAccountId());
-        //Ensure requesting account Id belongs to submitted
-        //business Id
-        if(isValidBusinessIdAndAccount(request.getBusinessId(), request.getRequestingAccountId())){
+        authenticator.validateToken(request.getToken(), request.getAccountIdString());
+        if(isValidBusinessIdAndAccount(request.getBusinessId(), request.getAccountIdString())){
             validateAndSaveReportFormat(request.getBusinessId(), request.getReportFormat());
         }
 
+    }
+
+    public ReportFormat getReportFormat(Request request){
+        authenticator.validateToken(request.getToken(), request.getAccountIdString());
+
+        if(isValidBusinessIdAndAccount(request.getBusinessId(), request.getAccountIdString())){
+            return repoManager.getReportFormatIfExists(request.getBusinessId());
+        }
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Business ID");
     }
 
     private boolean isValidBusinessIdAndAccount(Integer businessId, String accountId){

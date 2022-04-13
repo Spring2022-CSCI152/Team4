@@ -1,38 +1,24 @@
 package com.CSCI152.team4.server.Reports.Requests;
 
+import com.CSCI152.team4.server.Accounts.Classes.AccountId;
 import com.CSCI152.team4.server.Accounts.Settings.ReportFormat;
+import com.CSCI152.team4.server.Util.InstanceClasses.Request;
 
-public class ReportFormatUpdateRequest {
-    private String token;
-    private String requestingAccountId;
-    private Integer businessId;
+public class ReportFormatUpdateRequest extends Request {
+
     private ReportFormat reportFormat;
 
     public ReportFormatUpdateRequest() {
+        super();
     }
 
-    public String getToken() {
-        return token;
+    public ReportFormatUpdateRequest(ReportFormat reportFormat) {
+        this.reportFormat = reportFormat;
     }
 
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public String getRequestingAccountId() {
-        return requestingAccountId;
-    }
-
-    public void setRequestingAccountId(String requestingAccountId) {
-        this.requestingAccountId = requestingAccountId;
-    }
-
-    public Integer getBusinessId() {
-        return businessId;
-    }
-
-    public void setBusinessId(Integer businessId) {
-        this.businessId = businessId;
+    public ReportFormatUpdateRequest(String token, AccountId accountId, ReportFormat reportFormat) {
+        super(token, accountId);
+        this.reportFormat = reportFormat;
     }
 
     public ReportFormat getReportFormat() {

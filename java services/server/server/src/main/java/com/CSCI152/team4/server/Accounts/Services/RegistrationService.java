@@ -143,7 +143,7 @@ public class RegistrationService {
     }
 
     private void validateRequest(AccountCreationRequest request){
-        authenticator.validateToken(request.getToken(), request.getRequestingAccountId());
+        authenticator.validateToken(request.getToken(), request.getAccountIdString());
         request.validate();
     }
 
@@ -159,7 +159,7 @@ public class RegistrationService {
         BusinessAccount returnable = repos.getBusinessIfExists(request.getBusinessId());
 
         try{
-            if(returnable.getAccountType(request.getRequestingAccountId())
+            if(returnable.getAccountType(request.getAccountIdString())
                     .equals(BusinessAccount.adminAccountType)){
                 return returnable;
             }

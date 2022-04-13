@@ -1,5 +1,6 @@
 package com.CSCI152.team4.server.Auth.Services;
 
+import com.CSCI152.team4.server.Util.InstanceClasses.Request;
 import com.CSCI152.team4.server.Util.InstanceClasses.TokenAuthenticator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,23 +17,23 @@ public class AuthenticationService {
         this.tokenAuthenticator = tokenAuthenticator;
     }
 
-    public ResponseEntity<Enum<HttpStatus>> validateToken(String token, String accountId){
+    public ResponseEntity<Enum<HttpStatus>> validateToken(Request request){
 
-        tokenAuthenticator.validateToken(token, accountId);
-
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    public ResponseEntity<Enum<HttpStatus>> refreshToken(String token, String accountId){
-
-        tokenAuthenticator.refreshToken(token, accountId);
+        tokenAuthenticator.validateToken(request.getToken(), request.getAccountIdString());
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    public ResponseEntity<Enum<HttpStatus>> invalidateToken(String token, String accountId){
+    public ResponseEntity<Enum<HttpStatus>> refreshToken(Request request){
 
-        tokenAuthenticator.invalidateToken(token, accountId);
+        tokenAuthenticator.refreshToken(request.getToken(), request.getAccountIdString());
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    public ResponseEntity<Enum<HttpStatus>> invalidateToken(Request request){
+
+        tokenAuthenticator.invalidateToken(request.getToken(), request.getAccountIdString());
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

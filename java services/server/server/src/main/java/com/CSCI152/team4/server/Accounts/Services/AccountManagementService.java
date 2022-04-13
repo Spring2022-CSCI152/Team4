@@ -172,9 +172,9 @@ public class AccountManagementService {
     }
 
     public ResponseEntity<Enum<HttpStatus>> updateEmployeePermissions(PermissionUpdateRequest request){
-        authenticator.validateToken(request.getToken(), request.getRequestAccountIdString());
+        authenticator.validateToken(request.getToken(), request.getAccountIdString());
 
-        if(repos.adminExists(request.getRequestingAccountId())){
+        if(repos.adminExists(request.getAccountId())){
             setEmployeePermissionsAndSave(request.getAccountToUpdateId(), request.getPermissions());
             return new ResponseEntity<>(HttpStatus.OK);
         }

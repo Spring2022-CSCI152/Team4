@@ -1,60 +1,37 @@
 package com.CSCI152.team4.server.Accounts.Requests;
 
 import com.CSCI152.team4.server.Accounts.Classes.AccountId;
+import com.CSCI152.team4.server.Util.InstanceClasses.Request;
 
 import java.util.List;
 import java.util.Objects;
 
-public class PermissionUpdateRequest {
+public class PermissionUpdateRequest extends Request {
 
-    AccountId requestingAccountId;
+
     AccountId accountToUpdateId;
     List<String> permissions;
-    String token;
 
     public PermissionUpdateRequest() {
     }
 
-    public PermissionUpdateRequest(String requestingAccountId, String requestingAccountEmail, Integer businessId,
-                                   String accountToUpdateId, String accountToUpdateEmail, List<String> permissions,
-                                   String token){
-
-        this.requestingAccountId = new AccountId(requestingAccountId, requestingAccountEmail, businessId);
-        this.accountToUpdateId = new AccountId(accountToUpdateId, accountToUpdateEmail, businessId);
+    public PermissionUpdateRequest(AccountId accountToUpdateId, List<String> permissions) {
+        this.accountToUpdateId = accountToUpdateId;
         this.permissions = permissions;
-        this.token = token;
-
     }
-    public PermissionUpdateRequest(AccountId requestingAccountId, AccountId accountToUpdate, List<String> permissions,
-                                   String token) {
-        this.requestingAccountId = requestingAccountId;
-        this.accountToUpdateId = accountToUpdate;
+
+    public PermissionUpdateRequest(String token, AccountId accountId, AccountId accountToUpdateId, List<String> permissions) {
+        super(token, accountId);
+        this.accountToUpdateId = accountToUpdateId;
         this.permissions = permissions;
-        this.token = token;
-    }
-
-    public AccountId getRequestingAccountId() {
-        return requestingAccountId;
-    }
-
-    public void setRequestingAccountId(String requestingAccountId, String requestingAccountEmail, Integer businessId){
-        this.requestingAccountId = new AccountId(requestingAccountId, requestingAccountEmail, businessId);
-    }
-
-    public void setRequestingAccountId(AccountId requestingAccountId) {
-        this.requestingAccountId = requestingAccountId;
     }
 
     public AccountId getAccountToUpdateId() {
         return accountToUpdateId;
     }
 
-    public void setAccountToUpdateId(String accountToUpdateId, String accountToUpdateEmail, Integer businessId){
-        this.accountToUpdateId = new AccountId(accountToUpdateId, accountToUpdateEmail, businessId);
-    }
-
-    public void setAccountToUpdateId(AccountId accountToUpdate) {
-        this.accountToUpdateId = accountToUpdate;
+    public void setAccountToUpdateId(AccountId accountToUpdateId) {
+        this.accountToUpdateId = accountToUpdateId;
     }
 
     public List<String> getPermissions() {
@@ -65,33 +42,16 @@ public class PermissionUpdateRequest {
         this.permissions = permissions;
     }
 
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public String getRequestAccountIdString(){
-        return requestingAccountId.getAccountIdString();
-    }
-
-    public String getAccountToUpdateIdString(){
-        return accountToUpdateId.getAccountIdString();
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof PermissionUpdateRequest)) return false;
         PermissionUpdateRequest that = (PermissionUpdateRequest) o;
-        return getRequestingAccountId().equals(that.getRequestingAccountId()) && getAccountToUpdateId().equals(that.getAccountToUpdateId()) && Objects.equals(getPermissions(), that.getPermissions()) && getToken().equals(that.getToken());
+        return super.getAccountId().equals(that.getAccountId()) && getAccountToUpdateId().equals(that.getAccountToUpdateId()) && Objects.equals(getPermissions(), that.getPermissions()) && getToken().equals(that.getToken());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getRequestingAccountId(), getAccountToUpdateId(), getPermissions(), getToken());
+        return Objects.hash(super.getAccountId(), getAccountToUpdateId(), getPermissions(), getToken());
     }
 }
