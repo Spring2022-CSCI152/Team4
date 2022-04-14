@@ -12,7 +12,9 @@ import java.util.List;
 public class CustomerProfileFormat {
 
     @Id
-    Integer businessId;
+    @Column(nullable = false)
+    private Integer businessId;
+
     private boolean name;
     private boolean status;
     private boolean address;
@@ -28,6 +30,7 @@ public class CustomerProfileFormat {
     public CustomerProfileFormat(Integer businessId) {
         this.businessId = businessId;
     }
+
 
     public Integer getBusinessId() {
         return businessId;
