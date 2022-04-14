@@ -14,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.function.Supplier;
 
 @Service
@@ -181,6 +182,14 @@ public class AccountManagementService {
                 return returnable;
             }
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Business Id!");
+        }
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Admin Does Not Exist!");
+    }
+
+    public List<WorkerAccount> getAccounts(Request request){
+        authenticator.validateToken(request.getToken(), request.getAccountIdString());
+        if(repos.adminExists(request.getAccountId())){
+            return repos.getAccountsByBusinessId(request.getBusinessId());
         }
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Admin Does Not Exist!");
     }

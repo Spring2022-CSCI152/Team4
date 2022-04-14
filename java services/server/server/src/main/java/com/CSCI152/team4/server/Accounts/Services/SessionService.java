@@ -38,6 +38,9 @@ public class SessionService {
 
         account.setToken(authenticator.getToken(account.getAccountIdString()));
 
+        /*Do not return Password!*/
+        account.setPassword(null);
+
         return account;
     }
 

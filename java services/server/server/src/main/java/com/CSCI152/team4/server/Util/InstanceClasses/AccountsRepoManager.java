@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -125,4 +127,20 @@ public class AccountsRepoManager implements AccountsRepoInterface {
         return null;
     }
 
+    public List<WorkerAccount> getAccountsByBusinessId(Integer businessId){
+        List<AdminAccount> adminList = admins.findAllByBusinessId(businessId);
+        List<EmployeeAccount> empList = employees.findAllByBusinessId(businessId);
+
+        List<WorkerAccount> retList = new ArrayList<>();
+        for(AdminAccount a : adminList){
+            a.setPassword(null);
+            retList.add((WorkerAccount) a);
+        }
+        for(EmployeeAccount e : empList){
+            e.setPassword(null);
+            retList.add((WorkerAccount) e);
+        }
+
+        return retList;
+    }
 }

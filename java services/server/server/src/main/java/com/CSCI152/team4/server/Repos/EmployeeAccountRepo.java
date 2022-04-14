@@ -5,6 +5,7 @@ import com.CSCI152.team4.server.Accounts.Classes.EmployeeAccount;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -13,4 +14,6 @@ public interface EmployeeAccountRepo extends CrudRepository<EmployeeAccount, Acc
     Optional<EmployeeAccount> findTopByEmailAndBusinessId(String email, Integer businessId);
 
     Boolean existsByEmailAndBusinessId(String email, Integer businessId);
+
+    List<EmployeeAccount> findAllByBusinessId(Integer businessId);
 }

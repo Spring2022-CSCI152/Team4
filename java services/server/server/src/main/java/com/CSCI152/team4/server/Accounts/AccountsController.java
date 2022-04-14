@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("api/v1/accounts")
 public class AccountsController {
@@ -79,7 +81,7 @@ public class AccountsController {
         return sessionService.login(request);
     }
 
-    @PostMapping
+    @PostMapping("/logout")
     public ResponseEntity<Enum<HttpStatus>> logout(@RequestBody Request request){
         return sessionService.logout(request);
     }
@@ -122,4 +124,8 @@ public class AccountsController {
         return managementService.updateEmployeePermissions(request);
     }
 
+    @GetMapping("/get_accounts")
+    public List<WorkerAccount> getAccounts(@RequestBody Request request){
+        return managementService.getAccounts(request);
+    }
 }
