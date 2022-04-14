@@ -6,32 +6,24 @@ import com.CSCI152.team4.server.Util.InstanceClasses.Request;
 import java.util.List;
 import java.util.Objects;
 
-public class PermissionUpdateRequest extends Request {
+public class PermissionUpdateRequest extends TargetAccountRequest {
 
 
-    AccountId accountToUpdateId;
     List<String> permissions;
 
     public PermissionUpdateRequest() {
+        super();
     }
 
-    public PermissionUpdateRequest(AccountId accountToUpdateId, List<String> permissions) {
-        this.accountToUpdateId = accountToUpdateId;
+    public PermissionUpdateRequest(List<String> permissions) {
+        super();
         this.permissions = permissions;
     }
 
-    public PermissionUpdateRequest(String token, AccountId accountId, AccountId accountToUpdateId, List<String> permissions) {
-        super(token, accountId);
-        this.accountToUpdateId = accountToUpdateId;
+
+    public PermissionUpdateRequest(String token, AccountId accountId, AccountId targetId, List<String> permissions) {
+        super(token, accountId, targetId);
         this.permissions = permissions;
-    }
-
-    public AccountId getAccountToUpdateId() {
-        return accountToUpdateId;
-    }
-
-    public void setAccountToUpdateId(AccountId accountToUpdateId) {
-        this.accountToUpdateId = accountToUpdateId;
     }
 
     public List<String> getPermissions() {
@@ -47,11 +39,14 @@ public class PermissionUpdateRequest extends Request {
         if (this == o) return true;
         if (!(o instanceof PermissionUpdateRequest)) return false;
         PermissionUpdateRequest that = (PermissionUpdateRequest) o;
-        return super.getAccountId().equals(that.getAccountId()) && getAccountToUpdateId().equals(that.getAccountToUpdateId()) && Objects.equals(getPermissions(), that.getPermissions()) && getToken().equals(that.getToken());
+        return super.getAccountId().equals(that.getAccountId())
+                && super.getTargetId().equals(that.getTargetId())
+                && Objects.equals(getPermissions(), that.getPermissions())
+                && getToken().equals(that.getToken());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.getAccountId(), getAccountToUpdateId(), getPermissions(), getToken());
+        return Objects.hash(super.getAccountId(), getTargetId(), getPermissions(), getToken());
     }
 }
