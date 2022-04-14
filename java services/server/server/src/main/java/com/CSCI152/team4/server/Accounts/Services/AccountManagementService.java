@@ -48,14 +48,16 @@ public class AccountManagementService {
     public AdminAccount getOtherAdminAccountInfo(TargetAccountRequest request){
         authenticator.validateToken(request.getToken(), request.getAccountIdString());
         return (AdminAccount) getReturnableOnAdminExists(request.getAccountId(),
-                () -> repos.getAdminIfExists(request.getTargetId()));
+                () -> repos.getAccountByEmailAndBusinessId(
+                        request.getTargetId().getEmail(), request.getTargetId().getBusinessId()));
     }
 
     /*Get Another Employees Account information: Only Available to Admin Accounts*/
     public EmployeeAccount getOtherEmployeeAccountInfo(TargetAccountRequest request){
         authenticator.validateToken(request.getToken(), request.getAccountIdString());
         return (EmployeeAccount) getReturnableOnAdminExists(request.getAccountId(),
-                () -> repos.getEmployeeIfExists(request.getTargetId()));
+                () -> repos.getAccountByEmailAndBusinessId(
+                        request.getTargetId().getEmail(), request.getTargetId().getBusinessId()));
     }
 
     /*An Admin will Update another Accounts information, but only the
