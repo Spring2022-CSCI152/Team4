@@ -9,7 +9,6 @@ import com.CSCI152.team4.server.Util.InstanceClasses.Request;
 import com.CSCI152.team4.server.Util.InstanceClasses.TokenAuthenticator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -75,14 +74,14 @@ public class AccountManagementService {
      * of update*/
     public AdminAccount updateAdminAccount(AdminAccount account){
         authenticator.validateToken(account.getToken(), account.getAccountIdString());
-        return updateAndSaveAdminAccount(account);
+        return updateAndSaveAdminAccount(account.getAccountId(), account);
     }
 
     /*Employee Updates their own info, Account Info is returned as proof
     * of update*/
     public EmployeeAccount updateEmployeeAccount(EmployeeAccount account){
         authenticator.validateToken(account.getToken(), account.getAccountIdString());
-        return updateAndSaveEmployeeAccount(account);
+        return updateAndSaveEmployeeAccount(account.getAccountId(), account);
     }
 
     private WorkerAccount updateAndSaveOther(UpdateFromAdminRequest request){
@@ -90,16 +89,15 @@ public class AccountManagementService {
         BusinessAccount businessAccount = repos.getBusinessIfExists(request.getBusinessId());
 
         String accountType = businessAccount.getAccountType(request.getTargetId().getAccountIdString());
-
         switch(accountType){
             case BusinessAccount.adminAccountType:
-                return updateAndSaveAdminAccount(
-                        new AdminAccount(request.getBusinessId(), request.getEmail(), null,
+                return updateAndSaveAdminAccount(request.getTargetId(),
+                        new AdminAccount(request.getBusinessId(), request.getAccountEmail(), request.getPassword(),
                                 request.getFirstName(), request.getLastName(), request.getJobTitle())
                 );
             case BusinessAccount.employeeAccountType:
-                return updateAndSaveEmployeeAccount(
-                        new EmployeeAccount(request.getBusinessId(), request.getEmail(), null,
+                return updateAndSaveEmployeeAccount(request.getTargetId(),
+                        new EmployeeAccount(request.getBusinessId(), request.getAccountEmail(), request.getPassword(),
                                 request.getFirstName(), request.getLastName(), request.getJobTitle())
                 );
             default:
@@ -107,9 +105,9 @@ public class AccountManagementService {
         }
     }
 
-    private AdminAccount updateAndSaveAdminAccount(AdminAccount account){
+    private AdminAccount updateAndSaveAdminAccount(AccountId accountIdToUpdate, AdminAccount account){
 
-        AdminAccount accountToSave = repos.getAdminIfExists(account.getAccountId());
+        AdminAccount accountToSave = repos.getAdminIfExists(accountIdToUpdate);
 
         updateMutableAccountFields(account, accountToSave);
 
@@ -120,8 +118,8 @@ public class AccountManagementService {
         return  returnable;
     }
 
-    private EmployeeAccount updateAndSaveEmployeeAccount(EmployeeAccount account){
-        EmployeeAccount accountToSave = repos.getEmployeeIfExists(account.getAccountId());
+    private EmployeeAccount updateAndSaveEmployeeAccount(AccountId accountIdToUpdate, EmployeeAccount account){
+        EmployeeAccount accountToSave = repos.getEmployeeIfExists(accountIdToUpdate);
 
         updateMutableAccountFields(account, accountToSave);
 
@@ -143,19 +141,19 @@ public class AccountManagementService {
         String jobTitleToUpdate = newInfo.getJobTitle();
         String newPassword = newInfo.getPassword();
 
-        if(!fNameToUpdate.isBlank()){
+        if(fNameToUpdate != null && !fNameToUpdate.isBlank()){
             originalInfo.setFirstName(fNameToUpdate);
         }
 
-        if(!lNameToUpdate.isBlank()){
+        if(lNameToUpdate != null && !lNameToUpdate.isBlank()){
             originalInfo.setLastName(lNameToUpdate);
         }
 
-        if(!jobTitleToUpdate.isBlank()){
+        if(jobTitleToUpdate != null && !jobTitleToUpdate.isBlank()){
             originalInfo.setJobTitle(jobTitleToUpdate);
         }
 
-        if(!newPassword.isBlank()){
+        if(newPassword != null && !newPassword.isBlank()){
             String encryptedPassword = BCrypt.hashpw(newPassword, BCrypt.gensalt(10));
             originalInfo.setPassword(encryptedPassword);
         }

@@ -60,7 +60,7 @@ public class Request implements RequestInterface {
         this.accountId.setBusinessId(businessId);
     }
 
-    public void setEmail(String email){
-        this.accountId.setEmail(email);
+    public void setEmail(String password){
+        this.accountId.setEmail(password);
     }
 }

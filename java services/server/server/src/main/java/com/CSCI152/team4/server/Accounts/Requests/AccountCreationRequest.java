@@ -42,7 +42,6 @@ public class AccountCreationRequest extends Request {
         return email;
     }
 
-    @Override
     public void setEmail(String email) {
         this.email = email;
     }

@@ -4,34 +4,26 @@ import com.CSCI152.team4.server.Accounts.Classes.AccountId;
 
 public class UpdateFromAdminRequest extends TargetAccountRequest{
 
-    private String email;
     private String firstName;
     private String lastName;
     private String jobTitle;
+    private String password;
 
     public UpdateFromAdminRequest() {
     }
 
     public UpdateFromAdminRequest(String token,
                                   AccountId accountId, AccountId targetId,
-                                  String email,
+                                  String password,
                                   String firstName, String lastName,
                                   String jobTitle) {
         super(token, accountId, targetId);
-        this.email = email;
+        this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.jobTitle = jobTitle;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    @Override
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
     public String getFirstName() {
         return firstName;
@@ -55,5 +47,13 @@ public class UpdateFromAdminRequest extends TargetAccountRequest{
 
     public void setJobTitle(String jobTitle) {
         this.jobTitle = jobTitle;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
