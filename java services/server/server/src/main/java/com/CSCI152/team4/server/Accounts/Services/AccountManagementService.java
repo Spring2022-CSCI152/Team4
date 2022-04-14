@@ -193,4 +193,8 @@ public class AccountManagementService {
         }
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Admin Does Not Exist!");
     }
+
+    /*
+    * TODO: PROMOTE AND DEMOTE
+    * */
 }
