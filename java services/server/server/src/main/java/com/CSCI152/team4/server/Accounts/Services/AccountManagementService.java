@@ -3,6 +3,7 @@ package com.CSCI152.team4.server.Accounts.Services;
 import com.CSCI152.team4.server.Accounts.Classes.*;
 import com.CSCI152.team4.server.Util.InstanceClasses.AccountsRepoManager;
 import com.CSCI152.team4.server.Accounts.Requests.PermissionUpdateRequest;
+import com.CSCI152.team4.server.Util.InstanceClasses.Request;
 import com.CSCI152.team4.server.Util.InstanceClasses.TokenAuthenticator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -113,18 +114,17 @@ public class AccountManagementService {
         }
     }
 
-    public WorkerAccount getAccountInfo(String token, AccountId account){
+    public WorkerAccount getAccountInfo(Request request){
 
-        if(repos.businessExists(account.getBusinessId())){
-            BusinessAccount businessAccount = repos.getBusinessIfExists(account.getBusinessId());
+        if(repos.businessExists(request.getBusinessId())){
+            BusinessAccount businessAccount = repos.getBusinessIfExists(request.getBusinessId());
 
-            System.out.println(account.getAccountIdString());
-            if(businessAccount.getAccountType(account.getAccountIdString())
+            if(businessAccount.getAccountType(request.getAccountIdString())
                     .equals(BusinessAccount.adminAccountType)){
-                return getAdminAccountInfo(token, account);
-            } else if(businessAccount.getAccountType(account.getAccountIdString())
+                return getAdminAccountInfo(request.getToken(), request.getAccountId());
+            } else if(businessAccount.getAccountType(request.getAccountIdString())
                     .equals(BusinessAccount.employeeAccountType)) {
-                return getEmployeeAccountInfo(token, account);
+                return getEmployeeAccountInfo(request.getToken(), request.getAccountId());
             }
         }
 

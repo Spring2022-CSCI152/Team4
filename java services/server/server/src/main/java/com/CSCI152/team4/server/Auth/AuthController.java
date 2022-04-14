@@ -1,7 +1,6 @@
 package com.CSCI152.team4.server.Auth;
 
 
-import com.CSCI152.team4.server.Auth.Requests.AuthRequest;
 import com.CSCI152.team4.server.Auth.Services.AuthenticationService;
 import com.CSCI152.team4.server.Util.InstanceClasses.Request;
 import org.springframework.beans.factory.annotation.Autowired;

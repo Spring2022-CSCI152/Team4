@@ -8,6 +8,7 @@ import com.CSCI152.team4.server.Accounts.Requests.*;
 import com.CSCI152.team4.server.Accounts.Services.AccountManagementService;
 import com.CSCI152.team4.server.Accounts.Services.RegistrationService;
 import com.CSCI152.team4.server.Accounts.Services.SessionService;
+import com.CSCI152.team4.server.Util.InstanceClasses.Request;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,10 +57,9 @@ public class AccountsController {
     }
 
     @GetMapping("/my_account_info")
-    public WorkerAccount getMyInfo(@RequestBody ObjectNode request){
+    public WorkerAccount getMyInfo(@RequestBody Request request){
 
-        AccountId account = getAccountIdFor("account", request);
-        return managementService.getAccountInfo(request.get("token").asText(), account);
+        return managementService.getAccountInfo(request);
     }
 
     @GetMapping("/get_admin_account_info")

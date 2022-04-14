@@ -36,6 +36,7 @@ public class AdminAccount extends WorkerAccount{
         this.accountId = new AccountId(UUID.randomUUID().toString(), email, null);
     }
 
+
     public void setAccountId(String accountId){
         this.accountId.setAccountIdString(accountId);
         this.accountId.setEmail(getEmail());
