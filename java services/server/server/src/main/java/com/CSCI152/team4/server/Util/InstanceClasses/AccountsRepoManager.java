@@ -143,4 +143,32 @@ public class AccountsRepoManager implements AccountsRepoInterface {
 
         return retList;
     }
+
+    @Override
+    public boolean removeEmployeeAccount(AccountId accountId) {
+        Optional<EmployeeAccount> optionalEmployeeAccount =
+                employees.findById(accountId);
+
+        if(optionalEmployeeAccount.isPresent()){
+            employees.delete(optionalEmployeeAccount.get());
+
+            return employeeExists(accountId);
+        }
+
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Employee Not Found!");
+    }
+
+    @Override
+    public boolean removeAdminAccount(AccountId accountId) {
+        Optional<AdminAccount> optionalAdminAccount =
+                admins.findById(accountId);
+
+        if(optionalAdminAccount.isPresent()){
+            admins.delete(optionalAdminAccount.get());
+
+            return adminExists(accountId);
+        }
+
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Admin Not Found!");
+    }
 }

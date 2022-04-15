@@ -27,4 +27,8 @@ public interface AccountsRepoInterface {
     WorkerAccount getAccountByEmailAndBusinessId(String email, Integer businessId);
 
     List<WorkerAccount> getAccountsByBusinessId(Integer businessId);
+
+    boolean removeEmployeeAccount(AccountId accountId);
+
+    boolean removeAdminAccount(AccountId accountId);
 }
