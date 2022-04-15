@@ -129,10 +129,6 @@ public class AccountsController {
         return managementService.getAccounts(request);
     }
 
-    /*
-    * TODO: PROMOTE AND DEMOTE
-    *  */
-
     @PostMapping("/promote")
     public WorkerAccount promote(@RequestBody TargetAccountRequest request){
         return managementService.promote(request);

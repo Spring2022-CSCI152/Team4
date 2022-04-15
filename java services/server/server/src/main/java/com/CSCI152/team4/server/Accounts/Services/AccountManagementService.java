@@ -36,8 +36,10 @@ public class AccountManagementService {
             WorkerAccount returnable
                     = repos.getAccountByEmailAndBusinessId(request.getAccountEmail(),
                     request.getBusinessId());
+            /*This does not require an Admin, therefore do not call getReturnableOnAdminExists*/
             /*Do not return password!*/
             returnable.setPassword(null);
+
             return returnable;
         }
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Business Account Not Found!");
@@ -194,10 +196,7 @@ public class AccountManagementService {
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Admin Does Not Exist!");
     }
 
-    /*
-    * TODO: PROMOTE AND DEMOTE
-    * */
-
+    /*Admin can Promote another Account to Admin if not already one*/
     public WorkerAccount promote(TargetAccountRequest request){
         authenticator.validateToken(request.getToken(), request.getAccountIdString());
 
@@ -211,6 +210,7 @@ public class AccountManagementService {
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Target is not Employee Account");
     }
 
+    /*Admin can demote another admin to "Employee", this will cause default permissions*/
     public WorkerAccount demote(TargetAccountRequest request){
         authenticator.validateToken(request.getToken(), request.getAccountIdString());
 
@@ -223,6 +223,7 @@ public class AccountManagementService {
 
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Target is not Employee Account");
     }
+
     private WorkerAccount promoteToAdmin(BusinessAccount businessAccount, AccountId accountToPromote){
         businessAccount.promote(accountToPromote.getAccountIdString());
 
@@ -236,11 +237,7 @@ public class AccountManagementService {
         repos.removeEmployeeAccount(accountToPromote);
 
         if(repos.adminExists(accountToPromote) && !repos.employeeExists(accountToPromote)){
-            AdminAccount returnable = repos.getAdminIfExists(accountToPromote);
-            /*Do not return Password!*/
-            returnable.setPassword(null);
-
-            return returnable;
+            return repos.getAdminIfExists(accountToPromote);
         }
 
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Something went wrong during promotion!");
@@ -260,11 +257,7 @@ public class AccountManagementService {
         repos.removeAdminAccount(accountToDemote);
 
         if(!repos.adminExists(accountToDemote) && repos.employeeExists(accountToDemote)){
-            EmployeeAccount returnable = repos.getEmployeeIfExists(accountToDemote);
-            /*Do not return Password!*/
-            returnable.setPassword(null);
-
-            return returnable;
+            return repos.getEmployeeIfExists(accountToDemote);
         }
 
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Something went wrong during demotion!");
