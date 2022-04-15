@@ -132,4 +132,14 @@ public class AccountsController {
     /*
     * TODO: PROMOTE AND DEMOTE
     *  */
+
+    @PostMapping("/promote")
+    public WorkerAccount promote(@RequestBody TargetAccountRequest request){
+        return managementService.promote(request);
+    }
+
+    @PostMapping("/demote")
+    public WorkerAccount demote(@RequestBody TargetAccountRequest request){
+        return managementService.demote(request);
+    }
 }

@@ -211,14 +211,27 @@ public class AccountManagementService {
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Target is not Employee Account");
     }
 
+    public WorkerAccount demote(TargetAccountRequest request){
+        authenticator.validateToken(request.getToken(), request.getAccountIdString());
+
+        BusinessAccount businessAccount = repos.getBusinessIfExists(request.getBusinessId());
+        if (businessAccount.getAccountType(request.getTargetId().getAccountIdString())
+                .equals(BusinessAccount.adminAccountType)){
+
+            return getReturnableOnAdminExists(request.getAccountId(), () -> demoteToEmployee(businessAccount, request.getTargetId()));
+        }
+
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Target is not Employee Account");
+    }
     private WorkerAccount promoteToAdmin(BusinessAccount businessAccount, AccountId accountToPromote){
         businessAccount.promote(accountToPromote.getAccountIdString());
 
         repos.saveBusinessAccount(businessAccount);
 
-        WorkerAccount newAdmin = repos.getEmployeeIfExists(accountToPromote);
+        AdminAccount newAdmin =
+                getAdminFromEmployee(repos.getEmployeeIfExists(accountToPromote));
 
-        repos.saveAdminAccount((AdminAccount) newAdmin);
+        repos.saveAdminAccount(newAdmin);
 
         repos.removeEmployeeAccount(accountToPromote);
 
@@ -238,13 +251,13 @@ public class AccountManagementService {
 
         repos.saveBusinessAccount(businessAccount);
 
-        WorkerAccount newEmployee = repos.getAdminIfExists(accountToDemote);
+        EmployeeAccount newEmployee =
+                getEmployeeFromAdmin(repos.getAdminIfExists(accountToDemote));
 
-        ((EmployeeAccount) newEmployee).setPermissionsList(List.of());
 
-        repos.saveEmployeeAccount((EmployeeAccount) newEmployee);
+        repos.saveEmployeeAccount(newEmployee);
 
-        repos.removeEmployeeAccount(accountToDemote);
+        repos.removeAdminAccount(accountToDemote);
 
         if(!repos.adminExists(accountToDemote) && repos.employeeExists(accountToDemote)){
             EmployeeAccount returnable = repos.getEmployeeIfExists(accountToDemote);
@@ -255,5 +268,29 @@ public class AccountManagementService {
         }
 
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Something went wrong during demotion!");
+    }
+
+    private AdminAccount getAdminFromEmployee(EmployeeAccount account){
+        AdminAccount retAccount =
+                new AdminAccount(account.getBusinessId(),
+                        account.getEmail(), account.getPassword(),
+                        account.getFirstName(), account.getLastName(),
+                        account.getJobTitle());
+
+        retAccount.setAccountId(account.getAccountId());
+
+        return retAccount;
+    }
+
+    private EmployeeAccount getEmployeeFromAdmin(AdminAccount account){
+        EmployeeAccount retAccount =
+                new EmployeeAccount(account.getBusinessId(),
+                        account.getEmail(), account.getPassword(),
+                        account.getFirstName(), account.getLastName(),
+                        account.getJobTitle());
+
+        retAccount.setAccountId(account.getAccountId());
+
+        return retAccount;
     }
 }
