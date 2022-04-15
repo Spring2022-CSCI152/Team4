@@ -1,14 +1,13 @@
 package com.CSCI152.team4.server.Accounts.Requests;
 
+import com.CSCI152.team4.server.Accounts.Classes.AccountId;
+import com.CSCI152.team4.server.Util.InstanceClasses.Request;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
-public class AccountCreationRequest {
+public class AccountCreationRequest extends Request {
 
 
-    private String token;
-    private String requestingAccountId;
-    private Integer businessId;
     private String email;
     private String password;
     private String firstName;
@@ -16,21 +15,6 @@ public class AccountCreationRequest {
     private String jobTitle;
 
     public AccountCreationRequest(){}
-
-    public AccountCreationRequest(String token,
-                                  String requestingAccountId, Integer businessId,
-                                  String email, String password,
-                                  String firstName, String lastName,
-                                  String jobTitle) {
-        this.token = token;
-        this.requestingAccountId = requestingAccountId;
-        this.businessId = businessId;
-        this.email = email;
-        this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.jobTitle = jobTitle;
-    }
 
     public AccountCreationRequest(String email, String password,
                                   String firstName, String lastName,
@@ -42,28 +26,16 @@ public class AccountCreationRequest {
         this.jobTitle = jobTitle;
     }
 
-    public String getToken() {
-        return token;
-    }
-
-    public String getRequestingAccountId() {
-        return requestingAccountId;
-    }
-
-    public void setRequestingAccountId(String requestingAccountId) {
-        this.requestingAccountId = requestingAccountId;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public Integer getBusinessId() {
-        return businessId;
-    }
-
-    public void setBusinessId(Integer businessId) {
-        this.businessId = businessId;
+    public AccountCreationRequest(String token, AccountId accountId,
+                                  String email, String password,
+                                  String firstName, String lastName,
+                                  String jobTitle) {
+        super(token, accountId);
+        this.email = email;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.jobTitle = jobTitle;
     }
 
     public String getEmail() {
@@ -106,11 +78,10 @@ public class AccountCreationRequest {
         this.jobTitle = jobTitle;
     }
 
-
     public void validate() {
 
-        if(token.equals("") || requestingAccountId.equals("")
-                || businessId == null
+        if(super.getToken().equals("") || super.getAccountIdString().equals("")
+                || super.getBusinessId() == null
                 && email.equals("") || password.equals("")
                 || firstName.equals("") || lastName.equals("")
                 || jobTitle.equals("")){

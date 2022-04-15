@@ -1,6 +1,7 @@
 package com.CSCI152.team4.server.Auth.Services;
 
-import com.CSCI152.team4.server.Util.InstanceClasses.TokenManager;
+import com.CSCI152.team4.server.Util.InstanceClasses.Request;
+import com.CSCI152.team4.server.Util.InstanceClasses.TokenAuthenticator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,30 +10,30 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthenticationService {
 
-    private final TokenManager tokenManager;
+    private final TokenAuthenticator tokenAuthenticator;
 
     @Autowired
-    public AuthenticationService(TokenManager tokenManager) {
-        this.tokenManager = tokenManager;
+    public AuthenticationService(TokenAuthenticator tokenAuthenticator) {
+        this.tokenAuthenticator = tokenAuthenticator;
     }
 
-    public ResponseEntity<Enum<HttpStatus>> validateToken(String token, String accountId){
+    public ResponseEntity<Enum<HttpStatus>> validateToken(Request request){
 
-        tokenManager.validateToken(token, accountId);
+        tokenAuthenticator.validateToken(request.getToken(), request.getAccountIdString());
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    public ResponseEntity<Enum<HttpStatus>> refreshToken(String token, String accountId){
+    public ResponseEntity<Enum<HttpStatus>> refreshToken(Request request){
 
-        tokenManager.refreshToken(token, accountId);
+        tokenAuthenticator.refreshToken(request.getToken(), request.getAccountIdString());
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    public ResponseEntity<Enum<HttpStatus>> invalidateToken(String token, String accountId){
+    public ResponseEntity<Enum<HttpStatus>> invalidateToken(Request request){
 
-        tokenManager.invalidateToken(token, accountId);
+        tokenAuthenticator.invalidateToken(request.getToken(), request.getAccountIdString());
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

@@ -86,6 +86,21 @@ public class Profile {
         return profileId;
     }
 
+    public Integer getBusinessId(){
+        return this.profileId.getBusinessId();
+    }
+
+    public void setBusinessId(Integer businessId){
+        this.profileId.setBusinessId(businessId);
+    }
+
+    public String getProfileIdString(){
+        return this.profileId.getProfileId();
+    }
+
+    public void setProfileIdString(String profileIdString){
+        this.profileId.setProfileId(profileIdString);
+    }
     public void setProfileId(ProfileId profileId) {
         this.profileId = profileId;
     }

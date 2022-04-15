@@ -20,10 +20,12 @@ public class Report {
     private ReportId reportId;
 
     //Profile Ids
+    @Column(nullable = false)
+    @ElementCollection(targetClass = String.class, fetch = FetchType.LAZY)
     private List<String> profiles;
     //Submission Time
     private Timestamp date;
-    //A String representation of the time that report occured
+    //A String representation of the time that report occurred
     private String time;
     private String author;
     private String type;
@@ -47,6 +49,8 @@ public class Report {
     * Change Log will consist of a list of Author Names and Timestamps
     * Each Entry will be:
     * Author: %s, Timestamp %s.format(report.author, report.timestamp.toString())*/
+    @Column(nullable = false)
+    @ElementCollection(targetClass = String.class, fetch = FetchType.LAZY)
     private List<String> changeLog;
 
     public Report() {

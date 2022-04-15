@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -125,4 +127,48 @@ public class AccountsRepoManager implements AccountsRepoInterface {
         return null;
     }
 
+    public List<WorkerAccount> getAccountsByBusinessId(Integer businessId){
+        List<AdminAccount> adminList = admins.findAllByBusinessId(businessId);
+        List<EmployeeAccount> empList = employees.findAllByBusinessId(businessId);
+
+        List<WorkerAccount> retList = new ArrayList<>();
+        for(AdminAccount a : adminList){
+            a.setPassword(null);
+            retList.add((WorkerAccount) a);
+        }
+        for(EmployeeAccount e : empList){
+            e.setPassword(null);
+            retList.add((WorkerAccount) e);
+        }
+
+        return retList;
+    }
+
+    @Override
+    public boolean removeEmployeeAccount(AccountId accountId) {
+        Optional<EmployeeAccount> optionalEmployeeAccount =
+                employees.findById(accountId);
+
+        if(optionalEmployeeAccount.isPresent()){
+            employees.delete(optionalEmployeeAccount.get());
+
+            return employeeExists(accountId);
+        }
+
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Employee Not Found!");
+    }
+
+    @Override
+    public boolean removeAdminAccount(AccountId accountId) {
+        Optional<AdminAccount> optionalAdminAccount =
+                admins.findById(accountId);
+
+        if(optionalAdminAccount.isPresent()){
+            admins.delete(optionalAdminAccount.get());
+
+            return adminExists(accountId);
+        }
+
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Admin Not Found!");
+    }
 }

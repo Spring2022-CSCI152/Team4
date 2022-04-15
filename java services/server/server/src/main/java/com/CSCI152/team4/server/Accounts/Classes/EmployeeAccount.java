@@ -62,8 +62,8 @@ public class EmployeeAccount extends WorkerAccount{
         return this.permissionsList;
     }
 
-    public void setAccountId(String accountId){
-        this.accountId.setAccountIdString(accountId);
+    public void setAccountId(AccountId accountId){
+        this.accountId = accountId;
     }
 
     @Override
@@ -74,6 +74,9 @@ public class EmployeeAccount extends WorkerAccount{
         return this.accountId.getAccountIdString();
     }
 
+    public void setAccountIdString(String accountIdString){
+        this.accountId.setAccountIdString(accountIdString);
+    }
     @Override
     public void setBusinessId(Integer businessId){
         if(getBusinessId() == null){

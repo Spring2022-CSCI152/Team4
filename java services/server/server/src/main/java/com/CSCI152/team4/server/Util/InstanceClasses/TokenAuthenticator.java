@@ -17,7 +17,7 @@ import java.util.Optional;
 import static java.time.LocalDateTime.now;
 
 @Component
-public class TokenManager implements Authenticator {
+public class TokenAuthenticator implements Authenticator {
 
     private final TokenRepo repo;
 
@@ -27,7 +27,7 @@ public class TokenManager implements Authenticator {
 
 
     @Autowired
-    public TokenManager(TokenRepo repo, @Value("${frmw.secret}") String secret, @Value("${frmw.expirationTimeInMinutes}") Integer expirationInMinutes) {
+    public TokenAuthenticator(TokenRepo repo, @Value("${frmw.secret}") String secret, @Value("${frmw.expirationTimeInMinutes}") Integer expirationInMinutes) {
         this.repo = repo;
         this.secret = secret;
         this.expirationInMins = expirationInMinutes;

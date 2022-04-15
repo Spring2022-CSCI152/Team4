@@ -1,31 +1,14 @@
 package com.CSCI152.team4.server.Auth.Requests;
 
-public class AuthRequest {
+import com.CSCI152.team4.server.Accounts.Classes.AccountId;
+import com.CSCI152.team4.server.Util.InstanceClasses.Request;
 
-    private String token;
-    private String accountId;
+public class AuthRequest extends Request {
 
     public AuthRequest() {
     }
 
-    public AuthRequest(String token, String accountId) {
-        this.token = token;
-        this.accountId = accountId;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public String getAccountId() {
-        return accountId;
-    }
-
-    public void setAccountId(String accountId) {
-        this.accountId = accountId;
+    public AuthRequest(String token, AccountId accountId) {
+        super(token, accountId);
     }
 }

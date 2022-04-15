@@ -52,10 +52,21 @@ public class BusinessAccount {
         this.businessName = businessName;
         createEmployeeListsAndAddAdmin(adminId);
         mapAccounts();
-        buildDefaultReportFormat();
-        buildDefaultProfileFormat();
+        if(this.businessId != null) {
+            buildDefaultReportFormat();
+            buildDefaultProfileFormat();
+        }
+
     }
 
+
+    public CustomerProfileFormat getProfileFormat() {
+        return profileFormat;
+    }
+
+    public void setProfileFormat(CustomerProfileFormat profileFormat) {
+        this.profileFormat = profileFormat;
+    }
 
     private void createEmployeeListsAndAddAdmin(String adminId){
         this.admins = new ArrayList<>(Collections.singleton(adminId));
@@ -134,9 +145,6 @@ public class BusinessAccount {
 
     public String getAccountType(String accountId){
         mapAccounts();
-        System.out.println(accountId);
-        System.out.println(this.accountMapper.toString());
-        System.out.println(this.accountMapper.get(accountId));
         return this.accountMapper.get(accountId);
     }
 

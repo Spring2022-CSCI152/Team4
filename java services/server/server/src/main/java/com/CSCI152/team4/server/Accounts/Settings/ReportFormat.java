@@ -41,7 +41,7 @@ public class ReportFormat {
     @Override
     public String toString() {
         return "ReportFormat{" +
-//                "businessId=" + businessId +
+                "businessId=" + businessId +
                 ", reportId=" + reportId +
                 ", profiles=" + profiles +
                 ", date=" + date +
@@ -64,7 +64,7 @@ public class ReportFormat {
     }
 
     /*Getters and Setters Needed for Persistence*/
-    public int getBusinessId() {
+    public Integer getBusinessId() {
         return businessId;
     }
 

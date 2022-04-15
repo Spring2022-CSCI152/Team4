@@ -220,26 +220,26 @@ class BusinessAccountRepoTest {
 
 
     /*Remaining Tests are for Report Format and Profile Format adjustments*/
-    @Test
-    void itShouldSaveNonBasicReportFormat(){
-        //Given
-        BusinessAccount account = getBusinessAccount();
-        account.setReportFormat(new ReportFormatBuilder()
-                .enableReportId()
-                .enableAttachments()
-                .enableAuthor()
-                .enableChangeLog()
-                .enableProfiles()
-                .enableType().build());
-        //When
-        account.setBusinessId(underTest.save(account).getBusinessId());
-
-        Optional<BusinessAccount> optionalBusinessAccount =
-                underTest.findById(account.getBusinessId());
-
-        assertThat(optionalBusinessAccount).isPresent()
-                .hasValueSatisfying(c -> assertThat(c).usingRecursiveComparison()
-                        .ignoringFields("accountMapper").isEqualTo(account));
-    }
+//    @Test
+//    void itShouldSaveNonBasicReportFormat(){
+//        //Given
+//        BusinessAccount account = getBusinessAccount();
+//        account.setReportFormat(new ReportFormatBuilder()
+//                .enableReportId()
+//                .enableAttachments()
+//                .enableAuthor()
+//                .enableChangeLog()
+//                .enableProfiles()
+//                .enableType().build());
+//        //When
+//        account.setBusinessId(underTest.save(account).getBusinessId());
+//
+//        Optional<BusinessAccount> optionalBusinessAccount =
+//                underTest.findById(account.getBusinessId());
+//
+//        assertThat(optionalBusinessAccount).isPresent()
+//                .hasValueSatisfying(c -> assertThat(c).usingRecursiveComparison()
+//                        .ignoringFields("accountMapper").isEqualTo(account));
+//    }
 
 }

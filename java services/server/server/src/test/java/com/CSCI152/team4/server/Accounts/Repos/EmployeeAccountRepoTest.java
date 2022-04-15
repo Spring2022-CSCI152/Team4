@@ -150,7 +150,7 @@ class EmployeeAccountRepoTest {
     void itShouldNotSaveIdFieldChanges(){
         EmployeeAccount account = getEmployeeAccount(127);
         EmployeeAccount original = getEmployeeAccount(127);
-        original.setAccountId(account.getAccountIdString());
+        original.setAccountIdString(account.getAccountIdString());
 
         underTest.save(account);
         Optional<EmployeeAccount> optionalEmployeeAccount = underTest.findById(account.getAccountId());
