@@ -56,7 +56,7 @@ public class TokenAuthenticator implements Authenticator {
         String token = DigestUtils.sha256Hex(accountId + secret);
         Token persist = new Token(token, accountId,
                 Timestamp.valueOf(now()),
-                Timestamp.valueOf(LocalDateTime.now().plusMinutes(expirationInMins)));
+                Timestamp.valueOf(now().plusMinutes(expirationInMins)));
 
         repo.save(persist);
 
@@ -75,15 +75,14 @@ public class TokenAuthenticator implements Authenticator {
     public void refreshToken(String token, String accountId){
 
         Token toRefresh = getTokenIfExists(token);
-
-        if(toRefresh.getAccountId().equals(accountId) && !toRefresh.isExpired()){
-            toRefresh.setExp(Timestamp.valueOf(LocalDateTime.now().plusMinutes(expirationInMins)));
-
-            repo.save(toRefresh);
-
+        System.out.println(toRefresh);
+        System.out.println((toRefresh.isExpired()) ? "Expired" : "Valid");
+        if(!toRefresh.getAccountId().equals(accountId) || toRefresh.isExpired()){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unable to refresh token!");
         }
 
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unable to refresh token!");
+        toRefresh.setExp(Timestamp.valueOf(LocalDateTime.now().plusMinutes(expirationInMins)));
+        repo.save(toRefresh);
     }
 
     private Token getTokenIfExists(String token){

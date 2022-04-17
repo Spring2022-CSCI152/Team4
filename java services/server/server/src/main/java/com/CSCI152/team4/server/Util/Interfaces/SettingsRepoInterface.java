@@ -15,7 +15,7 @@ public interface SettingsRepoInterface {
 
     ReportFormat getReportFormatIfExists(Integer businessId);
 
-    CustomerProfileFormat getCustomerProfileIfExists(Integer businessId);
+    CustomerProfileFormat getCustomerProfileFormatIfExists(Integer businessId);
 
 
 }
