@@ -99,5 +99,14 @@ hr.green {
   a {
     color: #000000;
     text-decoration: none;
+  }
+  
+  .w-auto.dropdown {
+    height: 2.7em;
+    border: 1px solid #ced4da;
+    width: 10em !important;
 }
+
+
+
 
