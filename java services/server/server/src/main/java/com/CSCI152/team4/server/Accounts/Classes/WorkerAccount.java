@@ -13,8 +13,8 @@ import java.util.Objects;
  * Data JPA*/
 
 @MappedSuperclass
-public class WorkerAccount {
-
+public abstract class WorkerAccount {
+//No real reason for it to be abstract, but it implies that other classes will extend this
 
     @Column(nullable = false, insertable = false, updatable = false)
     private Integer businessId;
