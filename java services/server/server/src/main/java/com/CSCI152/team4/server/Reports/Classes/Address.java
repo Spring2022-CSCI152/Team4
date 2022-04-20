@@ -6,7 +6,7 @@ import javax.persistence.Embeddable;
 public class Address {
 
     private String street1;
-    private String stree2;
+    private String street2;
     private String city;
     private String state;
     private Integer zipCode;
@@ -22,12 +22,12 @@ public class Address {
         this.street1 = street1;
     }
 
-    public String getStree2() {
-        return stree2;
+    public String getStreet2() {
+        return street2;
     }
 
-    public void setStree2(String stree2) {
-        this.stree2 = stree2;
+    public void setStreet2(String street2) {
+        this.street2 = street2;
     }
 
     public String getCity() {

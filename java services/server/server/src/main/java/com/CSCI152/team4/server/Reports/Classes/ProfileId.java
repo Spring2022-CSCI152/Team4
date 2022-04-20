@@ -3,6 +3,7 @@ package com.CSCI152.team4.server.Reports.Classes;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 @Embeddable
 public class ProfileId implements Serializable {
@@ -12,6 +13,9 @@ public class ProfileId implements Serializable {
     private String profileId;
 
     public ProfileId() {
+        if(this.profileId == null){
+            this.profileId = UUID.randomUUID().toString();
+        }
     }
 
     public ProfileId(Integer businessId, String profileId) {
