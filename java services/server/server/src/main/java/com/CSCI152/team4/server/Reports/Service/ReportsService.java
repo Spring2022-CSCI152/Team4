@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -42,9 +43,9 @@ public class ReportsService {
         authenticator.validateToken(request.getToken(), request.getAccountIdString());
 
         if(request.getPage() == null){
-            request.setPage(PageRequest.of(0, defaultPageSize));
+            request.setPageable(0, defaultPageSize, Sort.by("date").descending());
         }
-        return reports.findByBusinessId(request.getBusinessId(), request.getPage());
+        return reports.findAllByBusinessId(request.getBusinessId(), request.getPageable());
     }
 
     public void saveReport(ReportSubmissionRequest request){
@@ -60,12 +61,12 @@ public class ReportsService {
         for(Profile p : request.getProfileList()){
             /*If the profiles already exists,
             * take it out of the database to update*/
-            if(!profiles.existsById(p.getProfileId())){
+            if(profiles.existsById(p.getProfileId())){
                 p = profiles.findById(p.getProfileId()).get();
             }
 
             //Add Report ID to profile 'reports list'
-            p.getReports().add(request.getReport().getReportIdString());
+            p.appendToReports(request.getReport().getReportIdString());
 
             newProfiles.add(p);
             //Save Profile
@@ -86,7 +87,7 @@ public class ReportsService {
                 p.setProfileIdString(UUID.randomUUID().toString());
             }
         }
-
         validator.validateProfiles(profiles);
     }
+
 }

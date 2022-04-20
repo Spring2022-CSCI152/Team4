@@ -14,7 +14,7 @@ import java.util.List;
 @Repository
 public interface ReportsRepo extends CrudRepository<Report, ReportId> {
 
-    @Query("select r from Report r where r.getBusinessId() = :businessId ")
-    Page<Report> findByBusinessId(@Param("businessId") Integer businessId, Pageable page);
+    @Query("select r from Report r where r.reportId.businessId = :businessId ")
+    Page<Report> findAllByBusinessId(@Param("businessId") Integer businessId, Pageable page);
 
 }

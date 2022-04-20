@@ -51,6 +51,10 @@ public class ReportValidator {
         if(!settingsRepoManager.reportFormatExistsById(profile.getBusinessId())){
             throw new ResponseStatusException(HttpStatus.OK, "Business Not Found!");
         }
+
+        if(profile.getProfileIdString() == null){
+            profile.setProfileIdString(UUID.randomUUID().toString());
+        }
         CustomerProfileFormat profileFormat =
                 settingsRepoManager.getCustomerProfileFormatIfExists(profile.getBusinessId());
 

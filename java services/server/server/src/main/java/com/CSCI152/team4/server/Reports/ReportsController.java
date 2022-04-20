@@ -57,7 +57,7 @@ public class ReportsController {
     }
 
     @GetMapping("/get_reports")
-    public Page<Report> getReports(PageableRequest request){
+    public Page<Report> getReports(@RequestBody PageableRequest request){
         return reportsService.getReports(request);
     }
 

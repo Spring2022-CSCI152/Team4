@@ -161,6 +161,9 @@ public class Profile {
     }
 
     public List<String> getReports() {
+        if(reports == null){
+            reports = new ArrayList<>();
+        }
         return reports;
     }
 
