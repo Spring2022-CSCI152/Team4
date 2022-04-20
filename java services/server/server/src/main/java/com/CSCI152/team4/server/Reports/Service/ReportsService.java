@@ -5,7 +5,7 @@ import com.CSCI152.team4.server.Reports.Classes.Report;
 import com.CSCI152.team4.server.Reports.Requests.PageableRequest;
 import com.CSCI152.team4.server.Reports.Requests.ReportSubmissionRequest;
 import com.CSCI152.team4.server.Reports.Validator.ReportValidator;
-import com.CSCI152.team4.server.Repos.CustomerProfileRepo;
+import com.CSCI152.team4.server.Repos.CustomerProfilesRepo;
 import com.CSCI152.team4.server.Repos.ReportsRepo;
 import com.CSCI152.team4.server.Util.InstanceClasses.TokenAuthenticator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +24,13 @@ public class ReportsService {
     private Integer defaultPageSize ;
     private TokenAuthenticator authenticator;
     private ReportsRepo reports;
-    private CustomerProfileRepo profiles;
+    private CustomerProfilesRepo profiles;
     private ReportValidator validator;
 
     @Autowired
     public ReportsService(TokenAuthenticator authenticator, ReportsRepo reports,
                           @Value("${spring.data.web.pageable.default-page-size}") Integer defaultPageSize,
-                          CustomerProfileRepo profiles, ReportValidator validator) {
+                          CustomerProfilesRepo profiles, ReportValidator validator) {
         this.authenticator = authenticator;
         this.reports = reports;
         this.defaultPageSize = defaultPageSize;
@@ -51,32 +51,42 @@ public class ReportsService {
         authenticator.validateToken(request.getToken(), request.getAccountIdString());
 
         Report reportToSave = request.getReport();
-        //Generate report ID
-        if(reportToSave.getReportIdString() == null){
-            reportToSave.setReportIdString(UUID.randomUUID().toString());
-        }
+
+        validator.validateReport(reportToSave);
+        validateProfiles(request.getProfileList());
 
         List<Profile> newProfiles = new ArrayList<>();
 
         for(Profile p : request.getProfileList()){
-            if(p.getProfileIdString() == null){
-                //If not a known Profile, give a new Id
-                p.getProfileId().setProfileId(UUID.randomUUID().toString());
-            }
-            else{
-                //else, retrieve old entity
+            /*If the profiles already exists,
+            * take it out of the database to update*/
+            if(!profiles.existsById(p.getProfileId())){
                 p = profiles.findById(p.getProfileId()).get();
             }
+
             //Add Report ID to profile 'reports list'
             p.getReports().add(request.getReport().getReportIdString());
+
             newProfiles.add(p);
             //Save Profile
             profiles.save(p);
         }
 
+        /*Add profiles to report entity*/
         reportToSave.setProfiles(newProfiles);
 
+        /*Save Report Entity*/
         reports.save(request.getReport());
 
+    }
+
+    private void validateProfiles(List<Profile> profiles) {
+        for (Profile p : profiles) {
+            if (p.getProfileId() == null) {
+                p.setProfileIdString(UUID.randomUUID().toString());
+            }
+        }
+
+        validator.validateProfiles(profiles);
     }
 }

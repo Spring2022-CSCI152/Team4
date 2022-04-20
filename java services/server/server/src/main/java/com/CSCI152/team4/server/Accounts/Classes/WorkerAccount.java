@@ -119,11 +119,14 @@ public abstract class WorkerAccount {
         return token;
     }
 
-    public void setToken(String token) {
+    public void setToken(String token){
         this.token = token;
-    }
+    };
 
-    public String getAccountIdString(){return "";}
+    public abstract String getAccountIdString();
+
+    abstract AccountId getAccountId();
+
 
     @Override
     public boolean equals(Object o) {
@@ -146,5 +149,4 @@ public abstract class WorkerAccount {
                 getJobTitle());
     }
 
-    public AccountId getAccountId(){ return null;}
 }

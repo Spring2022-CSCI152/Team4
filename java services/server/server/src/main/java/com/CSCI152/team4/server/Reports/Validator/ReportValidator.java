@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.UUID;
 
 /*This class serves as a utility to ensure only the desired input is
 * accepted and saved*/
@@ -27,6 +28,9 @@ public class ReportValidator {
     public void validateReport(Report report){
         if(!settingsRepoManager.reportFormatExistsById(report.getBusinessId())){
             throw new ResponseStatusException(HttpStatus.OK, "Business Not Found!");
+        }
+        if (report.getReportIdString() == null){
+            report.setReportIdString(UUID.randomUUID().toString());
         }
         ReportFormat reportFormat =
                 settingsRepoManager.getReportFormatIfExists(report.getBusinessId());
