@@ -37,3 +37,8 @@ build/
 ### VS Code ###
 .vscode/
 application.properties
+
+*.env
+.env
+**/.env
+**/suspects/**
