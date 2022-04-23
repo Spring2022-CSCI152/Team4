@@ -68,7 +68,7 @@ class DBManager:
 		path = params.path.replace('\\','\\\\')
 		path = '\'' + path + '\''
 		profile_id = '\'' + params.profile_id + '\''
-		return """INSERT IGNORE INTO frmwimages.images 
+		return """INSERT IGNORE INTO images 
 				(profile_id, path, business_id) 
 			VALUES 
 				(%s, %s, %d);""" % (profile_id, path, params.business_id) 
