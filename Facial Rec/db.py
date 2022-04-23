@@ -46,11 +46,9 @@ class DBManager:
 
 	def execute_read_query(self, connection, query):
 		cursor = connection.cursor()
-		result = None
 		try:
 			cursor.execute(query)
-			result = cursor.fetchone()
-			return result
+			return cursor.fetchone()
 		except Error as e:
 			print(f"The error '{e}' occured")
 
