@@ -19,7 +19,7 @@ class DBManager:
 
 	def __init__(self, host_name, user_name, user_password, db_name):
 		self.connection = self.create_connection(host_name, user_name, user_password, db_name)
-		self.execute_query(self.connection, DBManager.create_images_table)
+		self.execute_query(DBManager.create_images_table)
 
 	def create_connection(self, host_name, user_name, user_password, db_name):
 		connection = None
@@ -35,17 +35,17 @@ class DBManager:
 
 		return connection
 
-	def execute_query(self, connection, query):
-		cursor = connection.cursor()
+	def execute_query(self, query):
+		cursor = self.connection.cursor()
 		try:
 			cursor.execute(query)
-			connection.commit()
+			self.connection.commit()
 			print("Query executed successfully")
 		except Error as e:
 			print(f"The error '{e}' occured")
 
-	def execute_read_query(self, connection, query):
-		cursor = connection.cursor()
+	def execute_read_query(self, query):
+		cursor = self.connection.cursor()
 		try:
 			cursor.execute(query)
 			return cursor.fetchone()
@@ -53,18 +53,18 @@ class DBManager:
 			print(f"The error '{e}' occured")
 
 	def save_entity(self, params):
-		query = self.create_image_insertion_query(params)
-		self.execute_query(self.connection, query)
+		query = DBManager.create_image_insertion_query(params)
+		self.execute_query(query)
 
 	def get_entity_by_ids(self, params):
-		query = self.create_image_selection_query_by_profile_id_and_business_id(params)
-		return  self.execute_read_query(self.connection, query)
+		query = DBManager.create_image_selection_query_by_profile_id_and_business_id(params)
+		return  self.execute_read_query(query)
 
 	def get_entity_by_file_path(self, params):
-		query = self.create_image_selection_query_by_file_path(params)
-		return self.execute_read_query(self.connection, query)
+		query = DBManager.create_image_selection_query_by_file_path(params)
+		return self.execute_read_query(query)
 
-	def create_image_insertion_query(self, params):
+	def create_image_insertion_query(params):
 		path = params.path.replace('\\','\\\\')
 		path = '\'' + path + '\''
 		profile_id = '\'' + params.profile_id + '\''
@@ -73,11 +73,11 @@ class DBManager:
 			VALUES 
 				(%s, %s, %d);""" % (profile_id, path, params.business_id) 
 	
-	def create_image_selection_query_by_profile_id_and_business_id(self, params):
+	def create_image_selection_query_by_profile_id_and_business_id(params):
 		profile_id = '\'' + params.profile_id + '\''
 		return """SELECT * FROM images WHERE profile_id = {0} AND business_id = {1};""".format(profile_id, params.business_id)
 
-	def create_image_selection_query_by_file_path(self, params):
+	def create_image_selection_query_by_file_path(params):
 		path = params.path.replace('\\','\\\\')
 		path = '\'' + path + '\''
 		return """SELECT * FROM images WHERE profile_id = {0};""".format(path)
