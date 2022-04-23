@@ -18,7 +18,7 @@ class DBManager:
 	);"""
 
 	def __init__(self, host_name, user_name, user_password, db_name):
-		self.connection = self.create_connection(host_name, user_name, user_password, db_name)
+		self.__connection = self.create_connection(host_name, user_name, user_password, db_name)
 		self.execute_query(DBManager.create_images_table)
 
 	def create_connection(self, host_name, user_name, user_password, db_name):
@@ -36,16 +36,16 @@ class DBManager:
 		return connection
 
 	def execute_query(self, query):
-		cursor = self.connection.cursor()
+		cursor = self.__connection.cursor()
 		try:
 			cursor.execute(query)
-			self.connection.commit()
+			self.__connection.commit()
 			print("Query executed successfully")
 		except Error as e:
 			print(f"The error '{e}' occured")
 
 	def execute_read_query(self, query):
-		cursor = self.connection.cursor()
+		cursor = self.__connection.cursor()
 		try:
 			cursor.execute(query)
 			return cursor.fetchone()
