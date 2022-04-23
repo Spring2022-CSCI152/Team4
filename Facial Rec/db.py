@@ -60,23 +60,20 @@ class DBManager:
 
 	def get_entity_by_ids(self, params):
 		query = self.create_image_selection_query_by_profile_id_and_business_id(params)
-		ret = self.execute_read_query(self.connection, query)
-		return ret
+		return  self.execute_read_query(self.connection, query)
 
 	def get_entity_by_file_path(self, params):
 		query = self.create_image_selection_query_by_file_path(params)
-		ret = self.execute_read_query(self.connection, query)
+		return self.execute_read_query(self.connection, query)
 
 	def create_image_insertion_query(self, params):
 		path = params.path.replace('\\','\\\\')
 		path = '\'' + path + '\''
 		profile_id = '\'' + params.profile_id + '\''
-		line = """INSERT IGNORE INTO frmwimages.images 
+		return """INSERT IGNORE INTO frmwimages.images 
 				(profile_id, path, business_id) 
 			VALUES 
 				(%s, %s, %d);""" % (profile_id, path, params.business_id) 
-		print(line)
-		return line
 	
 	def create_image_selection_query_by_profile_id_and_business_id(self, params):
 		profile_id = '\'' + params.profile_id + '\''
