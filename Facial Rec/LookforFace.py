@@ -100,7 +100,6 @@ class FaceRec:
         return cv2.cvtColor(cv2.resize(image,(0,0),None,0.25,0.25), cv2.COLOR_BGR2RGB) 
             
 # Encapulate Notification Sending Activities to NotificationManager
-# Encapulate Notification Sending Activities to NotificationManager
 class NotificationManager:
       
     # Using instance vars, and using built in dict() constructor
@@ -130,5 +129,9 @@ class NotificationManager:
         headers = {'content-type': 'application/json'}
         x = requests.post(SERVER_PATH, headers = headers, data = json.dumps(data))
         
+<<<<<<< HEAD
+=======
+
+>>>>>>> 40b3792469c1f5ab40ac100f1b75cf65f54e4e3b
 fr = FaceRec(config('HOST'), config('UNAME'), config('PASSWORD'), config('DBNAME'), 'suspects')
 fr.execute_facial_rec()
