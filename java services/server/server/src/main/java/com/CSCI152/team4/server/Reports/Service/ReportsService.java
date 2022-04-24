@@ -1,23 +1,34 @@
 package com.CSCI152.team4.server.Reports.Service;
 
+import com.CSCI152.team4.server.Accounts.Classes.AccountId;
+import com.CSCI152.team4.server.Accounts.Settings.Permissions;
 import com.CSCI152.team4.server.Reports.Classes.Profile;
+import com.CSCI152.team4.server.Reports.Classes.ProfileId;
 import com.CSCI152.team4.server.Reports.Classes.Report;
+import com.CSCI152.team4.server.Reports.Classes.ReportId;
 import com.CSCI152.team4.server.Reports.Requests.PageableRequest;
 import com.CSCI152.team4.server.Reports.Requests.ReportSubmissionRequest;
 import com.CSCI152.team4.server.Reports.Validator.ReportValidator;
 import com.CSCI152.team4.server.Repos.CustomerProfilesRepo;
 import com.CSCI152.team4.server.Repos.ReportsRepo;
+import com.CSCI152.team4.server.Util.InstanceClasses.AccountsRepoManager;
+import com.CSCI152.team4.server.Util.InstanceClasses.Request;
 import com.CSCI152.team4.server.Util.InstanceClasses.TokenAuthenticator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import static java.time.LocalDateTime.now;
 
 @Service
 public class ReportsService {
@@ -27,16 +38,15 @@ public class ReportsService {
     private ReportsRepo reports;
     private CustomerProfilesRepo profiles;
     private ReportValidator validator;
+    AccountsRepoManager accountsRepoManager;
 
-    @Autowired
-    public ReportsService(TokenAuthenticator authenticator, ReportsRepo reports,
-                          @Value("${spring.data.web.pageable.default-page-size}") Integer defaultPageSize,
-                          CustomerProfilesRepo profiles, ReportValidator validator) {
+    public ReportsService(@Value("${spring.data.web.pageable.default-page-size}") Integer defaultPageSize, TokenAuthenticator authenticator, ReportsRepo reports, CustomerProfilesRepo profiles, ReportValidator validator, AccountsRepoManager accountsRepoManager) {
+        this.defaultPageSize = defaultPageSize;
         this.authenticator = authenticator;
         this.reports = reports;
-        this.defaultPageSize = defaultPageSize;
         this.profiles = profiles;
         this.validator = validator;
+        this.accountsRepoManager = accountsRepoManager;
     }
 
     public Page<Report> getReports(PageableRequest request){
@@ -50,7 +60,9 @@ public class ReportsService {
 
     public void saveReport(ReportSubmissionRequest request){
         authenticator.validateToken(request.getToken(), request.getAccountIdString());
-
+        if(!isPermitted(request.getAccountId(), Permissions.CR)){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not Allowed!");
+        }
         Report reportToSave = request.getReport();
 
         validator.validateReport(reportToSave);
@@ -90,4 +102,53 @@ public class ReportsService {
         validator.validateProfiles(profiles);
     }
 
+    public Profile getProfile(String profileIdString, Request request){
+        authenticator.validateToken(request.getToken(), request.getAccountIdString());
+
+        ProfileId profileId = new ProfileId(request.getBusinessId(), profileIdString);
+
+        if(!profiles.existsById(profileId)){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Profile not found!" );
+        }
+
+        return profiles.findById(profileId).get();
+    }
+
+    public Page<Profile> getProfilesByPage(PageableRequest request){
+        authenticator.validateToken(request.getToken(), request.getAccountIdString());
+
+        if(request.getPage() == null){
+            request.setPageable(0, defaultPageSize, Sort.by("name").ascending());
+        }
+        return profiles.findAllByBusinessId(request.getBusinessId(), request.getPageable());
+    }
+
+    public Report updateReport(ReportSubmissionRequest request){
+        authenticator.validateToken(request.getToken(), request.getAccountIdString());
+
+        if(!isPermitted(request.getAccountId(), Permissions.ER)){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not Allowed!");
+        }
+        ReportId reportId = request.getReport().getReportId();
+
+        if(!reports.existsById(reportId)){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Original Report not found!");
+        }
+        if(!reportId.getBusinessId().equals(request.getBusinessId())){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid Business ID!");
+        }
+
+        Report newReport = request.getReport();
+        newReport.updateChangeLog(newReport.getAuthor(), Timestamp.valueOf(now()));
+
+        reports.save(newReport);
+
+        return newReport;
+    }
+
+    private boolean isPermitted(AccountId accountId, Permissions permission){
+        return accountsRepoManager.adminExists(accountId) ||
+                accountsRepoManager.getEmployeeIfExists(accountId)
+                        .getPermissionsList().contains(permission.name());
+    }
 }

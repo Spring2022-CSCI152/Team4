@@ -2,6 +2,7 @@ package com.CSCI152.team4.server.Reports;
 
 import com.CSCI152.team4.server.Accounts.Settings.CustomerProfileFormat;
 import com.CSCI152.team4.server.Accounts.Settings.ReportFormat;
+import com.CSCI152.team4.server.Reports.Classes.Profile;
 import com.CSCI152.team4.server.Reports.Classes.Report;
 import com.CSCI152.team4.server.Reports.Requests.PageableRequest;
 import com.CSCI152.team4.server.Reports.Requests.ProfileFormatUpdateRequest;
@@ -65,7 +66,31 @@ public class ReportsController {
     @PostMapping("/save_report")
     public ResponseEntity<Enum<HttpStatus>> saveReport(@RequestBody ReportSubmissionRequest request){
         reportsService.saveReport(request);
-
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    /*TODO:
+    *
+    * edit_report
+    *
+    * edit_profile
+    *
+    * get_profile
+    *
+    * get_profiles (Page)*/
+
+    @GetMapping("/get_profile/{profile_id}")
+    public Profile getProfile(@PathVariable("profile_id") String profileId, @RequestBody Request request ){
+        return reportsService.getProfile(profileId, request);
+    }
+
+    @GetMapping("get_profiles")
+    public Page<Profile> getProfiles(@RequestBody PageableRequest request){
+        return reportsService.getProfilesByPage(request);
+    }
+
+    @PutMapping("/update_report")
+    public Report updateReport(@RequestBody ReportSubmissionRequest request){
+        return reportsService.updateReport(request);
     }
 }
