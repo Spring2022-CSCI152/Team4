@@ -41,7 +41,7 @@ public class TokenAuthenticator implements Authenticator {
         if(persistedToken.isExpired()
             || !persistedToken.getAccountId().equals(requestAccountId)){
 
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Token has been invalidated!");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Token has been invalidated!", new Exception());
         }
 
     }
@@ -78,7 +78,7 @@ public class TokenAuthenticator implements Authenticator {
         System.out.println(toRefresh);
         System.out.println((toRefresh.isExpired()) ? "Expired" : "Valid");
         if(!toRefresh.getAccountId().equals(accountId) || toRefresh.isExpired()){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unable to refresh token!");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unable to refresh token!", new Exception());
         }
 
         toRefresh.setExp(Timestamp.valueOf(LocalDateTime.now().plusMinutes(expirationInMins)));
@@ -92,7 +92,7 @@ public class TokenAuthenticator implements Authenticator {
             return optional.get();
         }
 
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No token found!");
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No token found!", new Exception());
     }
 
 }

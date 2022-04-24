@@ -52,6 +52,11 @@ public class AccountCreationRequest extends Request {
 
     public void setPassword(String password) {
         this.password = password;
+        if(password == null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "No Null Fields Allowed");
+        }
+
     }
 
     public String getFirstName() {
@@ -79,6 +84,7 @@ public class AccountCreationRequest extends Request {
     }
 
     public void validate() {
+
 
         if(super.getToken().equals("") || super.getAccountIdString().equals("")
                 || super.getBusinessId() == null
