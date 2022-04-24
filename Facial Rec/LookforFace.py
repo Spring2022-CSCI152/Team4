@@ -129,9 +129,5 @@ class NotificationManager:
         headers = {'content-type': 'application/json'}
         x = requests.post(SERVER_PATH, headers = headers, data = json.dumps(data))
         
-<<<<<<< HEAD
-=======
-
->>>>>>> 40b3792469c1f5ab40ac100f1b75cf65f54e4e3b
 fr = FaceRec(config('HOST'), config('UNAME'), config('PASSWORD'), config('DBNAME'), 'suspects')
 fr.execute_facial_rec()
