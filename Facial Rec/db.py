@@ -77,8 +77,8 @@ class DBManager:
 		profile_id = '\'' + params.profile_id + '\''
 		return """SELECT * FROM images WHERE profile_id = {0} AND business_id = {1};""".format(profile_id, params.business_id)
 
-	def create_image_selection_query_by_file_path(params):
-		path = params.path.replace('\\','\\\\')
+	def create_image_selection_query_by_file_path(path):
+		path = path.replace('\\','\\\\')
 		path = '\'' + path + '\''
 		return """SELECT * FROM images WHERE profile_id = {0};""".format(path)
 
