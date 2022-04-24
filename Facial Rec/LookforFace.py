@@ -30,8 +30,8 @@ import os
 #detectionQueue = {}
 #
 #def enqueue(imagePath):
-#    if not detectionQueue.get(imagePath) or  time.now() - detectionQueue.get(imagePath) > timedelta(minutes=10):
-#        detectionQueue.put(imagePath, time.now())
+#    if not detectionQueue.get(imagePath) or  datetime.now() - detectionQueue.get(imagePath) > timedelta(minutes=10):
+#        detectionQueue.put(imagePath, datetime.now())
 #        sendtoFront(imagePath)
 
 #encode pictures
