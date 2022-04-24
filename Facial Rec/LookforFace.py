@@ -240,7 +240,7 @@ execute()
 #     def send_notif(self, file_path):
 #         global SERVER_PATH
         
-#         (profile_id, pathS, business_id) = self.database.get_entity_by_file_path(pathS)
+#         (profile_id, file_path, business_id) = self.database.get_entity_by_file_path(file_path)
 
 #         data = {
 #             "profile_id": profile_id, 
