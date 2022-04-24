@@ -35,24 +35,34 @@ import os
 #        sendtoFront(imagePath)
 
 #encode pictures
-path = 'C:\\Users\\Maaku\\Desktop\\CSCI152ProjectMain\\Team4\\Facial Rec\\suspects'
-
-def checkdir():
+# FOR FUTURE REFERENCE, from terminal cd 'C:\\Users\\Maaku\\Desktop\\CSCI152ProjectMain\\Team4\\Facial Rec'
+## GLOBALS
+path = '\\suspects'
+images =  []
+SusNames = []
+myList = []
+encodeListKnown = [] #create init encode list
+cap = None
+def setup():
+    
+    myList = getdirs()
+    
+    for rpt in myList:
+        curImage = cv2.imread(rpt)
+        images.append(curImage)
+        SusNames.append(os.path.split(rpt)[1])
+        
+    encodeListKnown = findEncoding(images)
+        
+        
+def getdirs():
     currDir = []
     for path2, subdirs, files in os.walk(path):
         for name in files:
             currDir.append(os.path.join(path2,name))
     return currDir
 
-images =  []
-SusNames = []
-myList = checkdir() #Sets current directory
-print(myList)
 
-for rpt in myList:
-    curImage = cv2.imread(rpt)
-    images.append(curImage)
-    SusNames.append(os.path.split(rpt)[1])
 
 def findEncoding(images): #function to create list of encoded values for each image
     encodeList = []
@@ -63,50 +73,45 @@ def findEncoding(images): #function to create list of encoded values for each im
         encodeList.append(encode) # List of encoding numbers of each image
     return encodeList
 
-encodeListKnown = findEncoding(images) #create init encode list
+
+def execue():
+    while True:
+        if  not myList == getdirs(): #update encode list
+            setup()
+
+        success, img2 = cap.read()
+        imgSm = cv2.resize(img2,(0,0),None,0.25,0.25)
+        imgSm = cv2.cvtColor(imgSm,cv2.COLOR_BGR2RGB)
+
+        faceCurrFrame = face_recognition.face_locations(imgSm) #Finds faces
+        encodesCurrFrame = face_recognition.face_encodings(imgSm, faceCurrFrame) # takes face location, creates encoding for each face in frame
+
+
+        for encodeFace,faceLoc in zip(encodesCurrFrame, faceCurrFrame): #Every frame faces are checked through folder
+            matches = face_recognition.compare_faces(encodeListKnown,encodeFace) 
+            faceDis = face_recognition.face_distance(encodeListKnown,encodeFace)
+            print(faceDis)
+            matchIndex = np.argmin(faceDis) #get min element from array
+
+            if matches[matchIndex]: #In feed Creates box and places name
+
+                #name = SusNames[matchIndex].upper()
+                #print(name) # Where to send notification
+                print(myList[matchIndex])
+                #enqueue(path)
+
+                """
+                y1,x2,y2,x1 = faceLoc
+                y1,x2,y2,x1 = y1*4,x2*4,y2*4,x1*4
+                cv2.rectangle(img2,(x1,y1),(x2,y2),(0,255,0),2)
+                cv2.rectangle(img2,(x1,y2-35),(x2,y2),(0,255,0),cv2.FILLED)
+                cv2.putText(img2,name,(x1+6,y2-6),cv2.FONT_HERSHEY_COMPLEX,1,(255,255,255),2)
+                """
+
+        #cv2.imshow('Webcam', img2)
+        #cv2.waitKey(1)
+
+setup()
 print('Total Encode images: ', len(encodeListKnown), " / ", len(myList))
-
 cap = cv2.VideoCapture(0) #running image capture
-
-while True:
-    if  not myList == checkdir(): #update encode list
-        myList = checkdir()
-        images = []
-        SusNames = []
-        for rpt in myList:
-            curImage = cv2.imread(rpt)
-            images.append(curImage)
-            SusNames.append(os.path.split(rpt)[1])
-        encodeListKnown = findEncoding(images)
-
-    success, img2 = cap.read()
-    imgSm = cv2.resize(img2,(0,0),None,0.25,0.25)
-    imgSm = cv2.cvtColor(imgSm,cv2.COLOR_BGR2RGB)
-
-    faceCurrFrame = face_recognition.face_locations(imgSm) #Finds faces
-    encodesCurrFrame = face_recognition.face_encodings(imgSm, faceCurrFrame) # takes face location, creates encoding for each face in frame
-
-    
-    for encodeFace,faceLoc in zip(encodesCurrFrame, faceCurrFrame): #Every frame faces are checked through folder
-        matches = face_recognition.compare_faces(encodeListKnown,encodeFace) 
-        faceDis = face_recognition.face_distance(encodeListKnown,encodeFace)
-        print(faceDis)
-        matchIndex = np.argmin(faceDis) #get min element from array
-        
-        if matches[matchIndex]: #In feed Creates box and places name
-
-            #name = SusNames[matchIndex].upper()
-            #print(name) # Where to send notification
-            print(myList[matchIndex])
-            #enqueue(path)
-            
-            """
-            y1,x2,y2,x1 = faceLoc
-            y1,x2,y2,x1 = y1*4,x2*4,y2*4,x1*4
-            cv2.rectangle(img2,(x1,y1),(x2,y2),(0,255,0),2)
-            cv2.rectangle(img2,(x1,y2-35),(x2,y2),(0,255,0),cv2.FILLED)
-            cv2.putText(img2,name,(x1+6,y2-6),cv2.FONT_HERSHEY_COMPLEX,1,(255,255,255),2)
-            """
-    
-    #cv2.imshow('Webcam', img2)
-    #cv2.waitKey(1)
+execute()
