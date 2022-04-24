@@ -36,6 +36,7 @@ import os
 
 #encode pictures
 # FOR FUTURE REFERENCE, from terminal cd 'C:\\Users\\Maaku\\Desktop\\CSCI152ProjectMain\\Team4\\Facial Rec'
+# ONCE IN CORRECT directory in terminal, then type python LookForFace.py <- this should run correctly
 ## GLOBALS
 path = '\\suspects'
 images =  []
