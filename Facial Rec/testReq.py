@@ -6,11 +6,11 @@ import json
 def execute():
 	#Saving images in local machine
 	url = "http://localhost:5000/save_image"
-	with open('Team4\Facial Rec\Marc.jpg', 'rb') as f:
+	with open('C:\\Users\\Maaku\\Desktop\\CSCI152ProjectMain\\Team4\\Facial Rec\\Girl.jpg', 'rb') as f:
 		img_bytes = f.read()
 
 	img_b64 = base64.b64encode(img_bytes).decode('utf-8')
-	data = {'image': img_b64, 'file_name': 'image3.png', 'business_id': 104, 'profile_id': "someID"}
+	data = {'image': img_b64, 'file_name': 'girl.png', 'business_id': 109, 'profile_id': "Todo"}
 	# data = {} #sets names of images 
 
 	# print(json.dumps(data))
