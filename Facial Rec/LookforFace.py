@@ -5,34 +5,34 @@ import face_recognition
 import os
 
 #Notifications
-#import time
-#from datetime import timedelta
-#import json
-#import requests
-#from db import DBManager, RequestParams
-#from decouple import config
-#
-#database = DBManager(config('HOST'), config('UNAME'), config('PASSWORD'), config('DBNAME'))
-#
-#
-#def sendtoFront(pathS):
-#    address = "http://127.0.0.1:5000"
-#    (profile_id, pathS, business_id) = database.get_entity_by_file_path(pathS)
-#
-#    data = {
-#        "profile_id": profile_id, 
-#        "business_id": business_id
-#    }
-#
-#    headers = {'content-type': 'application/json'}
-#    x = requests.post(address, headers = headers, data = json.dumps(data))
-#
-#detectionQueue = {}
-#
-#def enqueue(imagePath):
-#    if not detectionQueue.get(imagePath) or  datetime.now() - detectionQueue.get(imagePath) > timedelta(minutes=10):
-#        detectionQueue.put(imagePath, datetime.now())
-#        sendtoFront(imagePath)
+import time
+from datetime import timedelta
+import json
+import requests
+from db import DBManager, RequestParams
+from decouple import config
+
+database = DBManager(config('HOST'), config('UNAME'), config('PASSWORD'), config('DBNAME'))
+
+
+def sendtoFront(pathS):
+   address = "http://127.0.0.1:5000"
+   (profile_id, pathS, business_id) = database.get_entity_by_file_path(pathS)
+
+   data = {
+       "profile_id": profile_id, 
+       "business_id": business_id
+   }
+
+   headers = {'content-type': 'application/json'}
+   x = requests.post(address, headers = headers, data = json.dumps(data))
+
+detectionQueue = {}
+
+def enqueue(imagePath):
+   if not detectionQueue.get(imagePath) or  datetime.now() - detectionQueue.get(imagePath) > timedelta(minutes=10):
+       detectionQueue[imagePath] = datetime.now()
+       sendtoFront(imagePath)
 
 #encode pictures
 # FOR FUTURE REFERENCE, from terminal cd 'C:\\Users\\Maaku\\Desktop\\CSCI152ProjectMain\\Team4\\Facial Rec'
