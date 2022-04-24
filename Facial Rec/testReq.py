@@ -4,14 +4,14 @@ import json
 
 
 def execute():
-
+	#Saving images in local machine
 	url = "http://localhost:5000/save_image"
-	with open('image.png', 'rb') as f:
+	with open('Team4\Facial Rec\Marc.jpg', 'rb') as f:
 		img_bytes = f.read()
 
 	img_b64 = base64.b64encode(img_bytes).decode('utf-8')
-	data = {'image': img_b64, 'file_name': 'image.png', 'business_id': 100, 'profile_id': "someID"}
-	# data = {}
+	data = {'image': img_b64, 'file_name': 'image3.png', 'business_id': 104, 'profile_id': "someID"}
+	# data = {} #sets names of images 
 
 	# print(json.dumps(data))
 
@@ -26,6 +26,7 @@ def execute():
 	# req = requests.get(url2, headers = headers, data = json.dumps(newData))
 
 	# print(req.json().get('result'))
+	
 
 
 execute()
