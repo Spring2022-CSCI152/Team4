@@ -8,6 +8,7 @@ import requests
 from db import DBManager, RequestParams
 from decouple import config
 
+# Update to Notification Server IP <- should be encapsulated in .env file
 SERVER_PATH = 'http://127.0.0.1:5000'
 
 # Encapsulate Facial Rec activities to FaceRec class
@@ -43,9 +44,7 @@ class FaceRec:
         for img in self.image_list:
             cur_image = self.read_and_encode_image(img)
             self.encoded_images = []
-            #print(face_recognition.face_encodings(cur_image))
             for enc in face_recognition.face_encodings(cur_image):
-                #print(enc)
                 self.encoded_images.append(enc) 
                   
      # Walks through the file system and stores the paths to all images found
@@ -67,13 +66,13 @@ class FaceRec:
             self.encode_images()
         
     def execute_facial_rec(self):
-        # Keep Processing
+
         while True:
             self.update_image_dirs()
             
             success, img = self.cap.read()
-            img_to_process = self.resize_and_encode_image(img) # <- inline encodings with extracted function
-    
+            img_to_process = self.resize_and_encode_image(img) 
+            
             #Finds faces
             face_curr_frame = face_recognition.face_locations(img_to_process) 
             
@@ -82,7 +81,6 @@ class FaceRec:
 
             if len(self.image_list) == 0: #nothing in suspects folder
                     continue
-            #Every frame faces are checked through folder
             else:
                 for encode_face, face_loc in zip(encodes_curr_frame, face_curr_frame): 
                     matches = face_recognition.compare_faces(self.encoded_images, encode_face) 
@@ -91,11 +89,6 @@ class FaceRec:
 
                     #In feed Creates box and places name
                     if matches[match_index]: 
-    
-                        #name = SusNames[matchIndex].upper()
-                        #print(name) # Where to send notification
-                        # print(self.image_list[match_index])
-                        # On Match -> enqueue to match to send notification
                         self.notif_manager.enqueue_match(self.image_list[match_index])
     
                         """
@@ -105,9 +98,6 @@ class FaceRec:
                         cv2.rectangle(img2,(x1,y2-35),(x2,y2),(0,255,0),cv2.FILLED)
                         cv2.putText(img2,name,(x1+6,y2-6),cv2.FONT_HERSHEY_COMPLEX,1,(255,255,255),2)
                         """
-    
-                #cv2.imshow('Webcam', img2)
-                #cv2.waitKey(1)
             
     # Extract and inline function coall, notice cv2.resize() is now a parameter to cv2.cvtColor()
     def resize_and_encode_image(self, image):
@@ -130,18 +120,23 @@ class NotificationManager:
             self.send_notif(file_path)
     
     def send_notif(self, file_path):
+            
         global SERVER_PATH
+      
         try:
             (profile_id, file_path, business_id) = self.database.get_entity_by_file_path(file_path)
-            print((profile_id, file_path, business_id))
+
             data = {
                 "profile_id": profile_id, 
                 "business_id": business_id
             }
 
             headers = {'content-type': 'application/json'}
+            
             x = requests.post(SERVER_PATH, headers = headers, data = json.dumps(data))
+            
         except TypeError :
+            
             print("Database entry Not Found")
 
 fr = FaceRec(config('HOST'), config('UNAME'), config('PASSWORD'), config('DBNAME'), 'suspects')
