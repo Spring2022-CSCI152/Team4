@@ -50,6 +50,7 @@ hr.green {
   white-space: nowrap;
   background-color: transparent;
 }
+
 .btn-sm:hover {
   width: fit-content;
   color: #000000;
@@ -91,22 +92,23 @@ hr.green {
 }
 
 .btn-signout:hover {
-    width: fit-content;
-    color: #ffffff;
-    background-color: transparent;
-  }
-
-  a {
-    color: #000000;
-    text-decoration: none;
-  }
-  
-  .w-auto.dropdown {
-    height: 2.7em;
-    border: 1px solid #ced4da;
-    width: 10em !important;
+  width: fit-content;
+  color: #ffffff;
+  background-color: transparent;
 }
 
+a {
+  color: #000000;
+  text-decoration: none;
+}
 
+.w-auto.dropdown {
+  height: 2.7em;
+  border: 1px solid #ced4da;
+  width: 10em !important;
+}
 
+.form-label {
+  margin-right: 1em;
 
+}
