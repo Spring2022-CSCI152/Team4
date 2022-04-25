@@ -171,6 +171,6 @@ public class RegistrationService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Account already registered!");
         }
     }
-    
+
 }
 
