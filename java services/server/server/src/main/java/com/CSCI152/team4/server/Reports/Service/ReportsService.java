@@ -17,16 +17,13 @@ import com.CSCI152.team4.server.Util.InstanceClasses.Request;
 import com.CSCI152.team4.server.Util.InstanceClasses.SecurityUtil;
 import com.CSCI152.team4.server.Util.InstanceClasses.TokenAuthenticator;
 import com.CSCI152.team4.server.Util.Interfaces.SecurityManager;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.security.Permission;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -72,7 +69,7 @@ public class ReportsService {
 
     public void saveReport(ReportSubmissionRequest request){
         authenticator.validateToken(request.getToken(), request.getAccountIdString());
-        validatePermission(request.getAccountId(), Permissions.CR);
+        validatePermission(request.getAccountId(), Permissions.REPORT_CREATE);
 
         Report reportToSave = request.getReport();
 
@@ -136,7 +133,7 @@ public class ReportsService {
 
     public Report updateReport(ReportSubmissionRequest request){
         authenticator.validateToken(request.getToken(), request.getAccountIdString());
-        validatePermission(request.getAccountId(), Permissions.ER);
+        validatePermission(request.getAccountId(), Permissions.REPORT_EDIT);
 
         ReportId reportId = request.getReport().getReportId();
 
@@ -158,7 +155,7 @@ public class ReportsService {
 
     public Profile updateProfile(ProfileSubmissionRequest request){
         authenticator.validateToken(request.getToken(), request.getAccountIdString());
-        validatePermission(request.getAccountId(), Permissions.EP);
+        validatePermission(request.getAccountId(), Permissions.PROFILES_EDIT);
 
         ProfileId profileId = request.getProfile().getProfileId();
 

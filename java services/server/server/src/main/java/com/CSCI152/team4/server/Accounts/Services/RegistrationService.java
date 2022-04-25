@@ -5,14 +5,16 @@ import com.CSCI152.team4.server.Accounts.Classes.BusinessAccount;
 import com.CSCI152.team4.server.Accounts.Classes.EmployeeAccount;
 import com.CSCI152.team4.server.Accounts.Classes.WorkerAccount;
 import com.CSCI152.team4.server.Accounts.Settings.CustomerProfileFormat;
+import com.CSCI152.team4.server.Accounts.Settings.Permissions;
 import com.CSCI152.team4.server.Accounts.Settings.ReportFormat;
 import com.CSCI152.team4.server.Util.InstanceClasses.AccountsRepoManager;
 import com.CSCI152.team4.server.Accounts.Requests.AccountCreationRequest;
 import com.CSCI152.team4.server.Accounts.Requests.AdminRequest;
 import com.CSCI152.team4.server.Accounts.Requests.BusinessRequest;
 import com.CSCI152.team4.server.Accounts.Requests.EmployeeRequest;
+import com.CSCI152.team4.server.Util.InstanceClasses.SecurityUtil;
 import com.CSCI152.team4.server.Util.InstanceClasses.SettingsRepoManager;
-import com.CSCI152.team4.server.Util.InstanceClasses.TokenAuthenticator;
+import com.CSCI152.team4.server.Util.Interfaces.SecurityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,13 +34,13 @@ import org.springframework.web.server.ResponseStatusException;
 public class RegistrationService {
 
     private final AccountsRepoManager repos;
-    private final TokenAuthenticator authenticator;
+    private final SecurityManager securityManager;
     private final SettingsRepoManager settings;
 
     @Autowired
-    public RegistrationService(AccountsRepoManager repos, TokenAuthenticator authenticator, SettingsRepoManager settings) {
+    public RegistrationService(AccountsRepoManager repos, SecurityUtil securityManager, SettingsRepoManager settings) {
         this.repos = repos;
-        this.authenticator = authenticator;
+        this.securityManager = securityManager;
         this.settings = settings;
     }
 
@@ -66,6 +68,7 @@ public class RegistrationService {
         * As a token of my apology, see the comments below
         * */
 
+        /*Ensure Fields are Non-null*/
         request.validate();
 
         //1. Extract the AdminAccount and encrypt the Password
@@ -90,7 +93,7 @@ public class RegistrationService {
         settings.saveCustomerProfileFormat(new CustomerProfileFormat(businessId));
 
         //6. Get Token and Clear AdminAccount Password field
-        returnable.setToken(authenticator.generateToken(returnable.getAccountIdString()));
+        returnable.setToken(securityManager.generateToken(returnable.getAccountId()));
         returnable.setPassword(null);
 
         //7. Return Account Info
@@ -99,17 +102,27 @@ public class RegistrationService {
 
     public ResponseEntity<Enum<HttpStatus>> registerAdmin(AdminRequest request){
 
-        validateRequest(request);
+        /*Ensure Auth and Permissions*/
+        securityManager.validateTokenAndPermission(request.getAccountId(), request.getToken(), Permissions.ACCOUNTS_REGISTER);
+
+        /*Ensure Non-null fields*/
+        request.validate();
+
+        /*Ensure No Prior Reg*/
         checkForPriorRegistration(request);
 
-        BusinessAccount businessAccount = getBusinessAccountIfValid(request);
+        /*Get Business Account*/
+        BusinessAccount businessAccount = repos.getBusinessIfExists(request.getBusinessId());
 
+        /*Extract New Admin Account and encrypt password*/
         AdminAccount newAdmin = request.getAdminAccount();
         encryptPassword(newAdmin);
 
+        /*On non-null business account, add admin to admins list*/
         assert businessAccount != null;
         businessAccount.addAdmin(newAdmin.getAccountIdString());
 
+        /*Save updated business account and admin account*/
         repos.saveBusinessAccount(businessAccount);
         repos.saveAdminAccount(newAdmin);
 
@@ -120,17 +133,27 @@ public class RegistrationService {
 
     public ResponseEntity<Enum<HttpStatus>> registerEmployee(EmployeeRequest request){
 
-        validateRequest(request);
+        /*Ensure Auth and Permissions*/
+        securityManager.validateTokenAndPermission(request.getAccountId(), request.getToken(), Permissions.ACCOUNTS_REGISTER);
+
+        /*Ensure Non-null fields*/
+        request.validate();
+
+        /*Ensure No Prior Reg*/
         checkForPriorRegistration(request);
 
-        BusinessAccount businessAccount = getBusinessAccountIfValid(request);
+        /*Get Business Account*/
+        BusinessAccount businessAccount = repos.getBusinessIfExists(request.getBusinessId());
 
+        /*Extract Employee account and encrypt password*/
         EmployeeAccount newEmployee = request.getEmployeeAccount();
         encryptPassword(newEmployee);
 
+        /*On Non null business account, save employee to account*/
         assert businessAccount != null;
         businessAccount.addEmployee(newEmployee.getAccountIdString());
 
+        /*Save updated business account and employee account*/
         repos.saveBusinessAccount(businessAccount);
         repos.saveEmployeeAccount(newEmployee);
 
@@ -142,32 +165,12 @@ public class RegistrationService {
                 BCrypt.gensalt(10)));
     }
 
-    private void validateRequest(AccountCreationRequest request){
-        authenticator.validateToken(request.getToken(), request.getAccountIdString());
-        request.validate();
-    }
-
     private void checkForPriorRegistration(AccountCreationRequest request){
         if(repos.getAccountByEmailAndBusinessId(
                 request.getEmail(), request.getBusinessId()) != null){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Account already registered!");
         }
     }
-
-    private BusinessAccount getBusinessAccountIfValid(AccountCreationRequest request){
-
-        BusinessAccount returnable = repos.getBusinessIfExists(request.getBusinessId());
-
-        try{
-            if(returnable.getAccountType(request.getAccountIdString())
-                    .equals(BusinessAccount.adminAccountType)){
-                return returnable;
-            }
-        }
-        catch(Exception e){
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid Request, User not Admin!");
-        }
-        return null;
-    }
+    
 }
 

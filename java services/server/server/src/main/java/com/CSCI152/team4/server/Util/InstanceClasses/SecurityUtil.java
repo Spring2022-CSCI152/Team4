@@ -49,6 +49,12 @@ public class SecurityUtil implements SecurityManager {
         }
     }
 
+    @Override
+    public void validateTokenAndPermission(AccountId accountId, String token, Permissions permission) throws ResponseStatusException {
+        validateToken(accountId, token);
+        validatePermission(accountId, permission);
+    }
+
     private boolean isPermitted(AccountId accountId, Permissions permission){
         return accounts.adminExists(accountId) ||
                 accounts.getEmployeeIfExists(accountId)

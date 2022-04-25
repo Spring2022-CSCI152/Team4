@@ -15,4 +15,6 @@ public interface SecurityManager {
     String generateToken(AccountId accountId) throws ResponseStatusException;
 
     void validatePermission(AccountId accountId, Permissions permission) throws ResponseStatusException;
+
+    void validateTokenAndPermission(AccountId accountId, String token, Permissions permission) throws ResponseStatusException;
 }

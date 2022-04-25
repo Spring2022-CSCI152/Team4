@@ -59,6 +59,7 @@ public abstract class WorkerAccount {
     public WorkerAccount() {
     }
 
+
     public Integer getBusinessId() {
         return businessId;
     }
