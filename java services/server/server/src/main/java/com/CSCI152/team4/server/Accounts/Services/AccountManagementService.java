@@ -15,8 +15,12 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.function.Supplier;
+
+import static org.hibernate.internal.util.ReflectHelper.getConstructor;
 
 @Service
 public class AccountManagementService {
@@ -218,6 +222,8 @@ public class AccountManagementService {
         securityManager.validateTokenAndPermission(request.getAccountId(), request.getToken(), Permissions.ACCOUNTS_DEMOTE);
 
         BusinessAccount businessAccount = repos.getBusinessIfExists(request.getBusinessId());
+        assert businessAccount != null;
+
         if (businessAccount.getAccountType(request.getTargetId().getAccountIdString())
                 .equals(BusinessAccount.adminAccountType)){
 
@@ -232,15 +238,18 @@ public class AccountManagementService {
 
         repos.saveBusinessAccount(businessAccount);
 
-        AdminAccount newAdmin =
-                getAdminFromEmployee(repos.getEmployeeIfExists(accountToPromote));
+        try{
+            AdminAccount newAdmin = (AdminAccount) transposeTo(AdminAccount.class, repos.getEmployeeIfExists(accountToPromote));
 
-        repos.saveAdminAccount(newAdmin);
+            repos.saveAdminAccount(newAdmin);
 
-        repos.removeEmployeeAccount(accountToPromote);
+            repos.removeEmployeeAccount(accountToPromote);
 
-        if(repos.adminExists(accountToPromote) && !repos.employeeExists(accountToPromote)){
-            return repos.getAdminIfExists(accountToPromote);
+            if(repos.adminExists(accountToPromote) && !repos.employeeExists(accountToPromote)){
+                return repos.getAdminIfExists(accountToPromote);
+            }
+        }catch(Exception e){
+            e.printStackTrace();
         }
 
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Something went wrong during promotion!");
@@ -251,42 +260,35 @@ public class AccountManagementService {
 
         repos.saveBusinessAccount(businessAccount);
 
-        EmployeeAccount newEmployee =
-                getEmployeeFromAdmin(repos.getAdminIfExists(accountToDemote));
+        try{
+            EmployeeAccount newEmployee = (EmployeeAccount) transposeTo(EmployeeAccount.class, repos.getAdminIfExists(accountToDemote));
 
+            repos.saveEmployeeAccount(newEmployee);
 
-        repos.saveEmployeeAccount(newEmployee);
+            repos.removeAdminAccount(accountToDemote);
 
-        repos.removeAdminAccount(accountToDemote);
-
-        if(!repos.adminExists(accountToDemote) && repos.employeeExists(accountToDemote)){
-            return repos.getEmployeeIfExists(accountToDemote);
+            if(!repos.adminExists(accountToDemote) && repos.employeeExists(accountToDemote)){
+                return repos.getEmployeeIfExists(newEmployee.getAccountId());
+            }
+        }catch(Exception e){
+            e.printStackTrace();
         }
-
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Something went wrong during demotion!");
     }
 
-    private AdminAccount getAdminFromEmployee(EmployeeAccount account){
-        AdminAccount retAccount =
-                new AdminAccount(account.getBusinessId(),
-                        account.getEmail(), account.getPassword(),
-                        account.getFirstName(), account.getLastName(),
-                        account.getJobTitle());
-
-        retAccount.setAccountId(account.getAccountId());
-
-        return retAccount;
-    }
-
-    private EmployeeAccount getEmployeeFromAdmin(AdminAccount account){
-        EmployeeAccount retAccount =
-                new EmployeeAccount(account.getBusinessId(),
-                        account.getEmail(), account.getPassword(),
-                        account.getFirstName(), account.getLastName(),
-                        account.getJobTitle());
-
-        retAccount.setAccountId(account.getAccountId());
-
-        return retAccount;
+    private WorkerAccount transposeTo(Class accountType, WorkerAccount account)
+            throws InvocationTargetException, InstantiationException, IllegalAccessException {
+        Constructor con = null;
+        for(Constructor c : accountType.getDeclaredConstructors()){
+            if(c.getParameterCount() == 6){
+                con = c;
+            }
+        }
+        WorkerAccount ret =  (WorkerAccount) con.newInstance(account.getBusinessId(),
+                account.getEmail(), account.getPassword(),
+                account.getFirstName(), account.getLastName(),
+                account.getJobTitle());
+        ret.setAccountId(account.getAccountIdString());
+        return ret;
     }
 }

@@ -13,7 +13,7 @@ import java.util.Objects;
  * Data JPA*/
 
 @MappedSuperclass
-public abstract class WorkerAccount {
+public abstract class WorkerAccount implements IAccountId {
 //No real reason for it to be abstract, but it implies that other classes will extend this
 
     @Column(nullable = false, insertable = false, updatable = false)
@@ -126,8 +126,11 @@ public abstract class WorkerAccount {
 
     public abstract String getAccountIdString();
 
-    abstract AccountId getAccountId();
+    public AccountId getAccountId(){return null;}
 
+    public abstract void setAccountId(String accountId);
+
+    public abstract void setAccountId(AccountId accountId);
 
     @Override
     public boolean equals(Object o) {
