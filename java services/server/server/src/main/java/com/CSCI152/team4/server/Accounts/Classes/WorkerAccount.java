@@ -1,6 +1,8 @@
 package com.CSCI152.team4.server.Accounts.Classes;
 
 
+import com.CSCI152.team4.server.Accounts.Interfaces.IAccountId;
+
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;

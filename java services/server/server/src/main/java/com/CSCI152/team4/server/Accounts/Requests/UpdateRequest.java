@@ -1,0 +1,74 @@
+package com.CSCI152.team4.server.Accounts.Requests;
+
+import com.CSCI152.team4.server.Accounts.Classes.AccountId;
+import com.CSCI152.team4.server.Util.InstanceClasses.Request;
+
+public class UpdateRequest extends Request {
+
+    private String email;
+    private String password;
+    private String firstName;
+    private String lastName;
+    private String jobTitle;
+
+    public UpdateRequest() {
+    }
+
+    public UpdateRequest(String email, String password, String firstName, String lastName, String jobTitle) {
+        this.email = email;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.jobTitle = jobTitle;
+    }
+
+    public UpdateRequest(String token, AccountId accountId, String email, String password, String firstName, String lastName, String jobTitle) {
+        super(token, accountId);
+        this.email = email;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.jobTitle = jobTitle;
+    }
+
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getJobTitle() {
+        return jobTitle;
+    }
+
+    public void setJobTitle(String jobTitle) {
+        this.jobTitle = jobTitle;
+    }
+}
