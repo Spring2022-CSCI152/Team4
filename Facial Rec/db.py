@@ -12,7 +12,7 @@ class DBManager:
 	create_images_table = """
 	CREATE TABLE IF NOT EXISTS images (
 	profile_id VARCHAR(255) NOT NULL,
-	path VARCHAR(255) NOT NULL,
+	file_path VARCHAR(255) NOT NULL,
 	business_id INTEGER NOT NULL,
 	PRIMARY KEY (profile_id, business_id)
 	);"""
@@ -69,7 +69,7 @@ class DBManager:
 		path = '\'' + path + '\''
 		profile_id = '\'' + params.profile_id + '\''
 		return """INSERT IGNORE INTO images 
-				(profile_id, path, business_id) 
+				(profile_id, file_path, business_id) 
 			VALUES 
 				(%s, %s, %d);""" % (profile_id, path, params.business_id) 
 	
@@ -80,7 +80,7 @@ class DBManager:
 	def create_image_selection_query_by_file_path(path):
 		path = path.replace('\\','\\\\')
 		path = '\'' + path + '\''
-		return """SELECT * FROM images WHERE profile_id = {0};""".format(path)
+		return """SELECT * FROM images WHERE file_path = {0};""".format(path)
 
 class RequestParams:
 
