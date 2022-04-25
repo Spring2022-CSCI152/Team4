@@ -36,7 +36,7 @@ public class SessionService {
 
         validateBusinessRelation(request.getBusinessId(), account.getAccountIdString());
 
-        account.setToken(authenticator.getToken(account.getAccountIdString()));
+        account.setToken(authenticator.generateToken(account.getAccountIdString()));
 
         /*Do not return Password!*/
         account.setPassword(null);

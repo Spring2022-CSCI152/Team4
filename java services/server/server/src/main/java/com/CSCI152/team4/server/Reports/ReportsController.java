@@ -4,10 +4,7 @@ import com.CSCI152.team4.server.Accounts.Settings.CustomerProfileFormat;
 import com.CSCI152.team4.server.Accounts.Settings.ReportFormat;
 import com.CSCI152.team4.server.Reports.Classes.Profile;
 import com.CSCI152.team4.server.Reports.Classes.Report;
-import com.CSCI152.team4.server.Reports.Requests.PageableRequest;
-import com.CSCI152.team4.server.Reports.Requests.ProfileFormatUpdateRequest;
-import com.CSCI152.team4.server.Reports.Requests.ReportFormatUpdateRequest;
-import com.CSCI152.team4.server.Reports.Requests.ReportSubmissionRequest;
+import com.CSCI152.team4.server.Reports.Requests.*;
 import com.CSCI152.team4.server.Reports.Service.ReportsService;
 import com.CSCI152.team4.server.Reports.Service.SettingsService;
 import com.CSCI152.team4.server.Util.InstanceClasses.Request;
@@ -69,15 +66,10 @@ public class ReportsController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    /*TODO:
-    *
-    * edit_report
-    *
-    * edit_profile
-    *
-    * get_profile
-    *
-    * get_profiles (Page)*/
+    @PutMapping("/update_profile")
+    public Profile updateProfile(@RequestBody ProfileSubmissionRequest request){
+        return reportsService.updateProfile(request);
+    }
 
     @GetMapping("/get_profile/{profile_id}")
     public Profile getProfile(@PathVariable("profile_id") String profileId, @RequestBody Request request ){

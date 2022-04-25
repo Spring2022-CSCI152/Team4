@@ -90,7 +90,7 @@ public class RegistrationService {
         settings.saveCustomerProfileFormat(new CustomerProfileFormat(businessId));
 
         //6. Get Token and Clear AdminAccount Password field
-        returnable.setToken(authenticator.getToken(returnable.getAccountIdString()));
+        returnable.setToken(authenticator.generateToken(returnable.getAccountIdString()));
         returnable.setPassword(null);
 
         //7. Return Account Info

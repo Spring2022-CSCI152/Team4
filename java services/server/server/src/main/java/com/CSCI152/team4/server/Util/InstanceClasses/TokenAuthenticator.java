@@ -34,20 +34,19 @@ public class TokenAuthenticator implements Authenticator {
     }
 
     @Override
-    public void validateToken(String token, String requestAccountId)
+    public void validateToken(String accountId, String token)
     {
         Token persistedToken = getTokenIfExists(token);
 
         if(persistedToken.isExpired()
-            || !persistedToken.getAccountId().equals(requestAccountId)){
-
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Token has been invalidated!", new Exception());
+            || !persistedToken.getAccountId().equals(accountId)){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Token has been invalidated!", new Exception());
         }
 
     }
 
     @Override
-    public String getToken(String accountId) {
+    public String generateToken(String accountId) {
         return generateAndSaveToken(accountId);
     }
 
@@ -64,19 +63,18 @@ public class TokenAuthenticator implements Authenticator {
     }
 
     @Override
-    public void invalidateToken(String token, String requestAccountId) {
+    public void invalidateToken(String accountId, String token) {
         Token t = getTokenIfExists(token);
-        if(t.getAccountId().equals(requestAccountId)
+        if(t.getAccountId().equals(accountId)
                 || t.isExpired()){
             repo.delete(t);
         }
     }
 
-    public void refreshToken(String token, String accountId){
+    @Override
+    public void refreshToken(String accountId, String token){
 
         Token toRefresh = getTokenIfExists(token);
-        System.out.println(toRefresh);
-        System.out.println((toRefresh.isExpired()) ? "Expired" : "Valid");
         if(!toRefresh.getAccountId().equals(accountId) || toRefresh.isExpired()){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unable to refresh token!", new Exception());
         }
@@ -86,10 +84,9 @@ public class TokenAuthenticator implements Authenticator {
     }
 
     private Token getTokenIfExists(String token){
-        Optional<Token> optional =  repo.findById(token);
 
-        if(optional.isPresent()) {
-            return optional.get();
+        if(repo.existsById(token)) {
+            return repo.findById(token).get();
         }
 
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No token found!", new Exception());

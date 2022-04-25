@@ -66,7 +66,7 @@ class RegistrationServiceTest {
     }
 
     private void setTokenManagerStubs(){
-        doReturn("someToken").when(tokenAuthenticator).getToken(any());
+        doReturn("someToken").when(tokenAuthenticator).generateToken(any());
         doNothing().when(tokenAuthenticator).validateToken(any(), any());
     }
 
