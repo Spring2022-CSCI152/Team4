@@ -6,6 +6,7 @@ import com.CSCI152.team4.server.Reports.Classes.Profile;
 import com.CSCI152.team4.server.Reports.Classes.ProfileId;
 import com.CSCI152.team4.server.Reports.Classes.Report;
 import com.CSCI152.team4.server.Reports.Classes.ReportId;
+import com.CSCI152.team4.server.Reports.Interfaces.IReportValidator;
 import com.CSCI152.team4.server.Reports.Requests.PageableRequest;
 import com.CSCI152.team4.server.Reports.Requests.ProfileSubmissionRequest;
 import com.CSCI152.team4.server.Reports.Requests.ReportSubmissionRequest;
@@ -16,6 +17,8 @@ import com.CSCI152.team4.server.Util.InstanceClasses.AccountsRepoManager;
 import com.CSCI152.team4.server.Util.InstanceClasses.Request;
 import com.CSCI152.team4.server.Util.InstanceClasses.SecurityUtil;
 import com.CSCI152.team4.server.Util.InstanceClasses.TokenAuthenticator;
+import com.CSCI152.team4.server.Util.Interfaces.AccountsRepoInterface;
+import com.CSCI152.team4.server.Util.Interfaces.Authenticator;
 import com.CSCI152.team4.server.Util.Interfaces.SecurityManager;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -35,11 +38,11 @@ import static java.time.LocalDateTime.now;
 public class ReportsService {
 
     private Integer defaultPageSize ;
-    private TokenAuthenticator authenticator;
+    private Authenticator authenticator;
     private ReportsRepo reports;
     private CustomerProfilesRepo profiles;
-    private ReportValidator validator;
-    private AccountsRepoManager accountsRepoManager;
+    private IReportValidator validator;
+    private AccountsRepoInterface accountsRepoManager;
     private SecurityManager securityManager;
 
     public ReportsService(@Value("${spring.data.web.pageable.default-page-size}") Integer defaultPageSize,

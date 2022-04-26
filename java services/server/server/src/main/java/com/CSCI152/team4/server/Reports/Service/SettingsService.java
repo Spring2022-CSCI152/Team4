@@ -8,6 +8,9 @@ import com.CSCI152.team4.server.Util.InstanceClasses.AccountsRepoManager;
 import com.CSCI152.team4.server.Util.InstanceClasses.Request;
 import com.CSCI152.team4.server.Util.InstanceClasses.SettingsRepoManager;
 import com.CSCI152.team4.server.Util.InstanceClasses.TokenAuthenticator;
+import com.CSCI152.team4.server.Util.Interfaces.AccountsRepoInterface;
+import com.CSCI152.team4.server.Util.Interfaces.Authenticator;
+import com.CSCI152.team4.server.Util.Interfaces.SettingsRepoInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -18,9 +21,10 @@ import javax.persistence.criteria.CriteriaBuilder;
 @Service
 public class SettingsService {
 
-    private final TokenAuthenticator authenticator;
-    private final SettingsRepoManager repoManager;
-    private final AccountsRepoManager accounts;
+    private final Authenticator authenticator;
+    private final SettingsRepoInterface repoManager;
+    private final AccountsRepoInterface accounts;
+
     @Autowired
     public SettingsService(TokenAuthenticator authenticator, SettingsRepoManager repoManager, AccountsRepoManager accounts) {
         this.authenticator = authenticator;

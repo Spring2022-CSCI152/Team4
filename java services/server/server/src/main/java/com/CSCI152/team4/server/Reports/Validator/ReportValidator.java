@@ -16,7 +16,7 @@ import java.util.UUID;
 /*This class serves as a utility to ensure only the desired input is
 * accepted and saved*/
 @Component
-public class ReportValidator {
+public class ReportValidator implements com.CSCI152.team4.server.Reports.Interfaces.IReportValidator {
 
     private final SettingsRepoManager settingsRepoManager;
 
@@ -25,6 +25,7 @@ public class ReportValidator {
         this.settingsRepoManager = settingsRepoManager;
     }
 
+    @Override
     public void validateReport(Report report){
         if(!settingsRepoManager.reportFormatExistsById(report.getBusinessId())){
             throw new ResponseStatusException(HttpStatus.OK, "Business Not Found!");
@@ -47,6 +48,7 @@ public class ReportValidator {
         report.setBox5((reportFormat.isBox5()) ? report.getBox5() : null);
     }
 
+    @Override
     public void validateProfile(Profile profile){
         if(!settingsRepoManager.reportFormatExistsById(profile.getBusinessId())){
             throw new ResponseStatusException(HttpStatus.OK, "Business Not Found!");
@@ -69,6 +71,7 @@ public class ReportValidator {
 
     }
 
+    @Override
     public void validateProfiles(List<Profile> profileList){
 
         for(Profile profile : profileList){
