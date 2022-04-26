@@ -36,22 +36,13 @@ def build_and_get_save_dir(profile_id, file_name, business_id):
 
 # Saves an image locally, uses a base64 string rep of an image to build the saved image
 def save_image_to_local_system(path, image_b64):
-		image = Image.open(BytesIO(base64.b64decode(image_b64)))
-		exif = image.getexif()
-
-		for orientation in ExifTags.TAGS.keys():
-			if ExifTags.TAGS[orientation] == 'Orientation':
-				break
-		
-		if exif[orientation] == 3:
-			image=image.rotate(180, expand=True)
-		elif exif[orientation] == 6:
-			image=image.rotate(270, expand=True)
-		elif exif[orientation] == 8:
-			image=image.rotate(90, expand=True)
-		
-		image.save(path)
-		image.close()
+	size = int(len(image_b64)/8)
+	image = Image.open(BytesIO(base64.b64decode(image_b64))) 
+	# if size > 80000:
+	# 	image=image.rotate(270, expand=True)
+	
+	image.save(path)
+	image.close()
 
 # extracts the fields in a request
 def get_feilds(request_data):
