@@ -3,10 +3,10 @@ package com.CSCI152.team4.server.Reports.Classes;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "reports")
 public class Report {
 
     /*
@@ -22,7 +22,8 @@ public class Report {
     //Profile Ids
     @Column(nullable = false)
     @ElementCollection(targetClass = String.class, fetch = FetchType.LAZY)
-    private List<String> profiles;
+    @OneToMany
+    private List<Profile> profiles;
     //Submission Time
     private Timestamp date;
     //A String representation of the time that report occurred
@@ -80,11 +81,14 @@ public class Report {
         this.reportId.setReportId(reportId);
     }
 
-    public List<String> getProfiles() {
+    public List<Profile> getProfiles() {
+        if(profiles == null){
+            profiles = new ArrayList<>();
+        }
         return profiles;
     }
 
-    public void setProfiles(List<String> profiles) {
+    public void setProfiles(List<Profile> profiles) {
         this.profiles = profiles;
     }
 
@@ -170,5 +174,23 @@ public class Report {
 
     public void updateChangeLog(String author, Timestamp timestamp){
         this.changeLog.add(String.format("Timestamp: %s, Author: %s", timestamp.toString(), author));
+    }
+
+    @Override
+    public String toString() {
+        return "Report{" +
+                "reportId=" + reportId +
+                ", profiles=" + profiles +
+                ", date=" + date +
+                ", time='" + time + '\'' +
+                ", author='" + author + '\'' +
+                ", type='" + type + '\'' +
+                ", box1='" + box1 + '\'' +
+                ", box2='" + box2 + '\'' +
+                ", box3='" + box3 + '\'' +
+                ", box4='" + box4 + '\'' +
+                ", box5='" + box5 + '\'' +
+                ", changeLog=" + changeLog +
+                '}';
     }
 }

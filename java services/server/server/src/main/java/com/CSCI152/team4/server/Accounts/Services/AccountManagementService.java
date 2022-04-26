@@ -1,296 +1,111 @@
 package com.CSCI152.team4.server.Accounts.Services;
 
 import com.CSCI152.team4.server.Accounts.Classes.*;
+import com.CSCI152.team4.server.Accounts.Interfaces.IAccountPermissionUpdater;
+import com.CSCI152.team4.server.Accounts.Interfaces.IAccountRetriever;
+import com.CSCI152.team4.server.Accounts.Interfaces.IAccountStatusChanger;
+import com.CSCI152.team4.server.Accounts.Interfaces.IAccountUpdater;
 import com.CSCI152.team4.server.Accounts.Requests.PermissionUpdateRequest;
 import com.CSCI152.team4.server.Accounts.Requests.TargetAccountRequest;
-import com.CSCI152.team4.server.Accounts.Requests.UpdateFromAdminRequest;
+import com.CSCI152.team4.server.Accounts.Requests.UpdateOtherRequest;
+import com.CSCI152.team4.server.Accounts.Requests.UpdateRequest;
+import com.CSCI152.team4.server.Accounts.Settings.Permissions;
+import com.CSCI152.team4.server.Accounts.Utils.AccountPermissionUpdater;
+import com.CSCI152.team4.server.Accounts.Utils.AccountRetriever;
+import com.CSCI152.team4.server.Accounts.Utils.AccountStatusChanger;
+import com.CSCI152.team4.server.Accounts.Utils.AccountUpdater;
 import com.CSCI152.team4.server.Util.InstanceClasses.AccountsRepoManager;
 import com.CSCI152.team4.server.Util.InstanceClasses.Request;
-import com.CSCI152.team4.server.Util.InstanceClasses.TokenAuthenticator;
+import com.CSCI152.team4.server.Util.InstanceClasses.SecurityUtil;
+import com.CSCI152.team4.server.Util.Interfaces.SecurityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.function.Supplier;
+
+import static org.hibernate.internal.util.ReflectHelper.getConstructor;
 
 @Service
 public class AccountManagementService {
 
-    private final AccountsRepoManager repos;
-    private final TokenAuthenticator authenticator;
+    private final SecurityManager securityManager;
+    private final IAccountRetriever accounts;
+    private final IAccountUpdater updater;
+    private final IAccountPermissionUpdater permissions;
+    private final IAccountStatusChanger status;
 
+    /*
+    * Responsibilities:
+    * AccountRetrieval -> AccountRetriever
+    * AccountUpdates -> AccountUpdater
+    * Promote/Demote -> AccountStatusChanger
+    * Account Transpose -> AccountClassTranspose
+    * */
     @Autowired
-    public AccountManagementService(AccountsRepoManager repos, TokenAuthenticator authenticator) {
-        this.repos = repos;
-        this.authenticator = authenticator;
+    public AccountManagementService(SecurityUtil securityManager,
+                                    AccountRetriever accounts, AccountUpdater updater,
+                                    AccountPermissionUpdater permissions, AccountStatusChanger status) {
+        this.securityManager = securityManager;
+        this.accounts = accounts;
+        this.updater = updater;
+        this.permissions = permissions;
+        this.status = status;
     }
 
     /*Get Own Account Info*/
     public WorkerAccount getAccountInfo(Request request){
-        authenticator.validateToken(request.getToken(), request.getAccountIdString());
+        securityManager.validateToken(request.getAccountId(), request.getToken());
+        return accounts.getAccountInfo(request);
+    }
 
-        if(repos.businessExists(request.getBusinessId())){
-            WorkerAccount returnable
-                    = repos.getAccountByEmailAndBusinessId(request.getAccountEmail(),
-                    request.getBusinessId());
-            /*Do not return password!*/
-            returnable.setPassword(null);
-            return returnable;
+    public WorkerAccount getOtherAccountInfo(TargetAccountRequest request){
+        securityManager.validateTokenAndPermission(request.getAccountId(), request.getToken(), Permissions.ACCOUNTS_VIEW);
+        if(!request.getAccountId().getBusinessId().equals(request.getTargetId().getBusinessId())){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Different Business IDs");
         }
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Business Account Not Found!");
+        return accounts.getOtherAccountInfo(request);
     }
 
-    /*Get Another Admins Account information: Only Available to Admin Accounts*/
-    public AdminAccount getOtherAdminAccountInfo(TargetAccountRequest request){
-        authenticator.validateToken(request.getToken(), request.getAccountIdString());
-        return (AdminAccount) getReturnableOnAdminExists(request.getAccountId(),
-                () -> repos.getAccountByEmailAndBusinessId(
-                        request.getTargetId().getEmail(), request.getTargetId().getBusinessId()));
+    public List<WorkerAccount> getAccounts(Request request){
+        securityManager.validateTokenAndPermission(request.getAccountId(), request.getToken(), Permissions.ACCOUNTS_VIEW);
+        return accounts.getAccounts(request);
     }
 
-    /*Get Another Employees Account information: Only Available to Admin Accounts*/
-    public EmployeeAccount getOtherEmployeeAccountInfo(TargetAccountRequest request){
-        authenticator.validateToken(request.getToken(), request.getAccountIdString());
-        return (EmployeeAccount) getReturnableOnAdminExists(request.getAccountId(),
-                () -> repos.getAccountByEmailAndBusinessId(
-                        request.getTargetId().getEmail(), request.getTargetId().getBusinessId()));
+    public WorkerAccount updateInfo(UpdateRequest request){
+        securityManager.validateToken(request.getAccountId(), request.getToken());
+        return updater.updateSelf(request);
     }
 
-    /*An Admin will Update another Accounts information, but only the
-     * mutable fields
-     * Account Info is returned as proof
-     * of update*/
-    public WorkerAccount updateOtherFromAdmin(UpdateFromAdminRequest request){
-        authenticator.validateToken(request.getToken(), request.getAccountIdString());
-
-        return getReturnableOnAdminExists(request.getAccountId(),
-                () -> updateAndSaveOther(request));
-    }
-
-    /*Admin updates their own info, Account Info is returned as proof
-     * of update*/
-    public AdminAccount updateAdminAccount(AdminAccount account){
-        authenticator.validateToken(account.getToken(), account.getAccountIdString());
-        return updateAndSaveAdminAccount(account.getAccountId(), account);
-    }
-
-    /*Employee Updates their own info, Account Info is returned as proof
-    * of update*/
-    public EmployeeAccount updateEmployeeAccount(EmployeeAccount account){
-        authenticator.validateToken(account.getToken(), account.getAccountIdString());
-        return updateAndSaveEmployeeAccount(account.getAccountId(), account);
-    }
-
-    private WorkerAccount updateAndSaveOther(UpdateFromAdminRequest request){
-
-        BusinessAccount businessAccount = repos.getBusinessIfExists(request.getBusinessId());
-
-        String accountType = businessAccount.getAccountType(request.getTargetId().getAccountIdString());
-        switch(accountType){
-            case BusinessAccount.adminAccountType:
-                return updateAndSaveAdminAccount(request.getTargetId(),
-                        new AdminAccount(request.getBusinessId(), request.getAccountEmail(), request.getPassword(),
-                                request.getFirstName(), request.getLastName(), request.getJobTitle())
-                );
-            case BusinessAccount.employeeAccountType:
-                return updateAndSaveEmployeeAccount(request.getTargetId(),
-                        new EmployeeAccount(request.getBusinessId(), request.getAccountEmail(), request.getPassword(),
-                                request.getFirstName(), request.getLastName(), request.getJobTitle())
-                );
-            default:
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Invalid Account Type!");
-        }
-    }
-
-    private AdminAccount updateAndSaveAdminAccount(AccountId accountIdToUpdate, AdminAccount account){
-
-        AdminAccount accountToSave = repos.getAdminIfExists(accountIdToUpdate);
-
-        updateMutableAccountFields(account, accountToSave);
-
-        AdminAccount returnable = repos.saveAdminAccount(accountToSave);
-        /*Do not return password!*/
-        returnable.setPassword(null);
-
-        return  returnable;
-    }
-
-    private EmployeeAccount updateAndSaveEmployeeAccount(AccountId accountIdToUpdate, EmployeeAccount account){
-        EmployeeAccount accountToSave = repos.getEmployeeIfExists(accountIdToUpdate);
-
-        updateMutableAccountFields(account, accountToSave);
-
-        EmployeeAccount returnable = repos.saveEmployeeAccount(accountToSave);
-        /*Do not return password!*/
-        returnable.setPassword(null);
-
-        return returnable;
-    }
-
-    /*Non-mutable fields are Email, AccountId String and BusinessId
-    * All other fields are updatable
-    *
-    * Refer to WorkerAccount for available fields */
-    private void updateMutableAccountFields(WorkerAccount newInfo, WorkerAccount originalInfo){
-
-        String fNameToUpdate = newInfo.getFirstName();
-        String lNameToUpdate = newInfo.getLastName();
-        String jobTitleToUpdate = newInfo.getJobTitle();
-        String newPassword = newInfo.getPassword();
-
-        if(fNameToUpdate != null && !fNameToUpdate.isBlank()){
-            originalInfo.setFirstName(fNameToUpdate);
-        }
-
-        if(lNameToUpdate != null && !lNameToUpdate.isBlank()){
-            originalInfo.setLastName(lNameToUpdate);
-        }
-
-        if(jobTitleToUpdate != null && !jobTitleToUpdate.isBlank()){
-            originalInfo.setJobTitle(jobTitleToUpdate);
-        }
-
-        if(newPassword != null && !newPassword.isBlank()){
-            String encryptedPassword = BCrypt.hashpw(newPassword, BCrypt.gensalt(10));
-            originalInfo.setPassword(encryptedPassword);
-        }
+    public WorkerAccount updateOther(UpdateOtherRequest request){
+        securityManager.validateToken(request.getAccountId(), request.getToken());
+        return updater.updateOther(request);
     }
 
     /*Update an Employees Permissions from an Admin Account
     * Return the Account permissions as proof of success*/
     public WorkerAccount updateEmployeePermissions(PermissionUpdateRequest request){
-        authenticator.validateToken(request.getToken(), request.getAccountIdString());
-        return getReturnableOnAdminExists(request.getAccountId(),
-                () -> updatePermissions(request));
-    }
-
-    private WorkerAccount updatePermissions(PermissionUpdateRequest request){
-        EmployeeAccount accountToUpdate = repos.getEmployeeIfExists(request.getTargetId());
-        accountToUpdate.setPermissionsList(request.getPermissions());
-        return repos.saveEmployeeAccount(accountToUpdate);
-    }
-
-    /*Accepts a Lambda Expression to execute IF the admin is valid AND have matching business ID's*/
-    private WorkerAccount getReturnableOnAdminExists(AccountId requestingAccountId, Supplier<WorkerAccount> toReturn){
-        if(repos.adminExists(requestingAccountId)){
-            WorkerAccount returnable = toReturn.get();
-            if(returnable.getBusinessId().equals(requestingAccountId.getBusinessId())){
-                returnable.setPassword(null);
-                return returnable;
-            }
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Business Id!");
+        securityManager.validateTokenAndPermission(request.getAccountId(), request.getToken(), Permissions.PERMISSIONS_EDIT);
+        if(!request.getAccountId().getBusinessId().equals(request.getTargetId().getBusinessId())){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Different Business IDs");
         }
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Admin Does Not Exist!");
+        return permissions.updatePermissions(request);
     }
 
-    public List<WorkerAccount> getAccounts(Request request){
-        authenticator.validateToken(request.getToken(), request.getAccountIdString());
-        if(repos.adminExists(request.getAccountId())){
-            return repos.getAccountsByBusinessId(request.getBusinessId());
-        }
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Admin Does Not Exist!");
-    }
-
-    /*
-    * TODO: PROMOTE AND DEMOTE
-    * */
-
+    /*Admin can Promote another Account to Admin if not already one*/
     public WorkerAccount promote(TargetAccountRequest request){
-        authenticator.validateToken(request.getToken(), request.getAccountIdString());
-
-        BusinessAccount businessAccount = repos.getBusinessIfExists(request.getBusinessId());
-        if (businessAccount.getAccountType(request.getTargetId().getAccountIdString())
-                .equals(BusinessAccount.employeeAccountType)){
-
-            return getReturnableOnAdminExists(request.getAccountId(), () -> promoteToAdmin(businessAccount, request.getTargetId()));
-        }
-
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Target is not Employee Account");
+        securityManager.validateTokenAndPermission(request.getAccountId(), request.getToken(), Permissions.ACCOUNTS_PROMOTE);
+        return status.promote(request);
     }
 
+    /*Admin can demote another admin to "Employee", this will cause default permissions*/
     public WorkerAccount demote(TargetAccountRequest request){
-        authenticator.validateToken(request.getToken(), request.getAccountIdString());
-
-        BusinessAccount businessAccount = repos.getBusinessIfExists(request.getBusinessId());
-        if (businessAccount.getAccountType(request.getTargetId().getAccountIdString())
-                .equals(BusinessAccount.adminAccountType)){
-
-            return getReturnableOnAdminExists(request.getAccountId(), () -> demoteToEmployee(businessAccount, request.getTargetId()));
-        }
-
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Target is not Employee Account");
-    }
-    private WorkerAccount promoteToAdmin(BusinessAccount businessAccount, AccountId accountToPromote){
-        businessAccount.promote(accountToPromote.getAccountIdString());
-
-        repos.saveBusinessAccount(businessAccount);
-
-        AdminAccount newAdmin =
-                getAdminFromEmployee(repos.getEmployeeIfExists(accountToPromote));
-
-        repos.saveAdminAccount(newAdmin);
-
-        repos.removeEmployeeAccount(accountToPromote);
-
-        if(repos.adminExists(accountToPromote) && !repos.employeeExists(accountToPromote)){
-            AdminAccount returnable = repos.getAdminIfExists(accountToPromote);
-            /*Do not return Password!*/
-            returnable.setPassword(null);
-
-            return returnable;
-        }
-
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Something went wrong during promotion!");
-    }
-
-    private WorkerAccount demoteToEmployee(BusinessAccount businessAccount, AccountId accountToDemote){
-        businessAccount.demote(accountToDemote.getAccountIdString());
-
-        repos.saveBusinessAccount(businessAccount);
-
-        EmployeeAccount newEmployee =
-                getEmployeeFromAdmin(repos.getAdminIfExists(accountToDemote));
-
-
-        repos.saveEmployeeAccount(newEmployee);
-
-        repos.removeAdminAccount(accountToDemote);
-
-        if(!repos.adminExists(accountToDemote) && repos.employeeExists(accountToDemote)){
-            EmployeeAccount returnable = repos.getEmployeeIfExists(accountToDemote);
-            /*Do not return Password!*/
-            returnable.setPassword(null);
-
-            return returnable;
-        }
-
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Something went wrong during demotion!");
-    }
-
-    private AdminAccount getAdminFromEmployee(EmployeeAccount account){
-        AdminAccount retAccount =
-                new AdminAccount(account.getBusinessId(),
-                        account.getEmail(), account.getPassword(),
-                        account.getFirstName(), account.getLastName(),
-                        account.getJobTitle());
-
-        retAccount.setAccountId(account.getAccountId());
-
-        return retAccount;
-    }
-
-    private EmployeeAccount getEmployeeFromAdmin(AdminAccount account){
-        EmployeeAccount retAccount =
-                new EmployeeAccount(account.getBusinessId(),
-                        account.getEmail(), account.getPassword(),
-                        account.getFirstName(), account.getLastName(),
-                        account.getJobTitle());
-
-        retAccount.setAccountId(account.getAccountId());
-
-        return retAccount;
+        securityManager.validateTokenAndPermission(request.getAccountId(), request.getToken(), Permissions.ACCOUNTS_DEMOTE);
+        return status.demote(request);
     }
 }

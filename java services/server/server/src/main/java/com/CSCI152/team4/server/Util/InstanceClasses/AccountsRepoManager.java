@@ -37,7 +37,6 @@ public class AccountsRepoManager implements AccountsRepoInterface {
     }
 
     public AdminAccount saveAdminAccount(AdminAccount account){
-        System.out.println(account.toString());
         return admins.save(account);
     }
 

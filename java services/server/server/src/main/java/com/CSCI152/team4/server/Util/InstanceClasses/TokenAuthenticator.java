@@ -34,20 +34,19 @@ public class TokenAuthenticator implements Authenticator {
     }
 
     @Override
-    public void validateToken(String token, String requestAccountId)
+    public void validateToken(String accountId, String token)
     {
         Token persistedToken = getTokenIfExists(token);
 
         if(persistedToken.isExpired()
-            || !persistedToken.getAccountId().equals(requestAccountId)){
-
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Token has been invalidated!");
+            || !persistedToken.getAccountId().equals(accountId)){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Token has been invalidated!", new Exception());
         }
 
     }
 
     @Override
-    public String getToken(String accountId) {
+    public String generateToken(String accountId) {
         return generateAndSaveToken(accountId);
     }
 
@@ -56,7 +55,7 @@ public class TokenAuthenticator implements Authenticator {
         String token = DigestUtils.sha256Hex(accountId + secret);
         Token persist = new Token(token, accountId,
                 Timestamp.valueOf(now()),
-                Timestamp.valueOf(LocalDateTime.now().plusMinutes(expirationInMins)));
+                Timestamp.valueOf(now().plusMinutes(expirationInMins)));
 
         repo.save(persist);
 
@@ -64,36 +63,33 @@ public class TokenAuthenticator implements Authenticator {
     }
 
     @Override
-    public void invalidateToken(String token, String requestAccountId) {
+    public void invalidateToken(String accountId, String token) {
         Token t = getTokenIfExists(token);
-        if(t.getAccountId().equals(requestAccountId)
+        if(t.getAccountId().equals(accountId)
                 || t.isExpired()){
             repo.delete(t);
         }
     }
 
-    public void refreshToken(String token, String accountId){
+    @Override
+    public void refreshToken(String accountId, String token){
 
         Token toRefresh = getTokenIfExists(token);
-
-        if(toRefresh.getAccountId().equals(accountId) && !toRefresh.isExpired()){
-            toRefresh.setExp(Timestamp.valueOf(LocalDateTime.now().plusMinutes(expirationInMins)));
-
-            repo.save(toRefresh);
-
+        if(!toRefresh.getAccountId().equals(accountId) || toRefresh.isExpired()){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unable to refresh token!", new Exception());
         }
 
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unable to refresh token!");
+        toRefresh.setExp(Timestamp.valueOf(LocalDateTime.now().plusMinutes(expirationInMins)));
+        repo.save(toRefresh);
     }
 
     private Token getTokenIfExists(String token){
-        Optional<Token> optional =  repo.findById(token);
 
-        if(optional.isPresent()) {
-            return optional.get();
+        if(repo.existsById(token)) {
+            return repo.findById(token).get();
         }
 
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No token found!");
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No token found!", new Exception());
     }
 
 }

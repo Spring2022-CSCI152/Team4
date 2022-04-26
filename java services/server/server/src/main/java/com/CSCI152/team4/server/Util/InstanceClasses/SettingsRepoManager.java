@@ -6,7 +6,11 @@ import com.CSCI152.team4.server.Repos.CustomerProfileFormatRepo;
 import com.CSCI152.team4.server.Repos.ReportFormatRepo;
 import com.CSCI152.team4.server.Util.Interfaces.SettingsRepoInterface;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.Optional;
 
 @Component
 public class SettingsRepoManager implements SettingsRepoInterface {
@@ -22,31 +26,43 @@ public class SettingsRepoManager implements SettingsRepoInterface {
 
     @Override
     public ReportFormat saveReportFormat(ReportFormat reportFormat) {
-        return null;
+        return reportFormats.save(reportFormat);
     }
 
     @Override
     public CustomerProfileFormat saveCustomerProfileFormat(CustomerProfileFormat profileFormat) {
-        return null;
+        return profileFormats.save(profileFormat);
     }
 
     @Override
     public boolean reportFormatExistsById(Integer businessId) {
-        return false;
+        return reportFormats.existsById(businessId);
     }
 
     @Override
     public boolean customerProfileFormatExistsById(Integer businessId) {
-        return false;
+        return profileFormats.existsById(businessId);
     }
 
     @Override
     public ReportFormat getReportFormatIfExists(Integer businessId) {
-        return null;
+        Optional<ReportFormat> optional = reportFormats.findById(businessId);
+
+        if(optional.isPresent()){
+            return optional.get();
+        }
+
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Report Format Not Found!");
     }
 
     @Override
-    public CustomerProfileFormat getCustomerProfileIfExists(Integer businessId) {
-        return null;
+    public CustomerProfileFormat getCustomerProfileFormatIfExists(Integer businessId) {
+        Optional<CustomerProfileFormat> optional = profileFormats.findById(businessId);
+
+        if(optional.isPresent()){
+            return optional.get();
+        }
+
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Profile Format Not Found!");
     }
 }

@@ -94,34 +94,9 @@ public class AccountsController {
         return managementService.getAccountInfo(request);
     }
 
-    @GetMapping("/get_admin_account_info")
-    public AdminAccount getAdminAccountInfo(@RequestBody TargetAccountRequest request){
-        return managementService.getOtherAdminAccountInfo(request);
-    }
-
-    @GetMapping("/get_employee_account_info")
-    public EmployeeAccount getEmployeeAccountInfo(@RequestBody TargetAccountRequest request){
-        return managementService.getOtherEmployeeAccountInfo(request);
-    }
-
-    @PostMapping("/update_admin_account_info")
-    public AdminAccount updateAdminAccountInfo(@RequestBody AdminAccount request){
-        return managementService.updateAdminAccount(request);
-    }
-
-    @PostMapping("/update_employee_account_info")
-    public EmployeeAccount updateEmployeeAccountInfo(@RequestBody EmployeeAccount request){
-        return managementService.updateEmployeeAccount(request);
-    }
-
-    @PostMapping("/update_account_info_from_admin")
-    public WorkerAccount updateEmployeeFromAdmin(@RequestBody UpdateFromAdminRequest request){
-        return managementService.updateOtherFromAdmin(request);
-    }
-
-    @PostMapping("/update_permissions")
-    public WorkerAccount updateEmployeePermissions(@RequestBody PermissionUpdateRequest request){
-        return managementService.updateEmployeePermissions(request);
+    @GetMapping("/get_other_account_info")
+    public WorkerAccount getAdminAccountInfo(@RequestBody TargetAccountRequest request){
+        return managementService.getOtherAccountInfo(request);
     }
 
     @GetMapping("/get_accounts")
@@ -129,16 +104,28 @@ public class AccountsController {
         return managementService.getAccounts(request);
     }
 
-    /*
-    * TODO: PROMOTE AND DEMOTE
-    *  */
+    @PutMapping("/update_info")
+    public WorkerAccount updateInfo(@RequestBody UpdateRequest request){
+        return managementService.updateInfo(request);
+    }
 
-    @PostMapping("/promote")
+    @PutMapping("/update_other_info")
+    public WorkerAccount updateOtherInfo(@RequestBody UpdateOtherRequest request){
+        return managementService.updateOther(request);
+    }
+
+
+    @PutMapping("/update_permissions")
+    public WorkerAccount updateEmployeePermissions(@RequestBody PermissionUpdateRequest request){
+        return managementService.updateEmployeePermissions(request);
+    }
+
+    @PutMapping("/promote")
     public WorkerAccount promote(@RequestBody TargetAccountRequest request){
         return managementService.promote(request);
     }
 
-    @PostMapping("/demote")
+    @PutMapping("/demote")
     public WorkerAccount demote(@RequestBody TargetAccountRequest request){
         return managementService.demote(request);
     }

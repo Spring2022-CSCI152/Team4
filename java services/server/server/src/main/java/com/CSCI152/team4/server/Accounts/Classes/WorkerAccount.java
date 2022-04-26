@@ -1,6 +1,8 @@
 package com.CSCI152.team4.server.Accounts.Classes;
 
 
+import com.CSCI152.team4.server.Accounts.Interfaces.IAccountId;
+
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
@@ -13,8 +15,8 @@ import java.util.Objects;
  * Data JPA*/
 
 @MappedSuperclass
-public class WorkerAccount {
-
+public abstract class WorkerAccount implements IAccountId {
+//No real reason for it to be abstract, but it implies that other classes will extend this
 
     @Column(nullable = false, insertable = false, updatable = false)
     private Integer businessId;
@@ -58,6 +60,7 @@ public class WorkerAccount {
 
     public WorkerAccount() {
     }
+
 
     public Integer getBusinessId() {
         return businessId;
@@ -119,11 +122,17 @@ public class WorkerAccount {
         return token;
     }
 
-    public void setToken(String token) {
+    public void setToken(String token){
         this.token = token;
-    }
+    };
 
-    public String getAccountIdString(){return "";}
+    public abstract String getAccountIdString();
+
+    public AccountId getAccountId(){return null;}
+
+    public abstract void setAccountId(String accountId);
+
+    public abstract void setAccountId(AccountId accountId);
 
     @Override
     public boolean equals(Object o) {
@@ -146,5 +155,4 @@ public class WorkerAccount {
                 getJobTitle());
     }
 
-    public AccountId getAccountId(){ return null;}
 }

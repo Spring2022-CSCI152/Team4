@@ -2,7 +2,6 @@ package com.CSCI152.team4.server.Reports.Classes;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -162,6 +161,9 @@ public class Profile {
     }
 
     public List<String> getReports() {
+        if(reports == null){
+            reports = new ArrayList<>();
+        }
         return reports;
     }
 
@@ -171,8 +173,23 @@ public class Profile {
 
     public void appendToReports(String reportId){
         if(this.reports == null){
-            this.reports = new ArrayList<>();
+            this.reports = new ArrayList<String>();
         }
         this.reports.add(reportId);
+    }
+
+    @Override
+    public String toString() {
+        return "Profile{" +
+                "profileId=" + profileId +
+                ", name='" + name + '\'' +
+                ", status='" + status + '\'' +
+                ", address=" + address +
+                ", banDuration=" + banDuration +
+                ", attributes=" + attributes +
+                ", imageName='" + imageName + '\'' +
+                ", involvement='" + involvement + '\'' +
+                ", reports=" + reports +
+                '}';
     }
 }

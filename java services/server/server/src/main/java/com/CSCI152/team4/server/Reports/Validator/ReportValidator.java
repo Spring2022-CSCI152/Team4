@@ -4,6 +4,7 @@ import com.CSCI152.team4.server.Accounts.Settings.CustomerProfileFormat;
 import com.CSCI152.team4.server.Accounts.Settings.ReportFormat;
 import com.CSCI152.team4.server.Reports.Classes.Profile;
 import com.CSCI152.team4.server.Reports.Classes.Report;
+import com.CSCI152.team4.server.Reports.Interfaces.IReportValidator;
 import com.CSCI152.team4.server.Util.InstanceClasses.SettingsRepoManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,11 +12,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.UUID;
 
 /*This class serves as a utility to ensure only the desired input is
 * accepted and saved*/
 @Component
-public class ReportValidator {
+public class ReportValidator implements IReportValidator {
 
     private final SettingsRepoManager settingsRepoManager;
 
@@ -24,9 +26,13 @@ public class ReportValidator {
         this.settingsRepoManager = settingsRepoManager;
     }
 
+    @Override
     public void validateReport(Report report){
         if(!settingsRepoManager.reportFormatExistsById(report.getBusinessId())){
             throw new ResponseStatusException(HttpStatus.OK, "Business Not Found!");
+        }
+        if (report.getReportIdString() == null){
+            report.setReportIdString(UUID.randomUUID().toString());
         }
         ReportFormat reportFormat =
                 settingsRepoManager.getReportFormatIfExists(report.getBusinessId());
@@ -43,12 +49,17 @@ public class ReportValidator {
         report.setBox5((reportFormat.isBox5()) ? report.getBox5() : null);
     }
 
+    @Override
     public void validateProfile(Profile profile){
         if(!settingsRepoManager.reportFormatExistsById(profile.getBusinessId())){
             throw new ResponseStatusException(HttpStatus.OK, "Business Not Found!");
         }
+
+        if(profile.getProfileIdString() == null){
+            profile.setProfileIdString(UUID.randomUUID().toString());
+        }
         CustomerProfileFormat profileFormat =
-                settingsRepoManager.getCustomerProfileIfExists(profile.getBusinessId());
+                settingsRepoManager.getCustomerProfileFormatIfExists(profile.getBusinessId());
 
         profile.setName((profileFormat.isName()) ? profile.getName() : null);
         profile.setStatus((profileFormat.isStatus()) ? profile.getStatus() : null);
@@ -61,6 +72,7 @@ public class ReportValidator {
 
     }
 
+    @Override
     public void validateProfiles(List<Profile> profileList){
 
         for(Profile profile : profileList){

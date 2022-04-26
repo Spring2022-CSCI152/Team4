@@ -2,11 +2,8 @@ package com.CSCI152.team4.server.Accounts.Requests;
 
 import com.CSCI152.team4.server.Accounts.Classes.AccountId;
 import com.CSCI152.team4.server.Util.InstanceClasses.Request;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
 
-public class AccountCreationRequest extends Request {
-
+public class UpdateRequest extends Request {
 
     private String email;
     private String password;
@@ -14,11 +11,10 @@ public class AccountCreationRequest extends Request {
     private String lastName;
     private String jobTitle;
 
-    public AccountCreationRequest(){}
+    public UpdateRequest() {
+    }
 
-    public AccountCreationRequest(String email, String password,
-                                  String firstName, String lastName,
-                                  String jobTitle) {
+    public UpdateRequest(String email, String password, String firstName, String lastName, String jobTitle) {
         this.email = email;
         this.password = password;
         this.firstName = firstName;
@@ -26,10 +22,7 @@ public class AccountCreationRequest extends Request {
         this.jobTitle = jobTitle;
     }
 
-    public AccountCreationRequest(String token, AccountId accountId,
-                                  String email, String password,
-                                  String firstName, String lastName,
-                                  String jobTitle) {
+    public UpdateRequest(String token, AccountId accountId, String email, String password, String firstName, String lastName, String jobTitle) {
         super(token, accountId);
         this.email = email;
         this.password = password;
@@ -37,6 +30,7 @@ public class AccountCreationRequest extends Request {
         this.lastName = lastName;
         this.jobTitle = jobTitle;
     }
+
 
     public String getEmail() {
         return email;
@@ -52,11 +46,6 @@ public class AccountCreationRequest extends Request {
 
     public void setPassword(String password) {
         this.password = password;
-        if(password == null){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    "No Null Fields Allowed");
-        }
-
     }
 
     public String getFirstName() {
@@ -81,19 +70,5 @@ public class AccountCreationRequest extends Request {
 
     public void setJobTitle(String jobTitle) {
         this.jobTitle = jobTitle;
-    }
-
-    public void validate() {
-
-
-        if(super.getToken().equals("") || super.getAccountIdString().equals("")
-                || super.getBusinessId() == null
-                && email.equals("") || password.equals("")
-                || firstName.equals("") || lastName.equals("")
-                || jobTitle.equals("")){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    "Invalid Request, Contains Empty Fields");
-        }
-
     }
 }

@@ -1,6 +1,3 @@
-
-application.properties
-/application.properties
 **/application.properties
 !**/src/main/resources/
 HELP.md
@@ -37,7 +34,6 @@ build/
 ### VS Code ###
 .vscode/
 application.properties
-
 
 *.env
 .env

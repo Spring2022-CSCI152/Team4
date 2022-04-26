@@ -83,4 +83,14 @@ public class Token {
     public int hashCode() {
         return Objects.hash(getToken(), getAccountId(), getIss(), getExp());
     }
+
+    @Override
+    public String toString() {
+        return "Token{" +
+                "token='" + token + '\'' +
+                ", accountId='" + accountId + '\'' +
+                ", iss=" + iss +
+                ", exp=" + exp +
+                '}';
+    }
 }
