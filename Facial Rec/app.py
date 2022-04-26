@@ -39,7 +39,7 @@ def save_image_to_local_system(path, image_b64):
 	size = int(len(image_b64)/8)
 	image = Image.open(BytesIO(base64.b64decode(image_b64))) 
 	# if size > 80000:
-	# 	image=image.rotate(270, expand=True)
+	# 	image=image.rotate(270, expand=True) # <- janky fix if needed
 	
 	image.save(path)
 	image.close()
