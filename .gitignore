@@ -38,7 +38,10 @@ build/
 .vscode/
 application.properties
 
+
 *.env
 .env
 **/.env
 **/suspects/**
+**/node_modules/**
+
