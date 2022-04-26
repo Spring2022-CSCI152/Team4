@@ -51,6 +51,7 @@ def save_image_to_local_system(path, image_b64):
 			image=image.rotate(90, expand=True)
 		
 		image.save(path)
+		image.close()
 
 # extracts the fields in a request
 def get_feilds(request_data):
