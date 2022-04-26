@@ -4,6 +4,7 @@ import com.CSCI152.team4.server.Accounts.Settings.CustomerProfileFormat;
 import com.CSCI152.team4.server.Accounts.Settings.ReportFormat;
 import com.CSCI152.team4.server.Reports.Classes.Profile;
 import com.CSCI152.team4.server.Reports.Classes.Report;
+import com.CSCI152.team4.server.Reports.Interfaces.IReportValidator;
 import com.CSCI152.team4.server.Util.InstanceClasses.SettingsRepoManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,7 +17,7 @@ import java.util.UUID;
 /*This class serves as a utility to ensure only the desired input is
 * accepted and saved*/
 @Component
-public class ReportValidator implements com.CSCI152.team4.server.Reports.Interfaces.IReportValidator {
+public class ReportValidator implements IReportValidator {
 
     private final SettingsRepoManager settingsRepoManager;
 
