@@ -115,17 +115,17 @@ public class AccountsController {
     }
 
 
-    @PostMapping("/update_permissions")
+    @PutMapping("/update_permissions")
     public WorkerAccount updateEmployeePermissions(@RequestBody PermissionUpdateRequest request){
         return managementService.updateEmployeePermissions(request);
     }
 
-    @PostMapping("/promote")
+    @PutMapping("/promote")
     public WorkerAccount promote(@RequestBody TargetAccountRequest request){
         return managementService.promote(request);
     }
 
-    @PostMapping("/demote")
+    @PutMapping("/demote")
     public WorkerAccount demote(@RequestBody TargetAccountRequest request){
         return managementService.demote(request);
     }

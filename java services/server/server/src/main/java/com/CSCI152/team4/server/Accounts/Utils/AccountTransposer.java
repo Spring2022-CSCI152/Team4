@@ -1,12 +1,14 @@
 package com.CSCI152.team4.server.Accounts.Utils;
 
 import com.CSCI152.team4.server.Accounts.Classes.WorkerAccount;
-import com.CSCI152.team4.server.Accounts.Interfaces.IAccountClassTransposer;
+import com.CSCI152.team4.server.Accounts.Interfaces.IAccountTransposer;
+import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-public class AccountClassTransposer implements IAccountClassTransposer {
+@Component
+public class AccountTransposer implements IAccountTransposer {
 
     @Override
     public WorkerAccount transposeTo(Class accountType, WorkerAccount account)

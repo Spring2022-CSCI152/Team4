@@ -21,5 +21,4 @@ public enum Permissions {
     ACCOUNTS_VIEW,
     ACCOUNTS_UPDATE,
     PERMISSIONS_EDIT
-
 }

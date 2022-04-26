@@ -10,12 +10,10 @@ import com.CSCI152.team4.server.Util.InstanceClasses.AccountsRepoManager;
 import com.CSCI152.team4.server.Util.InstanceClasses.Request;
 import com.CSCI152.team4.server.Util.Interfaces.AccountsRepoInterface;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.core.RepositoryCreationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.persistence.Column;
 import java.util.List;
 
 @Component
