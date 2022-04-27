@@ -2,6 +2,7 @@ package com.CSCI152.team4.server.Accounts.Services;
 
 import com.CSCI152.team4.server.Accounts.Classes.AccountId;
 import com.CSCI152.team4.server.Accounts.Classes.AdminAccount;
+import com.CSCI152.team4.server.Accounts.Classes.EmployeeAccount;
 import com.CSCI152.team4.server.Accounts.Classes.WorkerAccount;
 import com.CSCI152.team4.server.Accounts.Requests.TargetAccountRequest;
 import com.CSCI152.team4.server.Accounts.Settings.Permissions;
@@ -17,6 +18,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -67,6 +70,17 @@ class AccountManagementServiceTest {
         account.setAccountId(accountId);
         return account;
     }
+
+    EmployeeAccount getNewEmployee(){
+        return new EmployeeAccount(150, "email", "password", "name1", "name2", "admin", List.of());
+    }
+
+    EmployeeAccount getEmployeeFromId(AccountId accountId){
+        EmployeeAccount account = getNewEmployee();
+        account.setAccountId(accountId);
+        return account;
+    }
+
     @Test
     void itShouldGetAccountInfo() {
         /*Behavior:
