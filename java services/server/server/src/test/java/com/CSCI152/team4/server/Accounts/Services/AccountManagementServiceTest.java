@@ -15,6 +15,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -129,6 +131,31 @@ class AccountManagementServiceTest {
         verify(accounts, times(1)).getOtherAccountInfo(targetedRequest);
         verifyNoMoreInteractions(securityManager, accounts);
         assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+    }
+
+    @Test
+    void itShouldThrowErrorOnGetOtherAccountsInfoWithDifferentBusinessIds(){
+        //Given
+        // Given
+        String accountIdString = "SomeAcctId";
+        String email = "someEmail";
+        Integer businessId = Integer.valueOf(100);
+        Integer targetedBusinessId = Integer.valueOf(102);
+        String token = "token";
+        AccountId requester = new AccountId(accountIdString, email, businessId);
+        AccountId target = new AccountId("targetId", "targetEmail", targetedBusinessId);
+        given(targetedRequest.getAccountId()).willReturn(requester);
+        given(targetedRequest.getTargetId()).willReturn(target);
+        given(targetedRequest.getToken()).willReturn(token);
+
+        Permissions expectedPermission = Permissions.ACCOUNTS_VIEW;
+        doNothing().when(securityManager).validateTokenAndPermission(requester, token, expectedPermission);
+        //When
+        //Then
+        Exception e = assertThrows(ResponseStatusException.class, () -> underTest.getOtherAccountInfo(targetedRequest));
+
+        assertThat(e).hasMessageContaining(HttpStatus.FORBIDDEN.name())
+                .hasMessageContaining("Different Business IDs");
     }
 
     @Test
