@@ -1,6 +1,5 @@
 package com.CSCI152.team4.server.Reports.Service;
 
-import com.CSCI152.team4.server.Accounts.Classes.AccountId;
 import com.CSCI152.team4.server.Accounts.Settings.Permissions;
 import com.CSCI152.team4.server.Reports.Classes.Profile;
 import com.CSCI152.team4.server.Reports.Classes.ProfileId;
@@ -13,12 +12,8 @@ import com.CSCI152.team4.server.Reports.Requests.ReportSubmissionRequest;
 import com.CSCI152.team4.server.Reports.Validator.ReportValidator;
 import com.CSCI152.team4.server.Repos.CustomerProfilesRepo;
 import com.CSCI152.team4.server.Repos.ReportsRepo;
-import com.CSCI152.team4.server.Util.InstanceClasses.AccountsRepoManager;
 import com.CSCI152.team4.server.Util.InstanceClasses.Request;
 import com.CSCI152.team4.server.Util.InstanceClasses.SecurityUtil;
-import com.CSCI152.team4.server.Util.InstanceClasses.TokenAuthenticator;
-import com.CSCI152.team4.server.Util.Interfaces.AccountsRepoInterface;
-import com.CSCI152.team4.server.Util.Interfaces.Authenticator;
 import com.CSCI152.team4.server.Util.Interfaces.SecurityManager;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -38,31 +33,25 @@ import static java.time.LocalDateTime.now;
 public class ReportsService {
 
     private Integer defaultPageSize ;
-    private Authenticator authenticator;
     private ReportsRepo reports;
     private CustomerProfilesRepo profiles;
     private IReportValidator validator;
-    private AccountsRepoInterface accountsRepoManager;
     private SecurityManager securityManager;
 
     public ReportsService(@Value("${spring.data.web.pageable.default-page-size}") Integer defaultPageSize,
-                          TokenAuthenticator authenticator,
                           ReportsRepo reports,
                           CustomerProfilesRepo profiles,
                           ReportValidator validator,
-                          AccountsRepoManager accountsRepoManager,
                           SecurityUtil securityManager) {
         this.defaultPageSize = defaultPageSize;
-        this.authenticator = authenticator;
         this.reports = reports;
         this.profiles = profiles;
         this.validator = validator;
-        this.accountsRepoManager = accountsRepoManager;
         this.securityManager = securityManager;
     }
 
     public Page<Report> getReports(PageableRequest request){
-        authenticator.validateToken(request.getToken(), request.getAccountIdString());
+        securityManager.validateToken(request.getAccountId(), request.getToken());
 
         if(request.getPage() == null){
             request.setPageable(0, defaultPageSize, Sort.by("date").descending());
@@ -71,8 +60,7 @@ public class ReportsService {
     }
 
     public void saveReport(ReportSubmissionRequest request){
-        authenticator.validateToken(request.getToken(), request.getAccountIdString());
-        validatePermission(request.getAccountId(), Permissions.REPORT_CREATE);
+        securityManager.validateTokenAndPermission(request.getAccountId(), request.getToken(), Permissions.REPORT_CREATE);
 
         Report reportToSave = request.getReport();
 
@@ -114,7 +102,7 @@ public class ReportsService {
     }
 
     public Profile getProfile(String profileIdString, Request request){
-        authenticator.validateToken(request.getToken(), request.getAccountIdString());
+        securityManager.validateToken(request.getAccountId(), request.getToken());
 
         ProfileId profileId = new ProfileId(request.getBusinessId(), profileIdString);
 
@@ -126,7 +114,7 @@ public class ReportsService {
     }
 
     public Page<Profile> getProfilesByPage(PageableRequest request){
-        authenticator.validateToken(request.getToken(), request.getAccountIdString());
+        securityManager.validateToken(request.getAccountId(), request.getToken());
 
         if(request.getPage() == null){
             request.setPageable(0, defaultPageSize, Sort.by("name").ascending());
@@ -135,8 +123,7 @@ public class ReportsService {
     }
 
     public Report updateReport(ReportSubmissionRequest request){
-        authenticator.validateToken(request.getToken(), request.getAccountIdString());
-        validatePermission(request.getAccountId(), Permissions.REPORT_EDIT);
+        securityManager.validateTokenAndPermission(request.getAccountId(), request.getToken(), Permissions.REPORT_EDIT);
 
         ReportId reportId = request.getReport().getReportId();
 
@@ -157,8 +144,7 @@ public class ReportsService {
 
 
     public Profile updateProfile(ProfileSubmissionRequest request){
-        authenticator.validateToken(request.getToken(), request.getAccountIdString());
-        validatePermission(request.getAccountId(), Permissions.PROFILES_EDIT);
+        securityManager.validateTokenAndPermission(request.getAccountId(), request.getToken(), Permissions.PROFILES_EDIT);
 
         ProfileId profileId = request.getProfile().getProfileId();
 
@@ -169,18 +155,5 @@ public class ReportsService {
         Profile updatedProfile = request.getProfile();
 
         return profiles.save(updatedProfile);
-
-    }
-
-    private void validatePermission(AccountId accountId, Permissions permission){
-        if(!isPermitted(accountId, permission)){
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not Allowed!");
-        }
-    }
-
-    private boolean isPermitted(AccountId accountId, Permissions permission){
-        return accountsRepoManager.adminExists(accountId) ||
-                accountsRepoManager.getEmployeeIfExists(accountId)
-                        .getPermissionsList().contains(permission.name());
     }
 }

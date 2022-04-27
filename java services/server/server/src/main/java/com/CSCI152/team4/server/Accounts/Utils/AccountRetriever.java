@@ -19,7 +19,7 @@ import java.util.List;
 @Component
 public class AccountRetriever implements IAccountRetriever {
 
-    private AccountsRepoInterface repos;
+    private final AccountsRepoInterface repos;
 
     @Autowired
     public AccountRetriever(AccountsRepoManager repos) {
