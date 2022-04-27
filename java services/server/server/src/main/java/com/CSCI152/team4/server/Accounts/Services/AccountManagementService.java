@@ -47,7 +47,7 @@ public class AccountManagementService {
         this.permissions = permissions;
         this.status = status;
     }
-    
+
     public WorkerAccount getAccountInfo(Request request){
         securityManager.validateToken(request.getAccountId(), request.getToken());
         return accounts.getAccountInfo(request);
