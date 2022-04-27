@@ -32,6 +32,4 @@ public class AuthController {
     public ResponseEntity<Enum<HttpStatus>> invalidate(@RequestBody Request request){
         return service.invalidateToken(request);
     }
-
-
 }

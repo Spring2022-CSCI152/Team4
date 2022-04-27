@@ -30,18 +30,14 @@ public class ReportsController {
 
     @PostMapping("/set_report_format")
     public ResponseEntity<Enum<HttpStatus>> setReportFormat(@RequestBody ReportFormatUpdateRequest request){
-
         settingsService.setReportFormat(request);
-
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
     @PostMapping("/set_profile_format")
     public ResponseEntity<Enum<HttpStatus>> setProfileFormat(@RequestBody ProfileFormatUpdateRequest request){
-
         settingsService.setProfileFormat(request);
-
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

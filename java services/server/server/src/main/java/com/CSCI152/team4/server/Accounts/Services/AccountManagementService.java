@@ -40,13 +40,6 @@ public class AccountManagementService {
     private final IAccountPermissionUpdater permissions;
     private final IAccountStatusChanger status;
 
-    /*
-    * Responsibilities:
-    * AccountRetrieval -> AccountRetriever
-    * AccountUpdates -> AccountUpdater
-    * Promote/Demote -> AccountStatusChanger
-    * Account Transpose -> AccountClassTranspose
-    * */
     @Autowired
     public AccountManagementService(SecurityUtil securityManager,
                                     AccountRetriever accounts, AccountUpdater updater,
