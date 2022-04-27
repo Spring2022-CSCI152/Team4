@@ -1,10 +1,7 @@
 package com.CSCI152.team4.server.Accounts.Services;
 
 import com.CSCI152.team4.server.Accounts.Classes.*;
-import com.CSCI152.team4.server.Accounts.Interfaces.IAccountPermissionUpdater;
-import com.CSCI152.team4.server.Accounts.Interfaces.IAccountRetriever;
-import com.CSCI152.team4.server.Accounts.Interfaces.IAccountStatusChanger;
-import com.CSCI152.team4.server.Accounts.Interfaces.IAccountUpdater;
+import com.CSCI152.team4.server.Accounts.Interfaces.*;
 import com.CSCI152.team4.server.Accounts.Requests.PermissionUpdateRequest;
 import com.CSCI152.team4.server.Accounts.Requests.TargetAccountRequest;
 import com.CSCI152.team4.server.Accounts.Requests.UpdateOtherRequest;
@@ -59,7 +56,7 @@ public class AccountManagementService {
 
     public WorkerAccount getOtherAccountInfo(TargetAccountRequest request){
         securityManager.validateTokenAndPermission(request.getAccountId(), request.getToken(), Permissions.ACCOUNTS_VIEW);
-        checkForSameBusinessIds(request);
+        checkForSameBusinessIds(request.getAccountId(), request.getTargetId());
         return accounts.getOtherAccountInfo(request);
     }
 
@@ -75,7 +72,7 @@ public class AccountManagementService {
 
     public WorkerAccount updateOther(UpdateOtherRequest request){
         securityManager.validateToken(request.getAccountId(), request.getToken());
-        checkForSameBusinessIds(request);
+        checkForSameBusinessIds(request.getAccountId(), request.getTargetId());
         return updater.updateOther(request);
     }
 
@@ -83,26 +80,26 @@ public class AccountManagementService {
     * Return the Account permissions as proof of success*/
     public WorkerAccount updateEmployeePermissions(PermissionUpdateRequest request){
         securityManager.validateTokenAndPermission(request.getAccountId(), request.getToken(), Permissions.PERMISSIONS_EDIT);
-        checkForSameBusinessIds(request);
+        checkForSameBusinessIds(request.getAccountId(), request.getTargetId());
         return permissions.updatePermissions(request);
     }
 
     /*Admin can Promote another Account to Admin if not already one*/
     public WorkerAccount promote(TargetAccountRequest request){
         securityManager.validateTokenAndPermission(request.getAccountId(), request.getToken(), Permissions.ACCOUNTS_PROMOTE);
-        checkForSameBusinessIds(request);
+        checkForSameBusinessIds(request.getAccountId(), request.getTargetId());
         return status.promote(request);
     }
 
     /*Admin can demote another admin to "Employee", this will cause default permissions*/
     public WorkerAccount demote(TargetAccountRequest request){
         securityManager.validateTokenAndPermission(request.getAccountId(), request.getToken(), Permissions.ACCOUNTS_DEMOTE);
-        checkForSameBusinessIds(request);
+        checkForSameBusinessIds(request.getAccountId(), request.getTargetId());
         return status.demote(request);
     }
 
-    private void checkForSameBusinessIds(TargetAccountRequest request){
-        if(!request.getAccountId().getBusinessId().equals(request.getTargetId().getBusinessId())){
+    private void checkForSameBusinessIds(AccountId requester, AccountId target){
+        if(!requester.getBusinessId().equals(target.getBusinessId())){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Different Business IDs");
         }
     }
