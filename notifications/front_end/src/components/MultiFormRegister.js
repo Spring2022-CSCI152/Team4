@@ -13,14 +13,6 @@ function RegisterForms() {
       password: "", 
       businessName: "",
       jobTitle: "",
-//move to report
-      reportBusinessId:false,
-      reportId:false,
-      profiles:false,
-      date:false,
-      time:false,
-      author:false,
-      type:false
   });
 
 

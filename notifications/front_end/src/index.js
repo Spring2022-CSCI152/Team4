@@ -5,7 +5,6 @@ import { BrowserRouter } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './reportDashboard.css';
 import './utility.css';
-import Form from './components/testMultiRegister';
 
 
 ReactDOM.render(

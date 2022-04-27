@@ -94,7 +94,7 @@ function ReportFormat() {
           <Form>
             <Form.Check
               type="switch"
-              label="box1"
+              label="Box1 Source of Activity"
               checked={isCheck.box1}
               onChange={(e) => {
                 setCheck({ ...isCheck, box1: !isCheck.box1 });
@@ -102,7 +102,7 @@ function ReportFormat() {
             />
             <Form.Check
               type="switch"
-              label="box2"
+              label="Box2 Investigation"
               checked={isCheck.box1}
               onChange={(e) => {
                 setCheck({ ...isCheck, box2: !isCheck.box2 });
@@ -110,7 +110,7 @@ function ReportFormat() {
             />
             <Form.Check
               type="switch"
-              label="box3"
+              label="Box3 Resolution"
               checked={isCheck.box3}
               onChange={(e) => {
                 setCheck({ ...isCheck, box3: !isCheck.box3 });
@@ -118,7 +118,7 @@ function ReportFormat() {
             />
             <Form.Check
               type="switch"
-              label="box4"
+              label="Box4 Conclusion"
               checked={isCheck.box4}
               onChange={(e) => {
                 setCheck({ ...isCheck, box4: !isCheck.box4 });
@@ -126,7 +126,7 @@ function ReportFormat() {
             />
             <Form.Check
               type="switch"
-              label="box5"
+              label="Box5 Dispositional Information"
               checked={isCheck.box5}
               onChange={(e) => {
                 setCheck({ ...isCheck, box5: !isCheck.box5 });
@@ -134,7 +134,7 @@ function ReportFormat() {
             />
             <Form.Check
               type="switch"
-              label="attachments"
+              label="Attachments"
               checked={isCheck.attachments}
               onChange={(e) => {
                 setCheck({ ...isCheck, attachments: !isCheck.attachments });
@@ -142,7 +142,7 @@ function ReportFormat() {
             />
             <Form.Check
               type="switch"
-              label="changeLog"
+              label="Change Log"
               checked={isCheck.changeLog}
               onChange={(e) => {
                 setCheck({ ...isCheck, changeLog: !isCheck.changeLog });

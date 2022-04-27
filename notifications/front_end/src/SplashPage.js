@@ -1,7 +1,7 @@
 import logo from "./assets/logo.png";
 import React from "react";
 import SignIn from "./components/SignIn";
-import RegisterForms from "./components/testMultiRegister";
+import RegisterForms from "./components/MultiFormRegister";
 import { useState } from "react";
 import { Navbar } from "react-bootstrap";
 
