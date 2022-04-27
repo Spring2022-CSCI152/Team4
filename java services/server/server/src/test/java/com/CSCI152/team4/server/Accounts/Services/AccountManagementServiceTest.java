@@ -3,6 +3,8 @@ package com.CSCI152.team4.server.Accounts.Services;
 import com.CSCI152.team4.server.Accounts.Classes.AccountId;
 import com.CSCI152.team4.server.Accounts.Classes.AdminAccount;
 import com.CSCI152.team4.server.Accounts.Classes.WorkerAccount;
+import com.CSCI152.team4.server.Accounts.Requests.TargetAccountRequest;
+import com.CSCI152.team4.server.Accounts.Settings.Permissions;
 import com.CSCI152.team4.server.Accounts.Utils.AccountPermissionUpdater;
 import com.CSCI152.team4.server.Accounts.Utils.AccountRetriever;
 import com.CSCI152.team4.server.Accounts.Utils.AccountStatusChanger;
@@ -37,6 +39,9 @@ class AccountManagementServiceTest {
 
     @Mock
     private Request request;
+
+    @Mock
+    private TargetAccountRequest targetedRequest;
 
     @BeforeEach
     void setUp() {
@@ -75,20 +80,20 @@ class AccountManagementServiceTest {
         String email = "someEmail";
         Integer businessId = Integer.valueOf(100);
         String token = "token";
+        AccountId accountId = new AccountId(accountIdString, email, businessId);
+        given(request.getAccountId()).willReturn(accountId);
+        given(request.getToken()).willReturn(token);
 
-        given(request.getAccountId()).willReturn(new AccountId(accountIdString, email, businessId));
         AdminAccount expected = getAdminFromId(request.getAccountId());
         doReturn(expected).when(accounts).getAccountInfo(request);
 
-        given(request.getToken()).willReturn(token);
-
-        doNothing().when(securityManager).validateToken(any(), any());
+        doNothing().when(securityManager).validateToken(accountId, token);
 
         // When
         WorkerAccount returnable = underTest.getAccountInfo(request);
         // Then
 
-        verify(securityManager, times(1)).validateToken(any(), any());
+        verify(securityManager, times(1)).validateToken(accountId, token);
         verify(accounts, times(1)).getAccountInfo(request);
         verifyNoMoreInteractions(securityManager, accounts);
         assertThat(returnable).usingRecursiveComparison().isEqualTo(expected);
@@ -97,8 +102,33 @@ class AccountManagementServiceTest {
     @Test
     void itShouldGetOtherAccountInfo() {
         // Given
+        String accountIdString = "SomeAcctId";
+        String email = "someEmail";
+        Integer businessId = Integer.valueOf(100);
+        String token = "token";
+        AccountId requester = new AccountId(accountIdString, email, businessId);
+        AccountId target = new AccountId("targetId", "targetEmail", businessId);
+
+        AdminAccount expected = getAdminFromId(target);
+
+        given(targetedRequest.getAccountId()).willReturn(requester);
+        given(targetedRequest.getTargetId()).willReturn(target);
+        given(targetedRequest.getToken()).willReturn(token);
+        given(targetedRequest.getBusinessId()).willReturn(businessId);
+
+        Permissions expectedPermission = Permissions.ACCOUNTS_VIEW;
+        doNothing().when(securityManager).validateTokenAndPermission(requester, token, expectedPermission);
+
+        doReturn(expected).when(accounts).getOtherAccountInfo(targetedRequest);
+
         // When
+        WorkerAccount actual = underTest.getOtherAccountInfo(targetedRequest);
         // Then
+
+        verify(securityManager, times(1)).validateTokenAndPermission(requester, token, expectedPermission);
+        verify(accounts, times(1)).getOtherAccountInfo(targetedRequest);
+        verifyNoMoreInteractions(securityManager, accounts);
+        assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
     }
 
     @Test
