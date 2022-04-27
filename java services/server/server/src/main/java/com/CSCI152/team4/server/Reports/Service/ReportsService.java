@@ -62,7 +62,7 @@ public class ReportsService {
     }
 
     public Page<Report> getReports(PageableRequest request){
-        authenticator.validateToken(request.getToken(), request.getAccountIdString());
+        securityManager.validateToken(request.getAccountId(), request.getToken());
 
         if(request.getPage() == null){
             request.setPageable(0, defaultPageSize, Sort.by("date").descending());
@@ -71,8 +71,7 @@ public class ReportsService {
     }
 
     public void saveReport(ReportSubmissionRequest request){
-        authenticator.validateToken(request.getToken(), request.getAccountIdString());
-        validatePermission(request.getAccountId(), Permissions.REPORT_CREATE);
+        securityManager.validateTokenAndPermission(request.getAccountId(), request.getToken(), Permissions.REPORT_CREATE);
 
         Report reportToSave = request.getReport();
 
@@ -114,7 +113,7 @@ public class ReportsService {
     }
 
     public Profile getProfile(String profileIdString, Request request){
-        authenticator.validateToken(request.getToken(), request.getAccountIdString());
+        securityManager.validateToken(request.getAccountId(), request.getToken());
 
         ProfileId profileId = new ProfileId(request.getBusinessId(), profileIdString);
 
@@ -126,7 +125,7 @@ public class ReportsService {
     }
 
     public Page<Profile> getProfilesByPage(PageableRequest request){
-        authenticator.validateToken(request.getToken(), request.getAccountIdString());
+        securityManager.validateToken(request.getAccountId(), request.getToken());
 
         if(request.getPage() == null){
             request.setPageable(0, defaultPageSize, Sort.by("name").ascending());
@@ -135,8 +134,7 @@ public class ReportsService {
     }
 
     public Report updateReport(ReportSubmissionRequest request){
-        authenticator.validateToken(request.getToken(), request.getAccountIdString());
-        validatePermission(request.getAccountId(), Permissions.REPORT_EDIT);
+        securityManager.validateTokenAndPermission(request.getAccountId(), request.getToken(), Permissions.REPORT_EDIT);
 
         ReportId reportId = request.getReport().getReportId();
 
@@ -157,8 +155,7 @@ public class ReportsService {
 
 
     public Profile updateProfile(ProfileSubmissionRequest request){
-        authenticator.validateToken(request.getToken(), request.getAccountIdString());
-        validatePermission(request.getAccountId(), Permissions.PROFILES_EDIT);
+        securityManager.validateTokenAndPermission(request.getAccountId(), request.getToken(), Permissions.PROFILES_EDIT);
 
         ProfileId profileId = request.getProfile().getProfileId();
 
@@ -169,18 +166,5 @@ public class ReportsService {
         Profile updatedProfile = request.getProfile();
 
         return profiles.save(updatedProfile);
-
-    }
-
-    private void validatePermission(AccountId accountId, Permissions permission){
-        if(!isPermitted(accountId, permission)){
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not Allowed!");
-        }
-    }
-
-    private boolean isPermitted(AccountId accountId, Permissions permission){
-        return accountsRepoManager.adminExists(accountId) ||
-                accountsRepoManager.getEmployeeIfExists(accountId)
-                        .getPermissionsList().contains(permission.name());
     }
 }
