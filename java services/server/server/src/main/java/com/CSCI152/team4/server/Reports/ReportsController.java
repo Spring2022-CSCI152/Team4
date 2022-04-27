@@ -76,7 +76,7 @@ public class ReportsController {
         return reportsService.getProfile(profileId, request);
     }
 
-    @GetMapping("get_profiles")
+    @GetMapping("/get_profiles")
     public Page<Profile> getProfiles(@RequestBody PageableRequest request){
         return reportsService.getProfilesByPage(request);
     }
