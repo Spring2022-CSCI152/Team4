@@ -7,19 +7,19 @@ function ProfileFormat() {
     status: true,
     address: true,
     banDuration: true,
-    attributes : true,
+    attributes: true,
     imageName: true,
     involvement: true,
-    reports: true
+    reports: true,
   });
 
   useEffect(() => {
-    const data = window.localStorage.getItem("checkStates");
+    const data = window.localStorage.getItem("profileCheckStates");
     if (data !== null) setCheck(JSON.parse(data));
   }, []);
 
   useEffect(() => {
-    window.localStorage.setItem("checkStates", JSON.stringify(isCheck));
+    window.localStorage.setItem("profileCheckStates", JSON.stringify(isCheck));
   }, [isCheck]);
 
   return (
@@ -32,7 +32,7 @@ function ProfileFormat() {
             label="Name"
             checked={isCheck.name}
             onChange={(e) => {
-              setCheck({ ...isCheck, name: !isCheck.name});
+              setCheck({ ...isCheck, name: !isCheck.name });
             }}
           />
           <Form.Check
@@ -40,7 +40,7 @@ function ProfileFormat() {
             label="Status"
             checked={isCheck.status}
             onChange={(e) => {
-              setCheck({ ...isCheck, status: !isCheck.status});
+              setCheck({ ...isCheck, status: !isCheck.status });
             }}
           />
           <Form.Check
@@ -48,7 +48,7 @@ function ProfileFormat() {
             label="Address"
             checked={isCheck.address}
             onChange={(e) => {
-              setCheck({ ...isCheck, address: !isCheck.address});
+              setCheck({ ...isCheck, address: !isCheck.address });
             }}
           />
           <Form.Check
@@ -56,7 +56,7 @@ function ProfileFormat() {
             label="Ban Duration"
             checked={isCheck.banDuration}
             onChange={(e) => {
-              setCheck({ ...isCheck, banDuration: !isCheck.banDuration});
+              setCheck({ ...isCheck, banDuration: !isCheck.banDuration });
             }}
           />
         </Form>
@@ -69,7 +69,7 @@ function ProfileFormat() {
             label="Attributes"
             checked={isCheck.attributes}
             onChange={(e) => {
-              setCheck({ ...isCheck, attributes: !isCheck.attributes});
+              setCheck({ ...isCheck, attributes: !isCheck.attributes });
             }}
           />
           <Form.Check
@@ -77,7 +77,7 @@ function ProfileFormat() {
             label="Image Name"
             checked={isCheck.imageName}
             onChange={(e) => {
-              setCheck({ ...isCheck, imageName: !isCheck.imageName});
+              setCheck({ ...isCheck, imageName: !isCheck.imageName });
             }}
           />
           <Form.Check
@@ -85,7 +85,7 @@ function ProfileFormat() {
             label="Involvement"
             checked={isCheck.involvement}
             onChange={(e) => {
-              setCheck({ ...isCheck, involvement: !isCheck.involvement});
+              setCheck({ ...isCheck, involvement: !isCheck.involvement });
             }}
           />
           <Form.Check
@@ -93,7 +93,7 @@ function ProfileFormat() {
             label="Reports"
             checked={isCheck.reports}
             onChange={(e) => {
-              setCheck({ ...isCheck, reports: !isCheck.reports});
+              setCheck({ ...isCheck, reports: !isCheck.reports });
             }}
           />
         </Form>
