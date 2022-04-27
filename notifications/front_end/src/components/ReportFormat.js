@@ -3,52 +3,52 @@ import React from "react";
 
 function ReportFormat({ formData, setFormData }) {
     return (
-        <>
-            <h6>Select fields to display on your Reports</h6>
-            <div class="row">
-                <div class="col-3">
+       <div className=" justify-content-center">
+     
+            <h6>Select fields to display on Reports</h6>
+          
+            <div className="row">  
+                <div className="col">
                     <Form>
                         <Form.Check
                             type="switch"
-                            id="custom-switch"
                             label="Business Id"
+                            value={formData.reportBusinessId.value}
                         />
                         <Form.Check
                             type="switch"
-                            id="custom-switch"
                             label="reportId"
+                            value={formData.reportId}
                         />
                         <Form.Check
                             type="switch"
-                            id="custom-switch"
                             label="profiles"
+                            value={formData.profiles}
                         />
                         <Form.Check
                             type="switch"
-                            id="custom-switch"
                             label="date"
+                            value={formData.date}
                         />
                         <Form.Check
                             type="switch"
-                            id="custom-switch"
                             label="time"
+                            value={formData.time}
                         />
                         <Form.Check
                             type="switch"
-                            id="custom-switch"
                             label="author"
+                            value={formData.author}
                         />
                         <Form.Check
                             type="switch"
-                            id="custom-switch"
                             label="type"
+                            value={formData.type}
                         />
                     </Form>
-
                 </div>
-
-                <div class="col">
-                    <Form>
+                <div className="col"> 
+                    <Form>  
                         <Form.Check
                             type="switch"
                             id="custom-switch"
@@ -87,15 +87,7 @@ function ReportFormat({ formData, setFormData }) {
                     </Form>
                 </div>
             </div>
-
-
-
-
-
-
-
-
-        </>
+        </div>
     );
 }
 

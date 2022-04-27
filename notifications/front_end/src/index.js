@@ -10,7 +10,7 @@ import Form from './components/testMultiRegister';
 
 ReactDOM.render(
     <BrowserRouter> 
-        <Form/>
+        <App/>
     </BrowserRouter>   ,
 document.getElementById('root') 
 );

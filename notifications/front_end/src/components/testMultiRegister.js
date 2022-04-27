@@ -3,21 +3,28 @@ import Register from "./Register";
 import ProfileFormat from "./ProfileFormat";
 import ReportFormat from "./ReportFormat";
 
-function Form() {
+function RegisterForms() {
   const [page, setPage] = useState(0);
   const [formData, setFormData] = useState(
   {
-      email: "",
-      businessName: "",
       firstName: "",
-      lastName: "",
-      password: "",
-      jobTitle: ""
+      lastName: "",      
+      email: "",
+      password: "", 
+      businessName: "",
+      jobTitle: "",
+//move to report
+      reportBusinessId:false,
+      reportId:false,
+      profiles:false,
+      date:false,
+      time:false,
+      author:false,
+      type:false
   });
 
-  
 
-  const FormTitles = ["Register", "Profile Format", "Report Format"];
+  const FormTitles = ["Register Business", "Profile Format", "Report Format"];
 
   const PageDisplay = () => {
     if (page === 0) {
@@ -30,19 +37,27 @@ function Form() {
   };
 
   return (
+  
+
+
     <div className="form">
-      <div className="progressbar">
-        <div
-          style={{ width: page === 0 ? "33.3%" : page == 1 ? "66.6%" : "100%" }}
-        ></div>
-      </div>
+      
       <div className="form-container">
         <div className="header">
-          <h1>{FormTitles[page]}</h1>
+          <h4>{FormTitles[page]}</h4>
         </div>
+        <hr className="green"></hr>
         <div className="body">{PageDisplay()}</div>
-        <div className="footer">
-          <button
+        <hr className="green"></hr>
+
+        <div className="footer mx-auto">
+          <div className="progressbar mx-auto ">
+          <div
+            style={{ width: page === 0 ? "33.3%" : page == 1 ? "66.6%" : "100%" }}
+          ></div>
+          </div>
+
+          <button className="btn btn-dark btn-lg btn-block"
             disabled={page == 0}
             onClick={() => {
               setPage((currPage) => currPage - 1);
@@ -50,7 +65,7 @@ function Form() {
           >
             Prev
           </button>
-          <button
+          <button className="btn btn-dark btn-lg btn-block"
             onClick={() => {
               if (page === FormTitles.length - 1) {
                 alert("FORM SUBMITTED");
@@ -65,7 +80,8 @@ function Form() {
         </div>
       </div>
     </div>
+  
   );
 }
 
-export default Form;
+export default RegisterForms;
