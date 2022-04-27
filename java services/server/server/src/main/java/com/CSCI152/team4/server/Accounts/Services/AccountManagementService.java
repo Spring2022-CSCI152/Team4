@@ -47,8 +47,7 @@ public class AccountManagementService {
         this.permissions = permissions;
         this.status = status;
     }
-
-    /*Get Own Account Info*/
+    
     public WorkerAccount getAccountInfo(Request request){
         securityManager.validateToken(request.getAccountId(), request.getToken());
         return accounts.getAccountInfo(request);
@@ -76,22 +75,18 @@ public class AccountManagementService {
         return updater.updateOther(request);
     }
 
-    /*Update an Employees Permissions from an Admin Account
-    * Return the Account permissions as proof of success*/
     public WorkerAccount updateEmployeePermissions(PermissionUpdateRequest request){
         securityManager.validateTokenAndPermission(request.getAccountId(), request.getToken(), Permissions.PERMISSIONS_EDIT);
         checkForSameBusinessIds(request.getAccountId(), request.getTargetId());
         return permissions.updatePermissions(request);
     }
 
-    /*Admin can Promote another Account to Admin if not already one*/
     public WorkerAccount promote(TargetAccountRequest request){
         securityManager.validateTokenAndPermission(request.getAccountId(), request.getToken(), Permissions.ACCOUNTS_PROMOTE);
         checkForSameBusinessIds(request.getAccountId(), request.getTargetId());
         return status.promote(request);
     }
 
-    /*Admin can demote another admin to "Employee", this will cause default permissions*/
     public WorkerAccount demote(TargetAccountRequest request){
         securityManager.validateTokenAndPermission(request.getAccountId(), request.getToken(), Permissions.ACCOUNTS_DEMOTE);
         checkForSameBusinessIds(request.getAccountId(), request.getTargetId());
