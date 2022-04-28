@@ -25,7 +25,7 @@ import { useNavigate } from "react-router-dom";
                   <Nav.Link as={Link} to={"/Profiles"}>Profiles</Nav.Link>
                   <Nav.Link as={Link} to={"/Admin"}>Admin</Nav.Link>
               </Nav> 
-              <Button variant="secondary" size="sm" onClick={()=>signOut()}>Sign Out</Button>
+              <button type="button" className="btn btn-sm btn-signout" onClick={()=>signOut()}>Sign Out</button>
               <FaUserCircle size="1.5em"  style={{ fill: "#00f200" }} />
             </Container>
           </Navbar>
