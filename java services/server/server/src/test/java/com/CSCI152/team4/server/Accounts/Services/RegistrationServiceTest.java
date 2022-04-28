@@ -3,28 +3,26 @@ package com.CSCI152.team4.server.Accounts.Services;
 import com.CSCI152.team4.server.Accounts.Classes.AccountId;
 import com.CSCI152.team4.server.Accounts.Classes.AdminAccount;
 import com.CSCI152.team4.server.Accounts.Classes.BusinessAccount;
+import com.CSCI152.team4.server.Accounts.Classes.EmployeeAccount;
 import com.CSCI152.team4.server.Accounts.Requests.AdminRequest;
 import com.CSCI152.team4.server.Accounts.Requests.BusinessRequest;
 import com.CSCI152.team4.server.Accounts.Requests.EmployeeRequest;
 import com.CSCI152.team4.server.Accounts.Settings.CustomerProfileFormat;
+import com.CSCI152.team4.server.Accounts.Settings.Permissions;
 import com.CSCI152.team4.server.Accounts.Settings.ReportFormat;
 import com.CSCI152.team4.server.Util.InstanceClasses.AccountsRepoManager;
 import com.CSCI152.team4.server.Util.InstanceClasses.SecurityUtil;
 import com.CSCI152.team4.server.Util.InstanceClasses.SettingsRepoManager;
-import com.CSCI152.team4.server.Util.Interfaces.AccountsRepoInterface;
-import com.CSCI152.team4.server.Util.Interfaces.SecurityManager;
-import com.CSCI152.team4.server.Util.Interfaces.SettingsRepoInterface;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import java.util.List;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
@@ -43,6 +41,13 @@ class RegistrationServiceTest {
     private AdminRequest adminRequest;
     @Mock
     private EmployeeRequest employeeRequest;
+
+    @Mock
+    AdminAccount adminAccount;
+    @Mock
+    EmployeeAccount employeeAccount;
+    @Mock
+    BusinessAccount businessAccount;
 
     @Captor
     ArgumentCaptor<BusinessAccount> businessAccountArgumentCaptor;
@@ -128,11 +133,65 @@ class RegistrationServiceTest {
         verifyNoMoreInteractions(securityManager, repos, securityManager, businessRequest);
     }
 
+
     @Test
     void itShouldRegisterAdmin() {
         // Given
+        Integer businessId = 100;
+        String email = "email";
+        String accountIdString = "string";
+        String token = "token";
+        AccountId accountId = new AccountId(accountIdString, email, businessId);
+        given(adminRequest.getAccountId()).willReturn(accountId);
+        given(adminRequest.getToken()).willReturn(token);
+
+        Permissions expectedPermission = Permissions.ACCOUNTS_REGISTER;
+        /* Authentication should be the first thing to happen*/
+        doNothing().when(securityManager).validateTokenAndPermission(accountId, token, expectedPermission);
+
+        /* Request validation should happen next*/
+        doNothing().when(adminRequest).validate();
+
+        /*Check for prior reg using email and business id is next*/
+        given(adminRequest.getBusinessId()).willReturn(businessId);
+        given(adminRequest.getEmail()).willReturn(email);
+
+        /*Get business account to update happens next*/
+        given(repos.getBusinessIfExists(businessId)).willReturn(businessAccount);
+
+        /*Getting new admin account from request should happen*/
+        given(adminRequest.getAdminAccount()).willReturn(adminAccount);
+
+        /* Get and Store password due to hashing*/
+        given(adminAccount.getPassword()).willReturn("pass");
+        doNothing().when(adminAccount).setPassword(any());
+
+        /* Then add admin account id string to business account*/
+        given(adminAccount.getAccountIdString()).willReturn(accountIdString);
+        doNothing().when(businessAccount).addAdmin(accountIdString);
+
+        given(repos.saveBusinessAccount(businessAccount)).willReturn(businessAccount);
+        given(repos.saveAdminAccount(adminAccount)).willReturn(adminAccount);
+
         // When
+        ResponseEntity<Enum<HttpStatus>> actual = underTest.registerAdmin(adminRequest);
+
         // Then
+        assertThat(actual).isEqualTo(new ResponseEntity<>(HttpStatus.CREATED));
+        verify(adminRequest, times(1)).getAccountId();
+        verify(adminRequest, times(1)).getToken();
+        verify(securityManager, times(1)).validateTokenAndPermission(accountId, token, expectedPermission);
+        verify(adminRequest, times(1)).validate();
+        verify(repos, times(1)).getBusinessIfExists(businessId);
+        verify(adminRequest, times(1)).getEmail();
+        verify(adminRequest, times(1)).getBusinessId();
+        verify(adminRequest, times(1)).getAdminAccount();
+        verify(adminAccount, times(1)).getPassword();
+        verify(adminAccount, times(1)).setPassword(any());
+        verify(businessAccount, times(1)).addAdmin(accountIdString);
+        verify(repos, times(1)).saveBusinessAccount(businessAccount);
+        verify(repos, times(1)).saveAdminAccount(adminAccount);
+        verifyNoMoreInteractions(securityManager, adminRequest, repos, adminAccount, businessAccount);
     }
 
     @Test
