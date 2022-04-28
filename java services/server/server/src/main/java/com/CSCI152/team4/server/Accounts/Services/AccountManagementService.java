@@ -70,7 +70,7 @@ public class AccountManagementService {
     }
 
     public WorkerAccount updateOther(UpdateOtherRequest request){
-        securityManager.validateToken(request.getAccountId(), request.getToken());
+        securityManager.validateTokenAndPermission(request.getAccountId(), request.getToken(), Permissions.ACCOUNTS_UPDATE);
         checkForSameBusinessIds(request.getAccountId(), request.getTargetId());
         return updater.updateOther(request);
     }

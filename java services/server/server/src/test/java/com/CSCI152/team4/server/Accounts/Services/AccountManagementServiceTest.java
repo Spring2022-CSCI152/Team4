@@ -5,6 +5,8 @@ import com.CSCI152.team4.server.Accounts.Classes.AdminAccount;
 import com.CSCI152.team4.server.Accounts.Classes.EmployeeAccount;
 import com.CSCI152.team4.server.Accounts.Classes.WorkerAccount;
 import com.CSCI152.team4.server.Accounts.Requests.TargetAccountRequest;
+import com.CSCI152.team4.server.Accounts.Requests.UpdateOtherRequest;
+import com.CSCI152.team4.server.Accounts.Requests.UpdateRequest;
 import com.CSCI152.team4.server.Accounts.Settings.Permissions;
 import com.CSCI152.team4.server.Accounts.Utils.AccountPermissionUpdater;
 import com.CSCI152.team4.server.Accounts.Utils.AccountRetriever;
@@ -43,9 +45,12 @@ class AccountManagementServiceTest {
 
     @Mock
     private Request request;
-
     @Mock
     private TargetAccountRequest targetedRequest;
+    @Mock
+    private UpdateRequest updateRequest;
+    @Mock
+    private UpdateOtherRequest updateOtherRequest;
 
     @BeforeEach
     void setUp() {
@@ -71,7 +76,7 @@ class AccountManagementServiceTest {
     }
 
     EmployeeAccount getNewEmployee(){
-        return new EmployeeAccount(150, "email", "password", "name1", "name2", "admin", List.of());
+        return new EmployeeAccount(150, "email", "password", "name1", "name2", "emp", List.of());
     }
 
     EmployeeAccount getEmployeeFromId(AccountId accountId){
@@ -148,7 +153,7 @@ class AccountManagementServiceTest {
 
     @Test
     void itShouldThrowErrorOnGetOtherAccountsInfoWithDifferentBusinessIds(){
-        //Given
+
         // Given
         String accountIdString = "SomeAcctId";
         String email = "someEmail";
@@ -166,30 +171,97 @@ class AccountManagementServiceTest {
         //When
         //Then
         Exception e = assertThrows(ResponseStatusException.class, () -> underTest.getOtherAccountInfo(targetedRequest));
-
         assertThat(e).hasMessageContaining(HttpStatus.FORBIDDEN.name())
                 .hasMessageContaining("Different Business IDs");
+
+        verify(securityManager, times(1)).validateTokenAndPermission(requester, token, expectedPermission);
+        verifyNoInteractions(accounts);
+        verifyNoMoreInteractions(securityManager);
     }
 
     @Test
     void itShouldGetAccounts() {
         // Given
+        String accountIdString = "SomeAcctId";
+        String email = "someEmail";
+        Integer businessId = Integer.valueOf(100);
+        Integer targetedBusinessId = Integer.valueOf(102);
+        String token = "token";
+        AccountId accountId = new AccountId(accountIdString, email, businessId);
+        AccountId account1 = new AccountId("account1", "account1", targetedBusinessId);
+        AccountId account2 = new AccountId("account2", "account2", targetedBusinessId);
+        List<WorkerAccount> accountsList
+                = List.of(getAdminFromId(accountId), getAdminFromId(account1), getEmployeeFromId(account2));
+        given(request.getAccountId()).willReturn(accountId);
+        given(request.getToken()).willReturn(token);
+        given(accounts.getAccounts(request)).willReturn(accountsList);
+        Permissions expectedPermission = Permissions.ACCOUNTS_VIEW;
+        doNothing().when(securityManager).validateTokenAndPermission(accountId, token, expectedPermission);
+
+
         // When
+        List<WorkerAccount> actual = underTest.getAccounts(request);
         // Then
+        assertThat(actual).usingRecursiveComparison().isEqualTo(accountsList);
+        verify(accounts, times(1)).getAccounts(request);
+        verify(securityManager, times(1))
+                .validateTokenAndPermission(accountId, token, expectedPermission);
+        verifyNoMoreInteractions(securityManager, accounts);
     }
 
     @Test
     void itShouldUpdateInfo() {
         // Given
+        String accountIdString = "SomeAcctId";
+        String email = "someEmail";
+        Integer businessId = Integer.valueOf(100);
+        String token = "token";
+        AccountId accountId = new AccountId(accountIdString, email, businessId);
+        AdminAccount expected = getAdminFromId(accountId);
+        given(updateRequest.getAccountId()).willReturn(accountId);
+        given(updateRequest.getToken()).willReturn(token);
+        doNothing().when(securityManager).validateToken(accountId, token);
+        given(updater.updateSelf(updateRequest)).willReturn(expected);
         // When
+        WorkerAccount actual = underTest.updateInfo(updateRequest);
         // Then
+        assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+        verify(securityManager, times(1)).validateToken(accountId, token);
+        verify(updater, times(1)).updateSelf(updateRequest);
+        verifyNoMoreInteractions(securityManager, updater);
     }
 
+    /*NOTE: This test caught bug on 4-27-22,
+    * showed that securityManager only validated token and NOT the permission*/
     @Test
     void itShouldUpdateOther() {
         // Given
+        String accountIdString = "SomeAcctId";
+        String email = "someEmail";
+        Integer businessId = Integer.valueOf(100);
+        String token = "token";
+        AccountId requester = new AccountId(accountIdString, email, businessId);
+        AccountId target = new AccountId("targetId", "targetEmail", businessId);
+
+        AdminAccount expected = getAdminFromId(target);
+
+        given(updateOtherRequest.getAccountId()).willReturn(requester);
+        given(updateOtherRequest.getTargetId()).willReturn(target);
+        given(updateOtherRequest.getToken()).willReturn(token);
+        given(updateOtherRequest.getBusinessId()).willReturn(businessId);
+
+        given(updater.updateOther(updateOtherRequest)).willReturn(expected);
+
+        Permissions expectedPermission = Permissions.ACCOUNTS_UPDATE;
+        doNothing().when(securityManager).validateTokenAndPermission(requester, token, expectedPermission);
         // When
+        WorkerAccount actual = underTest.updateOther(updateOtherRequest);
         // Then
+        assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+        verify(securityManager, times(1))
+                .validateTokenAndPermission(requester, token, expectedPermission);
+        verify(updater, times(1)).updateOther(updateOtherRequest);
+        verifyNoMoreInteractions(securityManager, updater);
     }
 
     @Test
