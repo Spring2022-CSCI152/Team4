@@ -117,7 +117,7 @@ class RegistrationServiceTest {
         /* A token should be generated*/
         verify(securityManager, times(1))
                 .generateToken(expected.getAccountId());
-        
+
         /*capture and verify business and admin accounts that were to be saved*/
         verify(repos).saveBusinessAccount(businessAccountArgumentCaptor.capture());
         verify(repos).saveAdminAccount(adminAccountArgumentCaptor.capture());

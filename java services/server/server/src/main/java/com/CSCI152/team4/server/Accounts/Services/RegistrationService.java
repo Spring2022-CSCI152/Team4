@@ -61,43 +61,27 @@ public class RegistrationService {
      * @return AdminAccount containing the accounts information and am empty
      * password field*/
     public AdminAccount registerBusiness(BusinessRequest request){
-        /*
-        * Forgive me, I allowed this function to do several things.
-        * To break this function up, a large series of functions
-        * and confusions ensue, and I haven't the skill at
-        * present to make it clean.
-        *
-        * As a token of my apology, see the comments below
-        * */
-
         /*Ensure Fields are Non-null*/
         request.validate();
-
         //1. Extract the AdminAccount and encrypt the Password
         AdminAccount returnable = request.getAdminAccount();
         encryptPassword(returnable);
-
         //2. Create the BusinessAccount using the AdminAccount ID
         BusinessAccount newBusinessAccount
                 = request.getBusinessAccount(returnable.getAccountIdString());
-
         //3. Save BusinessAccount to retrieve generated ID
         Integer businessId
                 = repos.saveBusinessAccount(newBusinessAccount).getBusinessId();
 
-
         //4. Set AdminAccount's businessId and Save
         returnable.setBusinessId(businessId);
         repos.saveAdminAccount(returnable);
-
         //5. Build Corresponding Report and Profile Settings to defaults
         settings.saveReportFormat(new ReportFormat(businessId));
         settings.saveCustomerProfileFormat(new CustomerProfileFormat(businessId));
-
         //6. Get Token and Clear AdminAccount Password field
         returnable.setToken(securityManager.generateToken(returnable.getAccountId()));
         returnable.setPassword(null);
-
         //7. Return Account Info
         return returnable;
     }
@@ -106,24 +90,18 @@ public class RegistrationService {
 
         /*Ensure Auth and Permissions*/
         securityManager.validateTokenAndPermission(request.getAccountId(), request.getToken(), Permissions.ACCOUNTS_REGISTER);
-
         /*Ensure Non-null fields*/
         request.validate();
-
         /*Ensure No Prior Reg*/
         checkForPriorRegistration(request);
-
         /*Get Business Account*/
         BusinessAccount businessAccount = repos.getBusinessIfExists(request.getBusinessId());
-
         /*Extract New Admin Account and encrypt password*/
         AdminAccount newAdmin = request.getAdminAccount();
         encryptPassword(newAdmin);
-
         /*On non-null business account, add admin to admins list*/
         assert businessAccount != null;
         businessAccount.addAdmin(newAdmin.getAccountIdString());
-
         /*Save updated business account and admin account*/
         repos.saveBusinessAccount(businessAccount);
         repos.saveAdminAccount(newAdmin);
