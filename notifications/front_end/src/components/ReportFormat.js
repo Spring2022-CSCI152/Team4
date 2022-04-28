@@ -35,8 +35,9 @@ function ReportFormat() {
   return (
     <div className=" justify-content-center">
       <h6>Select fields to display on Reports</h6>
-
+    
       <div className="row">
+        <div className="col"></div>
         <div className="col">
           <Form>
             <Form.Check
@@ -150,7 +151,9 @@ function ReportFormat() {
             />
           </Form>
         </div>
+        <div className="col"></div>
       </div>
+     
     </div>
   );
 }

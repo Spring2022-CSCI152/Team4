@@ -9,7 +9,7 @@ const SignIn = ({ signInClicked }) => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-    businessId: null,
+    businessId: "",
   });
 
   return (

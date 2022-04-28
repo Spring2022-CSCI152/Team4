@@ -25,6 +25,7 @@ function ProfileFormat() {
   return (
     <div className="row justify-content-center">
       <h6>Select fields to display on profiles</h6>
+      <div className="col"></div>
       <div className="col">
         <Form>
           <Form.Check
@@ -98,6 +99,7 @@ function ProfileFormat() {
           />
         </Form>
       </div>
+      <div className="col"></div>
     </div>
   );
 }
