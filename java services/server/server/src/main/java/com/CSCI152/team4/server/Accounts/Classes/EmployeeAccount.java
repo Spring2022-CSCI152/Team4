@@ -109,7 +109,7 @@ public class EmployeeAccount extends WorkerAccount{
 
     @Override
     public String toString() {
-        return "AdminAccount{" +
+        return "EmployeeAccount{" +
                 "accountId=" + accountId.toString() +
                 ", email='" + this.getEmail() + '\'' +
                 ", businessId='" + this.getBusinessId() + '\'' +

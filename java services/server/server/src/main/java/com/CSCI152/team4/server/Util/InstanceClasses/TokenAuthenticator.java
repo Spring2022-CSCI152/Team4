@@ -42,6 +42,11 @@ public class TokenAuthenticator implements Authenticator {
             || !persistedToken.getAccountId().equals(accountId)){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Token has been invalidated!", new Exception());
         }
+        else{
+            /*Prevents auto timeout after 10 minutes, and allows them to take another
+            * 10 minutes of inaction to be invalid*/
+            refreshToken(persistedToken.getAccountId(), persistedToken.getToken());
+        }
 
     }
 
@@ -52,7 +57,7 @@ public class TokenAuthenticator implements Authenticator {
 
     private String generateAndSaveToken(String accountId){
 
-        String token = DigestUtils.sha256Hex(accountId + secret);
+        String token = DigestUtils.sha256Hex(accountId + secret + now());
         Token persist = new Token(token, accountId,
                 Timestamp.valueOf(now()),
                 Timestamp.valueOf(now().plusMinutes(expirationInMins)));

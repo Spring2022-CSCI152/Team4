@@ -1,15 +1,14 @@
 package com.CSCI152.team4.server.Reports.Service;
 
 import com.CSCI152.team4.server.Accounts.Settings.CustomerProfileFormat;
+import com.CSCI152.team4.server.Accounts.Settings.Permissions;
 import com.CSCI152.team4.server.Accounts.Settings.ReportFormat;
 import com.CSCI152.team4.server.Reports.Requests.ProfileFormatUpdateRequest;
 import com.CSCI152.team4.server.Reports.Requests.ReportFormatUpdateRequest;
-import com.CSCI152.team4.server.Util.InstanceClasses.AccountsRepoManager;
-import com.CSCI152.team4.server.Util.InstanceClasses.Request;
-import com.CSCI152.team4.server.Util.InstanceClasses.SettingsRepoManager;
-import com.CSCI152.team4.server.Util.InstanceClasses.TokenAuthenticator;
+import com.CSCI152.team4.server.Util.InstanceClasses.*;
 import com.CSCI152.team4.server.Util.Interfaces.AccountsRepoInterface;
 import com.CSCI152.team4.server.Util.Interfaces.Authenticator;
+import com.CSCI152.team4.server.Util.Interfaces.SecurityManager;
 import com.CSCI152.team4.server.Util.Interfaces.SettingsRepoInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,47 +20,41 @@ import javax.persistence.criteria.CriteriaBuilder;
 @Service
 public class SettingsService {
 
-    private final Authenticator authenticator;
+    private final SecurityManager authenticator;
     private final SettingsRepoInterface repoManager;
     private final AccountsRepoInterface accounts;
 
     @Autowired
-    public SettingsService(TokenAuthenticator authenticator, SettingsRepoManager repoManager, AccountsRepoManager accounts) {
+    public SettingsService(SecurityUtil authenticator, SettingsRepoManager repoManager, AccountsRepoManager accounts) {
         this.authenticator = authenticator;
         this.repoManager = repoManager;
         this.accounts = accounts;
     }
 
     public void setReportFormat(ReportFormatUpdateRequest request){
-        authenticator.validateToken(request.getToken(), request.getAccountIdString());
-        if(isAdminForBusiness(request.getBusinessId(), request.getAccountIdString())){
-            validateAndSaveReportFormat(request.getBusinessId(), request.getReportFormat());
-        }
+        authenticator.validateTokenAndPermission(request.getAccountId(), request.getToken(), Permissions.REPORT_FORMAT);
+        validateBusinessId(request);
+        validateAndSaveReportFormat(request.getBusinessId(), request.getReportFormat());
+
     }
 
     public ReportFormat getReportFormat(Request request){
-        authenticator.validateToken(request.getToken(), request.getAccountIdString());
-
-        if(isValidBusinessIdAndAccount(request.getBusinessId(), request.getAccountIdString())){
-            return repoManager.getReportFormatIfExists(request.getBusinessId());
-        }
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Business ID");
+        authenticator.validateToken(request.getAccountId(), request.getToken());
+        validateBusinessId(request);
+        return repoManager.getReportFormatIfExists(request.getBusinessId());
     }
 
     public void setProfileFormat(ProfileFormatUpdateRequest request){
-        authenticator.validateToken(request.getToken(), request.getAccountIdString());
-        if(isAdminForBusiness(request.getBusinessId(), request.getAccountIdString())){
-            validateAndSaveProfileFormat(request.getBusinessId(), request.getProfileFormat());
-        }
+        authenticator.validateTokenAndPermission(request.getAccountId(), request.getToken(), Permissions.PROFILES_FORMAT);
+        validateBusinessId(request);
+        validateAndSaveProfileFormat(request.getBusinessId(), request.getProfileFormat());
+
     }
 
     public CustomerProfileFormat getProfileFormat(Request request){
-        authenticator.validateToken(request.getToken(), request.getAccountIdString());
-
-        if(isValidBusinessIdAndAccount(request.getBusinessId(), request.getAccountIdString())){
-            return repoManager.getCustomerProfileFormatIfExists(request.getBusinessId());
-        }
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Business ID");
+        authenticator.validateToken(request.getAccountId(), request.getToken());
+        validateBusinessId(request);
+        return repoManager.getCustomerProfileFormatIfExists(request.getBusinessId());
     }
 
     private boolean isAdminForBusiness(Integer businessId, String accountIdString){
@@ -96,6 +89,12 @@ public class SettingsService {
     private void validateProfileFormat(CustomerProfileFormat profileFormat){
         if(profileFormat.getBusinessId() == null){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Business Id!");
+        }
+    }
+
+    private void validateBusinessId(Request request){
+        if(isValidBusinessIdAndAccount(request.getBusinessId(), request.getAccountIdString())){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Business ID");
         }
     }
 
