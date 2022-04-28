@@ -11,22 +11,16 @@ import com.CSCI152.team4.server.Accounts.Utils.AccountPermissionUpdater;
 import com.CSCI152.team4.server.Accounts.Utils.AccountRetriever;
 import com.CSCI152.team4.server.Accounts.Utils.AccountStatusChanger;
 import com.CSCI152.team4.server.Accounts.Utils.AccountUpdater;
-import com.CSCI152.team4.server.Util.InstanceClasses.AccountsRepoManager;
 import com.CSCI152.team4.server.Util.InstanceClasses.Request;
 import com.CSCI152.team4.server.Util.InstanceClasses.SecurityUtil;
 import com.CSCI152.team4.server.Util.Interfaces.SecurityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import java.util.function.Supplier;
 
-import static org.hibernate.internal.util.ReflectHelper.getConstructor;
 
 @Service
 public class AccountManagementService {

@@ -4,6 +4,7 @@ import com.CSCI152.team4.server.Accounts.Classes.AccountId;
 import com.CSCI152.team4.server.Accounts.Classes.AdminAccount;
 import com.CSCI152.team4.server.Accounts.Classes.EmployeeAccount;
 import com.CSCI152.team4.server.Accounts.Classes.WorkerAccount;
+import com.CSCI152.team4.server.Accounts.Requests.PermissionUpdateRequest;
 import com.CSCI152.team4.server.Accounts.Requests.TargetAccountRequest;
 import com.CSCI152.team4.server.Accounts.Requests.UpdateOtherRequest;
 import com.CSCI152.team4.server.Accounts.Requests.UpdateRequest;
@@ -51,6 +52,8 @@ class AccountManagementServiceTest {
     private UpdateRequest updateRequest;
     @Mock
     private UpdateOtherRequest updateOtherRequest;
+    @Mock
+    private PermissionUpdateRequest permissionUpdateRequest;
 
     @BeforeEach
     void setUp() {
@@ -87,18 +90,11 @@ class AccountManagementServiceTest {
 
     @Test
     void itShouldGetAccountInfo() {
-        /*Behavior:
-        * Takes a "Request" Parameter then does the following
-        * 1. Verify permissions using AccountId accountId and String token
-        * 2. Call and Return accounts.getAccountInfo(//)
-        *
-        * Testing:
-        * Ensure securityManager.validateToken(AccountId accountId, String token) gets called once
-        * Ensure accounts.getAccountInfo(AccountId accountId)*/
+
         // Given
         String accountIdString = "SomeAcctId";
         String email = "someEmail";
-        Integer businessId = Integer.valueOf(100);
+        Integer businessId = 100;
         String token = "token";
         AccountId accountId = new AccountId(accountIdString, email, businessId);
         given(request.getAccountId()).willReturn(accountId);
@@ -124,7 +120,7 @@ class AccountManagementServiceTest {
         // Given
         String accountIdString = "SomeAcctId";
         String email = "someEmail";
-        Integer businessId = Integer.valueOf(100);
+        Integer businessId = 100;
         String token = "token";
         AccountId requester = new AccountId(accountIdString, email, businessId);
         AccountId target = new AccountId("targetId", "targetEmail", businessId);
@@ -157,8 +153,8 @@ class AccountManagementServiceTest {
         // Given
         String accountIdString = "SomeAcctId";
         String email = "someEmail";
-        Integer businessId = Integer.valueOf(100);
-        Integer targetedBusinessId = Integer.valueOf(102);
+        Integer businessId = 100;
+        Integer targetedBusinessId = 102;
         String token = "token";
         AccountId requester = new AccountId(accountIdString, email, businessId);
         AccountId target = new AccountId("targetId", "targetEmail", targetedBusinessId);
@@ -184,8 +180,8 @@ class AccountManagementServiceTest {
         // Given
         String accountIdString = "SomeAcctId";
         String email = "someEmail";
-        Integer businessId = Integer.valueOf(100);
-        Integer targetedBusinessId = Integer.valueOf(102);
+        Integer businessId = 100;
+        Integer targetedBusinessId = 102;
         String token = "token";
         AccountId accountId = new AccountId(accountIdString, email, businessId);
         AccountId account1 = new AccountId("account1", "account1", targetedBusinessId);
@@ -214,7 +210,7 @@ class AccountManagementServiceTest {
         // Given
         String accountIdString = "SomeAcctId";
         String email = "someEmail";
-        Integer businessId = Integer.valueOf(100);
+        Integer businessId = 100;
         String token = "token";
         AccountId accountId = new AccountId(accountIdString, email, businessId);
         AdminAccount expected = getAdminFromId(accountId);
@@ -238,7 +234,7 @@ class AccountManagementServiceTest {
         // Given
         String accountIdString = "SomeAcctId";
         String email = "someEmail";
-        Integer businessId = Integer.valueOf(100);
+        Integer businessId = 100;
         String token = "token";
         AccountId requester = new AccountId(accountIdString, email, businessId);
         AccountId target = new AccountId("targetId", "targetEmail", businessId);
@@ -265,23 +261,220 @@ class AccountManagementServiceTest {
     }
 
     @Test
+    void itShouldThrowErrorOnUpdateOtherWithInvalidBusinessId(){
+        String accountIdString = "SomeAcctId";
+        String email = "someEmail";
+        Integer businessId = 100;
+        Integer targetedBusinessId = 102;
+        String token = "token";
+        AccountId requester = new AccountId(accountIdString, email, businessId);
+        AccountId target = new AccountId("targetId", "targetEmail", targetedBusinessId);
+        given(updateOtherRequest.getAccountId()).willReturn(requester);
+        given(updateOtherRequest.getTargetId()).willReturn(target);
+        given(updateOtherRequest.getToken()).willReturn(token);
+
+        Permissions expectedPermission = Permissions.ACCOUNTS_UPDATE;
+        doNothing().when(securityManager).validateTokenAndPermission(requester, token, expectedPermission);
+        //When
+        //Then
+        Exception e = assertThrows(ResponseStatusException.class,
+                () -> underTest.updateOther(updateOtherRequest));
+        assertThat(e).hasMessageContaining(HttpStatus.FORBIDDEN.name())
+                .hasMessageContaining("Different Business IDs");
+
+        verify(securityManager, times(1)).validateTokenAndPermission(requester, token, expectedPermission);
+        verifyNoInteractions(accounts);
+        verifyNoMoreInteractions(securityManager);
+
+    }
+    @Test
     void itShouldUpdateEmployeePermissions() {
         // Given
+        String accountIdString = "SomeAcctId";
+        String email = "someEmail";
+        Integer businessId = 100;
+        String token = "token";
+        AccountId requester = new AccountId(accountIdString, email, businessId);
+        AccountId target = new AccountId("targetId", "targetEmail", businessId);
+
+        EmployeeAccount expected = getEmployeeFromId(target);
+
+        given(permissionUpdateRequest.getAccountId()).willReturn(requester);
+        given(permissionUpdateRequest.getTargetId()).willReturn(target);
+        given(permissionUpdateRequest.getToken()).willReturn(token);
+        given(permissionUpdateRequest.getBusinessId()).willReturn(businessId);
+        given(permissionUpdateRequest.getPermissions()).willReturn(List.of(
+                Permissions.REPORT_CREATE.name(),
+                Permissions.REPORT_EDIT.name(),
+                Permissions.PROFILES_EDIT.name(),
+                Permissions.REPORT_FORMAT.name()
+        ));
+        given(permissions.updatePermissions(permissionUpdateRequest)).willReturn(expected);
+
+        Permissions expectedPermission = Permissions.PERMISSIONS_EDIT;
+        doNothing().when(securityManager).validateTokenAndPermission(requester, token, expectedPermission);
         // When
+        WorkerAccount actual = underTest.updateEmployeePermissions(permissionUpdateRequest);
         // Then
+        assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+        verify(securityManager, times(1))
+                .validateTokenAndPermission(requester, token, expectedPermission);
+        verify(permissions, times(1)).updatePermissions(permissionUpdateRequest);
+        verifyNoMoreInteractions(securityManager, permissions);
+
     }
 
     @Test
+    void itShouldThrowErrorOnPermissionUpdateWithInvalidBusinessId(){
+        // Given
+        String accountIdString = "SomeAcctId";
+        String email = "someEmail";
+        Integer businessId = 100;
+        Integer invalidBusinessId = 102;
+        String token = "token";
+        AccountId requester = new AccountId(accountIdString, email, businessId);
+        AccountId target = new AccountId("targetId", "targetEmail", invalidBusinessId);
+
+        EmployeeAccount expected = getEmployeeFromId(target);
+
+        given(permissionUpdateRequest.getAccountId()).willReturn(requester);
+        given(permissionUpdateRequest.getTargetId()).willReturn(target);
+        given(permissionUpdateRequest.getToken()).willReturn(token);
+        given(permissionUpdateRequest.getBusinessId()).willReturn(businessId);
+        given(permissionUpdateRequest.getPermissions()).willReturn(List.of(
+                Permissions.REPORT_CREATE.name(),
+                Permissions.REPORT_EDIT.name(),
+                Permissions.PROFILES_EDIT.name(),
+                Permissions.REPORT_FORMAT.name()
+        ));
+        given(permissions.updatePermissions(permissionUpdateRequest)).willReturn(expected);
+
+        Permissions expectedPermission = Permissions.PERMISSIONS_EDIT;
+        doNothing().when(securityManager).validateTokenAndPermission(requester, token, expectedPermission);
+
+        //When
+        //Then
+        Exception e = assertThrows(ResponseStatusException.class,
+                () -> underTest.updateEmployeePermissions(permissionUpdateRequest));
+        assertThat(e).hasMessageContaining(HttpStatus.FORBIDDEN.name())
+                .hasMessageContaining("Different Business IDs");
+
+        verify(securityManager, times(1)).validateTokenAndPermission(requester, token, expectedPermission);
+        verifyNoInteractions(permissions);
+        verifyNoMoreInteractions(securityManager);
+    }
+    @Test
     void itShouldPromote() {
         // Given
+        String accountIdString = "SomeAcctId";
+        String email = "someEmail";
+        Integer businessId = 100;
+        String token = "token";
+        AccountId requester = new AccountId(accountIdString, email, businessId);
+        AccountId target = new AccountId("targetId", "targetEmail", businessId);
+
+        EmployeeAccount expected = getEmployeeFromId(target);
+
+        given(targetedRequest.getAccountId()).willReturn(requester);
+        given(targetedRequest.getTargetId()).willReturn(target);
+        given(targetedRequest.getToken()).willReturn(token);
+        given(targetedRequest.getBusinessId()).willReturn(businessId);
+
+        Permissions expectedPermission = Permissions.ACCOUNTS_PROMOTE;
+        doNothing().when(securityManager).validateTokenAndPermission(requester, token, expectedPermission);
+
+        given(status.promote(targetedRequest)).willReturn(expected);
         // When
+        WorkerAccount actual = underTest.promote(targetedRequest);
         // Then
+        assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+        verify(securityManager, times(1)).validateTokenAndPermission(requester, token, expectedPermission);
+        verify(status, times(1)).promote(targetedRequest);
+        verifyNoMoreInteractions(securityManager, status);
+    }
+
+    @Test
+    void itShouldThrowErrorOnPromoteWhenInvalidBusinessId(){
+        // Given
+        String accountIdString = "SomeAcctId";
+        String email = "someEmail";
+        Integer businessId = 100;
+        Integer targetedBusinessId = 102;
+        String token = "token";
+        AccountId requester = new AccountId(accountIdString, email, businessId);
+        AccountId target = new AccountId("targetId", "targetEmail", targetedBusinessId);
+        given(targetedRequest.getAccountId()).willReturn(requester);
+        given(targetedRequest.getTargetId()).willReturn(target);
+        given(targetedRequest.getToken()).willReturn(token);
+
+        Permissions expectedPermission = Permissions.ACCOUNTS_PROMOTE;
+        doNothing().when(securityManager).validateTokenAndPermission(requester, token, expectedPermission);
+        //When
+        //Then
+        Exception e = assertThrows(ResponseStatusException.class, () -> underTest.promote(targetedRequest));
+        assertThat(e).hasMessageContaining(HttpStatus.FORBIDDEN.name())
+                .hasMessageContaining("Different Business IDs");
+
+        verify(securityManager, times(1)).validateTokenAndPermission(requester, token, expectedPermission);
+        verifyNoInteractions(status);
+        verifyNoMoreInteractions(securityManager);
     }
 
     @Test
     void itShouldDemote() {
         // Given
+        String accountIdString = "SomeAcctId";
+        String email = "someEmail";
+        Integer businessId = 100;
+        String token = "token";
+        AccountId requester = new AccountId(accountIdString, email, businessId);
+        AccountId target = new AccountId("targetId", "targetEmail", businessId);
+
+        EmployeeAccount expected = getEmployeeFromId(target);
+
+        given(targetedRequest.getAccountId()).willReturn(requester);
+        given(targetedRequest.getTargetId()).willReturn(target);
+        given(targetedRequest.getToken()).willReturn(token);
+        given(targetedRequest.getBusinessId()).willReturn(businessId);
+
+        Permissions expectedPermission = Permissions.ACCOUNTS_DEMOTE;
+        doNothing().when(securityManager).validateTokenAndPermission(requester, token, expectedPermission);
+
+        given(status.demote(targetedRequest)).willReturn(expected);
         // When
+        WorkerAccount actual = underTest.demote(targetedRequest);
         // Then
+        assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+        verify(securityManager, times(1)).validateTokenAndPermission(requester, token, expectedPermission);
+        verify(status, times(1)).demote(targetedRequest);
+        verifyNoMoreInteractions(securityManager, status);
+    }
+
+    @Test
+    void itShouldThrowErrorOnDemoteWhenInvalidBusinessId(){
+        // Given
+        String accountIdString = "SomeAcctId";
+        String email = "someEmail";
+        Integer businessId = 100;
+        Integer targetedBusinessId = 102;
+        String token = "token";
+        AccountId requester = new AccountId(accountIdString, email, businessId);
+        AccountId target = new AccountId("targetId", "targetEmail", targetedBusinessId);
+        given(targetedRequest.getAccountId()).willReturn(requester);
+        given(targetedRequest.getTargetId()).willReturn(target);
+        given(targetedRequest.getToken()).willReturn(token);
+
+        Permissions expectedPermission = Permissions.ACCOUNTS_DEMOTE;
+        doNothing().when(securityManager).validateTokenAndPermission(requester, token, expectedPermission);
+        //When
+        //Then
+        Exception e = assertThrows(ResponseStatusException.class,
+                () -> underTest.demote(targetedRequest));
+        assertThat(e).hasMessageContaining(HttpStatus.FORBIDDEN.name())
+                .hasMessageContaining("Different Business IDs");
+
+        verify(securityManager, times(1)).validateTokenAndPermission(requester, token, expectedPermission);
+        verifyNoInteractions(status);
+        verifyNoMoreInteractions(securityManager);
     }
 }
