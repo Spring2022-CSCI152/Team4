@@ -14,7 +14,9 @@ import com.CSCI152.team4.server.Accounts.Requests.BusinessRequest;
 import com.CSCI152.team4.server.Accounts.Requests.EmployeeRequest;
 import com.CSCI152.team4.server.Util.InstanceClasses.SecurityUtil;
 import com.CSCI152.team4.server.Util.InstanceClasses.SettingsRepoManager;
+import com.CSCI152.team4.server.Util.Interfaces.AccountsRepoInterface;
 import com.CSCI152.team4.server.Util.Interfaces.SecurityManager;
+import com.CSCI152.team4.server.Util.Interfaces.SettingsRepoInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,9 +35,9 @@ import org.springframework.web.server.ResponseStatusException;
 @Service
 public class RegistrationService {
 
-    private final AccountsRepoManager repos;
+    private final AccountsRepoInterface repos;
     private final SecurityManager securityManager;
-    private final SettingsRepoManager settings;
+    private final SettingsRepoInterface settings;
 
     @Autowired
     public RegistrationService(AccountsRepoManager repos, SecurityUtil securityManager, SettingsRepoManager settings) {
