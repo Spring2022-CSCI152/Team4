@@ -21,7 +21,7 @@
     height: 85vh;
     z-index: 1000;
     background: rgb(255, 255, 255);
-    padding: 10px;
+    padding: 2em;
     overflow: auto;
 }
 

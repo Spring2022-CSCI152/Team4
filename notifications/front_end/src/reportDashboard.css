@@ -8,7 +8,7 @@ body {
   height: 100vh;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 1fr 10fr .5fr;
+  grid-template-rows: 1fr 10fr 0.5fr;
   grid-template-areas:
     "header"
     "main"
@@ -19,7 +19,7 @@ header {
   grid-area: header;
   display: grid;
   grid-template-columns: 1fr 10fr 1fr;
-  background-color: #ffffff;  
+  background-color: #ffffff;
 }
 
 #app > main {
@@ -31,8 +31,8 @@ header {
 
 #app > footer {
   grid-area: footer;
-  background-color:#EEEEEE;
-  padding: .5em;
+  background-color: #eeeeee;
+  padding: 0.5em;
 }
 
 li a:hover {
@@ -41,128 +41,65 @@ li a:hover {
 
 .searchBar {
   color: #999999;
-  background-color: #EEEEEE;
+  background-color: #eeeeee;
   border-radius: 2px;
   height: 5em;
 }
 
 /* card */
-.row{
+.row {
   border-top: none;
-  font-size: .85rem;
+  font-size: 0.85rem;
 }
 
-.Stack{
-  font-size: .85rem;
+.Stack {
+  font-size: 0.85rem;
 }
 
 .card-label {
-  font-size: .85rem;
+  font-size: 0.85rem;
   color: #999999;
   display: grid;
 }
-
 
 .card {
   color: #000000;
   border-radius: 2px;
   border: 1px solid #acacac;
-  transition: all .1s ease-in-out;
-  box-shadow: inset .5em 0em #d6d6d6;
+  transition: all 0.1s ease-in-out;
+  box-shadow: inset 0.5em 0em #d6d6d6;
   overflow: hidden;
 }
 
-
-.card-margin{
-  grid-template-columns: 1fr 3.25fr .75fr .75fr 2fr 1fr;
+.card-margin {
+  grid-template-columns: .5fr 2.25fr .5fr .75fr 1.75fr;
   grid-gap: 1em;
-  margin:  0 1rem .5rem;
+  margin: 0.5rem 3rem 0.5rem;
   padding-left: 2em;
 }
 
-.card.acct{
+.card.acct {
   display: flex;
   flex-direction: row;
   gap: 1em;
   width: 50rem;
 }
 
-.card.acct img{
+.card.acct img {
   width: 3em;
   height: 3em;
 }
 
-.nested{
+.nested {
   align-items: center;
   background-color: #ffc8c8;
 }
 
-
 .card:hover {
   transform: scale(1.01);
-  color:#000000;
+  color: #000000;
   border: 1px solid #000000;
   box-shadow: inset 0.5em 0em #000000;
-}
-
-/* buttons */
-.btn {
-  width: fit-content;
-  height: 3em;
-  margin: 10px;
-  border: none;
-}
-
-.btn.sm {
-  width: fit-content;
-  height: 30px;
-  color: #999999;
-  white-space: nowrap;
-}
-
-.btn.blk {
-  color: #999999;
-  background:#333333;
-  font-size: 1.15rem;
-  width: 6rem;
-  height: 2em;
-  border-radius: 5px;
-}
-
-.btn-dark:hover {
-  color: #000000;
-  background:#00f200;
-  
-}
-
-
-.btn-link:hover {
-  color: #000000;
- 
-}
-
-
-.btn.green {
-  background-color: #00f200;
-}
-
-.btn.green:hover {
-  background-color: #00e400 ;
-}
-
-.btn.round {
-  border-radius: 3px;
-}
-
-#btn-signout{
-  background-color: #333;
-  color: #999999;
-  border: none;
-  float: right;
-}
-
-#btn-signout:hover{
-  color: #ffffff;
 }
 
 /* pagination */
@@ -170,6 +107,7 @@ li a:hover {
   width: 100%;
   display: flex;
   justify-content: center;
+  list-style-type: none;
 }
 
 .pagination-btn a {
@@ -179,12 +117,11 @@ li a:hover {
 }
 
 .pagination-btn a:hover {
-  color: rgb(255, 255, 255);
-  background-color: rgb(0, 0, 0);
+  color: rgb(147, 0, 0);
 }
 
 /* shrink page */
-@media (max-width: 600px){
+@media (max-width: 600px) {
   .card-label {
     grid-template-columns: 0.55fr 2.5fr 0fr 0.5fr 1.5fr;
   }
@@ -196,7 +133,7 @@ li a:hover {
 
   .nested {
     grid-template-rows: 1fr 1fr;
-    white-space:normal;
+    white-space: normal;
     overflow: visible;
   }
 
@@ -205,5 +142,4 @@ li a:hover {
     height: 8em;
     grid-template-rows: 1fr 1fr;
   }
-
 }
