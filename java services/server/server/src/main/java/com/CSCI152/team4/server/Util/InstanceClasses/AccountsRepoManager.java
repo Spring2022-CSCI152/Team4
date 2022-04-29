@@ -60,52 +60,26 @@ public class AccountsRepoManager implements AccountsRepoInterface {
         return employees.existsById(accountId);
     }
 
-    public BusinessAccount getBusinessIfExists(Integer businessId){
-        if(businessExists(businessId)){
-            Optional<BusinessAccount> optionalBusinessAccount
-                    = business.findById(businessId);
 
-            if(optionalBusinessAccount.isPresent()){
-                return optionalBusinessAccount.get();
-            }
-            else{
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Something went wrong!");
-            }
+    public BusinessAccount getBusinessIfExists(Integer businessId){
+        if(business.existsById(businessId)){
+            return business.findById(businessId).get();
         }
-        return null;
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Business Account Not Found!");
     }
 
     public AdminAccount getAdminIfExists(AccountId accountId){
-        if(adminExists(accountId)){
-            Optional<AdminAccount> optionalAdminAccount
-                    = admins.findById(accountId);
-
-            if(optionalAdminAccount.isPresent()){
-                return optionalAdminAccount.get();
-            }
-            else{
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Something went wrong!");
-            }
+        if(admins.existsById(accountId)){
+            return admins.findById(accountId).get();
         }
-        return null;
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Account Not Found!");
     }
 
     public EmployeeAccount getEmployeeIfExists(AccountId accountId){
-        if(employeeExists(accountId)){
-            Optional<EmployeeAccount> optionalEmployeeAccount
-                    = employees.findById(accountId);
-
-            if(optionalEmployeeAccount.isPresent()){
-                return optionalEmployeeAccount.get();
-            }
-            else{
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Something went wrong!");
-            }
+        if(employees.existsById(accountId)){
+            return employees.findById(accountId).get();
         }
-        return null;
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Account Not Found!");
     }
 
     public WorkerAccount getAccountByEmailAndBusinessId(String email, Integer businessId){
@@ -123,7 +97,7 @@ public class AccountsRepoManager implements AccountsRepoInterface {
         if(returnable != null && returnable.isPresent()){
             return (WorkerAccount) returnable.get();
         }
-        return null;
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Account Not Found!");
     }
 
     public List<WorkerAccount> getAccountsByBusinessId(Integer businessId){
@@ -133,41 +107,30 @@ public class AccountsRepoManager implements AccountsRepoInterface {
         List<WorkerAccount> retList = new ArrayList<>();
         for(AdminAccount a : adminList){
             a.setPassword(null);
-            retList.add((WorkerAccount) a);
+            retList.add(a);
         }
         for(EmployeeAccount e : empList){
             e.setPassword(null);
-            retList.add((WorkerAccount) e);
+            retList.add(e);
         }
-
         return retList;
     }
 
     @Override
     public boolean removeEmployeeAccount(AccountId accountId) {
-        Optional<EmployeeAccount> optionalEmployeeAccount =
-                employees.findById(accountId);
-
-        if(optionalEmployeeAccount.isPresent()){
-            employees.delete(optionalEmployeeAccount.get());
-
-            return employeeExists(accountId);
+        if(employees.existsById(accountId)){
+            employees.deleteById(accountId);
+            return !employees.existsById(accountId);
         }
-
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Employee Not Found!");
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Account Not Found!");
     }
 
     @Override
     public boolean removeAdminAccount(AccountId accountId) {
-        Optional<AdminAccount> optionalAdminAccount =
-                admins.findById(accountId);
-
-        if(optionalAdminAccount.isPresent()){
-            admins.delete(optionalAdminAccount.get());
-
-            return adminExists(accountId);
+        if(admins.existsById(accountId)){
+            admins.deleteById(accountId);
+            return !admins.existsById(accountId);
         }
-
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Admin Not Found!");
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Account Not Found!");
     }
 }

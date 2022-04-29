@@ -135,6 +135,22 @@ public class ReportsService {
         }
 
         Report newReport = request.getReport();
+
+        List<Profile> updatedProfiles = new ArrayList<>();
+
+        for(Profile p : request.getProfileList()){
+
+
+            //Add Report ID to profile 'reports list'
+            p.appendToReports(request.getReport().getReportIdString());
+
+            updatedProfiles.add(p);
+            //Save Profile
+            profiles.save(p);
+        }
+
+        newReport.setProfiles(updatedProfiles);
+
         newReport.updateChangeLog(newReport.getAuthor(), Timestamp.valueOf(now()));
 
         newReport = reports.save(newReport);
