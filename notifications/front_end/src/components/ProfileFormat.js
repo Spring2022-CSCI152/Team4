@@ -4,6 +4,7 @@ import { Form } from "react-bootstrap";
 const Register = ({ formData, setFormData }) => {
   return (
     <div className="row justify-content-center">
+      <h6>Select fields to display on profiles</h6>
       <div className="col"></div>
       <div className="col">
         <input
@@ -58,6 +59,7 @@ const Register = ({ formData, setFormData }) => {
         <li className="b">requirements</li>
         <li className="b">requirements</li>
       </div>
+      <div className="col"></div>
     </div>
   );
 };
