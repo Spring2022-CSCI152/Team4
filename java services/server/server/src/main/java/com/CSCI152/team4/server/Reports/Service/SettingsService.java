@@ -93,7 +93,7 @@ public class SettingsService {
     }
 
     private void validateBusinessId(Request request){
-        if(isValidBusinessIdAndAccount(request.getBusinessId(), request.getAccountIdString())){
+        if(!isValidBusinessIdAndAccount(request.getBusinessId(), request.getAccountIdString())){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Business ID");
         }
     }

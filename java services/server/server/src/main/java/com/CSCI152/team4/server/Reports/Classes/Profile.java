@@ -175,7 +175,10 @@ public class Profile {
         if(this.reports == null){
             this.reports = new ArrayList<String>();
         }
-        this.reports.add(reportId);
+        if(!this.reports.contains(reportId)){
+            this.reports.add(reportId);
+        }
+
     }
 
     @Override
