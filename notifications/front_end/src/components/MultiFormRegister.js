@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import Register from "./Register";
 import ProfileFormat from "./ProfileFormat";
 import ReportFormat from "./ReportFormat";
+import axios from 'axios'
 
 function RegisterForms() {
   const [page, setPage] = useState(0);
+
   const [formData, setFormData] = useState(
   {
       firstName: "",
@@ -14,7 +16,6 @@ function RegisterForms() {
       businessName: "",
       jobTitle: "",
   });
-
 
   const FormTitles = ["Register Business", "Profile Format", "Report Format"];
 
@@ -28,12 +29,17 @@ function RegisterForms() {
     }
   };
 
+  async function postRegistrationForm(e){
+    e.preventDefault()
+
+    try {
+      await axios.post("http://localhost:4000/post_registration_form", {formData})
+    }catch (error) {console.log(error)}
+  }
+
+
   return (
-  
-
-
-    <div className="form">
-      
+    <form onSubmit={postRegistrationForm}>  
       <div className="form-container">
         <div className="header">
           <h4>{FormTitles[page]}</h4>
@@ -57,11 +63,11 @@ function RegisterForms() {
           >
             Prev
           </button>
-          <button className="btn btn-dark btn-lg btn-block"
+
+          <input type="text" value={formData} onChange={(e) => setFormData(e.target.value)} />
+          <button type="submit" className="btn btn-dark btn-lg btn-block"
             onClick={() => {
               if (page === FormTitles.length - 1) {
-                alert("FORM SUBMITTED");
-                console.log(formData);
               } else {
                 setPage((currPage) => currPage + 1);
               }
@@ -71,7 +77,7 @@ function RegisterForms() {
           </button>
         </div>
       </div>
-    </div>
+    </form>
   
   );
 }

@@ -13,7 +13,7 @@ import UpdatedLogs from "./components/UpdatedLogs"
 import AllList from "./components/AllList";
 
 const App = () => {
-  const [user, setUser] = useState(null);
+  const [user, setUser, formData] = useState(null);
 
   const Layout = () => (
     <>
@@ -21,6 +21,7 @@ const App = () => {
       <Outlet />
     </>
   );
+
 
   return (
     <Routes>
