@@ -32,15 +32,19 @@ function RegisterForms() {
   async function postRegistrationForm(e) {
     e.preventDefault();
 
-    try {
-      await axios.post("http://localhost:4000/post_registration_form",
-     // await axios.post("http://spiritfinder5-6n152234f068o0n2.socketxp.com",
-      {
-        formData,
+    const response = await axios
+      .post(
+        "http://172.24.158.171:8080/api/v1/accounts/register_business",
+        formData
+      )
+      .then((res) => {
+        console.log("back ", res);
+        localStorage.setItem("newUser", JSON.stringify(res.data));
+        console.log(response.status);
+      })
+      .catch((err) => {
+        console.log(err);
       });
-    } catch (error) {
-      console.log(error);
-    }
   }
 
   return (
@@ -52,7 +56,6 @@ function RegisterForms() {
         <hr className="green"></hr>
         <div className="body">{PageDisplay()}</div>
         <hr className="green"></hr>
-
         <div className="footer mx-auto">
           <div className="progressbar mx-auto ">
             <div

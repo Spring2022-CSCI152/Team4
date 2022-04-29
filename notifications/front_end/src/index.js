@@ -10,7 +10,7 @@ import Notifications from './Notifications'
 
 ReactDOM.render(
     <BrowserRouter> 
-        <Notifications/>
+        <App/>
     </BrowserRouter>   ,
 document.getElementById('root') 
 );

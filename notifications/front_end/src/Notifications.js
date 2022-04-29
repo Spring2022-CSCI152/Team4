@@ -3,23 +3,24 @@ import NotificationCard from "./components/NotificationCard";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 //const { resolvePath } = require("react-router");
 
-const client = new W3CWebSocket('ws://localhost:8080/ws');
+//const client = new W3CWebSocket('ws://localhost:4000/ws');
 const Notifications = () => {
-  client.onopen =()=>{console.log('yep')}
+    
+//   client.onopen =()=>{console.log('yep')}
  
-    return (
-      <div className="container">
+//     return (
+//       <div className="container">
       
-          <NotificationCard/>
-          <button> onClick</button>
+//           <NotificationCard/>
+//           <button> onClick</button>
           
 
         
-      </div>
-    );
-  };
+//       </div>
+//     );
+//   };
  
-    //front end
+//     //front end
 
 
 
@@ -72,8 +73,8 @@ const Notifications = () => {
 })
 
 
-  );
+  );*/
  
-}; */
+}; 
 
 export default Notifications;
