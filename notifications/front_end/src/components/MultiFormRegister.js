@@ -48,7 +48,7 @@ function RegisterForms() {
     changeLog: false,
   });
 
- 
+
   const FormTitles = ["Register Business", "Profile Format", "Report Format"];
 
   const PageDisplay = () => {
@@ -66,34 +66,58 @@ function RegisterForms() {
       .then(response => {
         console.log(response)
         localStorage.setItem("newUser", JSON.stringify(response.data))
-        console.log(response.status)
+        console.log('first res ', response.status)
 
       }).catch(error =>
         console.log(error)
       )
 
-      let newUser = JSON.parse(localStorage.getItem("newUser"))
-        
-        
+    const newUser = JSON.parse(localStorage.getItem("newUser"))
 
-      console.log('token ',a, a.token, a.accountIdString, a.email, a.businessId)
-      console.log( 'test profile format ', profileData.name, profileData.status, profileData.address, profileData.banDuration, profileData.attributes, profileData.imageName, profileData.involvement, profileData.reports)
-          //testing git reset head
+    const form2 = await axios.post("http://172.24.158.171:8080/api/v1/reports/set_profile_format",
+      {
+        token: newUser.token,
+        accountId: {
+          accountIdString: newUser.accountIdString,
+          email: newUser.email,
+          businessId: newUser.businessId
+        },
+        profileFormat: {
+          businessId: newUser.businessId,
+          profileData
+        }
+      })
+      .then(form2 => {
+        console.log(form2)
+        console.log('res 2', form2.status)
+      }).catch(error =>
+        console.log(error)
+      )
 
-          ({
-            token: newUser.token, newUser.accountIdString, newUser.email
-            accountId: {
-                accountIdString: newUser.accountIdString,
-                email: newUser.email,
-                "businessId": newUser.businessId
-            },
-            profileFormat:{
-                profileData
-            }
-        })
-      console.log(profileData)
-      console.log(reportData)
-  
+    const form3 = await axios.post("http://172.24.158.171:8080/api/v1/reports/set_report_format", 
+    {
+      token: newUser.token,
+      accountId: {
+        accountIdString: newUser.accountIdString,
+        email: newUser.email,
+        businessId: newUser.businessId
+      },
+      reportFormat: {
+        businessId: newUser.businessId,
+        reportData
+      }
+    })
+      .then(form3 => {
+        console.log(form3)
+        console.log('res 3', form3.status)
+
+      }).catch(error =>
+        console.log(error)
+      )
+    
+    //console.log(profileData)
+    //    console.log(reportData)
+
   }
 
 
@@ -128,26 +152,37 @@ function RegisterForms() {
             Prev
           </button>
 
-         <div>{page}, {FormTitles.length - 1 }</div>
+          <div>{page}, {FormTitles.length - 1}</div>
 
           <button
-           type="submit"
+            type="submit"
             className="btn btn-dark btn-lg btn-block"
             onClick={(e) => {
               e.preventDefault();
               if (page == FormTitles.length - 1) {
-               
-            
-              
+
+
+
                 <input
                   value={formData}
                   onChange={(e) => setFormData(e.target.value)}
-                  
+                />;
+                
+                <input
+                  value={profileData}
+                  onChange={(e) => setProfileData(e.target.value)}
+
+                />;
+                
+                <input
+                  value={reportData}
+                  onChange={(e) => setReportData(e.target.value)}
+
                 />;
                 { postRegistrationForm(e) }
-               
+
               } else {
-                
+
                 setPage((currPage) => currPage + 1);
               }
             }}

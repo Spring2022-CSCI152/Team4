@@ -84,7 +84,7 @@ function ReportFormat({reportData,setReportData}) {
             <Form.Check
               type="switch"
               label="Box2 Investigation"
-              checked={reportData.box1}
+              checked={reportData.box2}
               onChange={(e) => {
                 setReportData({ ...reportData, box2: !reportData.box2 });
               }}
