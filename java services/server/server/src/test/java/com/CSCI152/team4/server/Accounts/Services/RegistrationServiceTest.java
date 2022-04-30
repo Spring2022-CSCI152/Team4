@@ -21,8 +21,10 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.server.ResponseStatusException;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
@@ -53,6 +55,9 @@ class RegistrationServiceTest {
     ArgumentCaptor<BusinessAccount> businessAccountArgumentCaptor;
     @Captor
     ArgumentCaptor<AdminAccount> adminAccountArgumentCaptor;
+    @Captor
+    ArgumentCaptor<EmployeeAccount> employeeAccountArgumentCaptor;
+
     private RegistrationService underTest;
 
     @BeforeEach
@@ -178,26 +183,130 @@ class RegistrationServiceTest {
 
         // Then
         assertThat(actual).isEqualTo(new ResponseEntity<>(HttpStatus.CREATED));
-        verify(adminRequest, times(1)).getAccountId();
-        verify(adminRequest, times(1)).getToken();
-        verify(securityManager, times(1)).validateTokenAndPermission(accountId, token, expectedPermission);
-        verify(adminRequest, times(1)).validate();
-        verify(repos, times(1)).getBusinessIfExists(businessId);
-        verify(adminRequest, times(1)).getEmail();
-        verify(adminRequest, times(1)).getBusinessId();
-        verify(adminRequest, times(1)).getAdminAccount();
-        verify(adminAccount, times(1)).getPassword();
-        verify(adminAccount, times(1)).setPassword(any());
-        verify(businessAccount, times(1)).addAdmin(accountIdString);
-        verify(repos, times(1)).saveBusinessAccount(businessAccount);
-        verify(repos, times(1)).saveAdminAccount(adminAccount);
-        verifyNoMoreInteractions(securityManager, adminRequest, repos, adminAccount, businessAccount);
+        verify(repos).saveBusinessAccount(businessAccountArgumentCaptor.capture());
+        verify(repos).saveAdminAccount(adminAccountArgumentCaptor.capture());
+        assertThat(businessAccountArgumentCaptor.getValue()).usingRecursiveComparison().isEqualTo(businessAccount);
+        assertThat(adminAccountArgumentCaptor.getValue()).usingRecursiveComparison()
+                .ignoringFields("password, token").isEqualTo(adminAccount);
     }
 
     @Test
     void itShouldRegisterEmployee() {
         // Given
+        Integer businessId = 100;
+        String email = "email";
+        String accountIdString = "string";
+        String token = "token";
+        AccountId accountId = new AccountId(accountIdString, email, businessId);
+        given(employeeRequest.getAccountId()).willReturn(accountId);
+        given(employeeRequest.getToken()).willReturn(token);
+
+        Permissions expectedPermission = Permissions.ACCOUNTS_REGISTER;
+        /* Authentication should be the first thing to happen*/
+        doNothing().when(securityManager).validateTokenAndPermission(accountId, token, expectedPermission);
+
+        /* Request validation should happen next*/
+        doNothing().when(employeeRequest).validate();
+
+        /*Check for prior reg using email and business id is next*/
+        given(employeeRequest.getBusinessId()).willReturn(businessId);
+        given(employeeRequest.getEmail()).willReturn(email);
+
+        /*Get business account to update happens next*/
+        given(repos.getBusinessIfExists(businessId)).willReturn(businessAccount);
+
+        /*Getting new admin account from request should happen*/
+        given(employeeRequest.getEmployeeAccount()).willReturn(employeeAccount);
+
+        /* Get and Store password due to hashing*/
+        given(employeeAccount.getPassword()).willReturn("pass");
+        doNothing().when(employeeAccount).setPassword(any());
+
+        /* Then add admin account id string to business account*/
+        given(employeeAccount.getAccountIdString()).willReturn(accountIdString);
+        doNothing().when(businessAccount).addAdmin(accountIdString);
+
+        given(repos.saveBusinessAccount(businessAccount)).willReturn(businessAccount);
+        given(repos.saveEmployeeAccount(employeeAccount)).willReturn(employeeAccount);
+
         // When
+        ResponseEntity<Enum<HttpStatus>> actual = underTest.registerEmployee(employeeRequest);
+
         // Then
+        assertThat(actual).isEqualTo(new ResponseEntity<>(HttpStatus.CREATED));
+        verify(repos).saveBusinessAccount(businessAccountArgumentCaptor.capture());
+        verify(repos).saveEmployeeAccount(employeeAccountArgumentCaptor.capture());
+        assertThat(businessAccountArgumentCaptor.getValue()).usingRecursiveComparison().isEqualTo(businessAccount);
+        assertThat(employeeAccountArgumentCaptor.getValue()).usingRecursiveComparison()
+                .ignoringFields("password, token").isEqualTo(employeeAccount);
+    }
+
+    @Test
+    void itShouldThrowErrorOnPriorRegistrationForAdminRequest(){
+        //Given
+        Integer businessId = 100;
+        String email = "email";
+        String accountIdString = "string";
+        String token = "token";
+        AccountId accountId = new AccountId(accountIdString, email, businessId);
+        given(adminRequest.getAccountId()).willReturn(accountId);
+        given(adminRequest.getToken()).willReturn(token);
+
+        Permissions expectedPermission = Permissions.ACCOUNTS_REGISTER;
+        /* Authentication should be the first thing to happen*/
+        doNothing().when(securityManager).validateTokenAndPermission(accountId, token, expectedPermission);
+
+        /* Request validation should happen next*/
+        doNothing().when(adminRequest).validate();
+
+        /*Check for prior reg using email and business id is next*/
+        given(adminRequest.getBusinessId()).willReturn(businessId);
+        given(adminRequest.getEmail()).willReturn(email);
+
+        given(repos.getAccountByEmailAndBusinessId(email, businessId)).willReturn(adminAccount);
+
+        //When
+        Exception e = assertThrows(ResponseStatusException.class,
+                () -> underTest.registerAdmin(adminRequest));
+
+        //Then
+        assertThat(e)
+                .hasMessageContaining(HttpStatus.BAD_REQUEST.name())
+                .hasMessageContaining("Account already registered!");
+
+    }
+
+    @Test
+    void itShouldThrowErrorOnPriorRegistrationForEmployeeRequest(){
+        //Given
+        Integer businessId = 100;
+        String email = "email";
+        String accountIdString = "string";
+        String token = "token";
+        AccountId accountId = new AccountId(accountIdString, email, businessId);
+        given(employeeRequest.getAccountId()).willReturn(accountId);
+        given(employeeRequest.getToken()).willReturn(token);
+
+        Permissions expectedPermission = Permissions.ACCOUNTS_REGISTER;
+        /* Authentication should be the first thing to happen*/
+        doNothing().when(securityManager).validateTokenAndPermission(accountId, token, expectedPermission);
+
+        /* Request validation should happen next*/
+        doNothing().when(employeeRequest).validate();
+
+        /*Check for prior reg using email and business id is next*/
+        given(employeeRequest.getBusinessId()).willReturn(businessId);
+        given(employeeRequest.getEmail()).willReturn(email);
+
+        given(repos.getAccountByEmailAndBusinessId(email, businessId)).willReturn(employeeAccount);
+
+        //When
+        Exception e = assertThrows(ResponseStatusException.class, () -> underTest.registerEmployee(employeeRequest));
+
+        //Then
+        assertThat(e)
+                .hasMessageContaining(HttpStatus.BAD_REQUEST.name())
+                .hasMessageContaining("Account already registered!");
+
     }
 }

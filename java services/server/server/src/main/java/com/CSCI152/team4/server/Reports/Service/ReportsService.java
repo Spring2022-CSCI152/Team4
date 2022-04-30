@@ -41,8 +41,8 @@ public class ReportsService {
     public ReportsService(@Value("${spring.data.web.pageable.default-page-size}") Integer defaultPageSize,
                           ReportsRepo reports,
                           CustomerProfilesRepo profiles,
-                          ReportValidator validator,
-                          SecurityUtil securityManager) {
+                          IReportValidator validator,
+                          SecurityManager securityManager) {
         this.defaultPageSize = defaultPageSize;
         this.reports = reports;
         this.profiles = profiles;

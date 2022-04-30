@@ -39,13 +39,20 @@ public class RegistrationService {
     private final SecurityManager securityManager;
     private final SettingsRepoInterface settings;
 
+//    @Autowired
+//    public RegistrationService(AccountsRepoManager repos, SecurityUtil securityManager, SettingsRepoManager settings) {
+//        this.repos = repos;
+//        this.securityManager = securityManager;
+//        this.settings = settings;
+//    }
+
     @Autowired
-    public RegistrationService(AccountsRepoManager repos, SecurityUtil securityManager, SettingsRepoManager settings) {
+    public RegistrationService(AccountsRepoInterface repos, SecurityManager securityManager,
+                               SettingsRepoInterface settings) {
         this.repos = repos;
         this.securityManager = securityManager;
         this.settings = settings;
     }
-
     /**
      * Process the Business Registration Request
      * 1. Extract the AdminAccount and encrypt the Password
@@ -100,7 +107,6 @@ public class RegistrationService {
         AdminAccount newAdmin = request.getAdminAccount();
         encryptPassword(newAdmin);
         /*On non-null business account, add admin to admins list*/
-        assert businessAccount != null;
         businessAccount.addAdmin(newAdmin.getAccountIdString());
         /*Save updated business account and admin account*/
         repos.saveBusinessAccount(businessAccount);
@@ -130,7 +136,6 @@ public class RegistrationService {
         encryptPassword(newEmployee);
 
         /*On Non null business account, save employee to account*/
-        assert businessAccount != null;
         businessAccount.addEmployee(newEmployee.getAccountIdString());
 
         /*Save updated business account and employee account*/
