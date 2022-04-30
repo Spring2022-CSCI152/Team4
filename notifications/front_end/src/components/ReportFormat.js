@@ -68,6 +68,22 @@ function ReportFormat({reportData,setReportData}) {
                 setReportData({ ...reportData, type: !reportData.type });
               }}
             />
+              <Form.Check
+              type="switch"
+              label="Attachments"
+              checked={reportData.attachments}
+              onChange={(e) => {
+                setReportData({ ...reportData, attachments: !reportData.attachments });
+              }}
+            />
+            <Form.Check
+              type="switch"
+              label="Change Log"
+              checked={reportData.changeLog}
+              onChange={(e) => {
+                setReportData({ ...reportData, changeLog: !reportData.changeLog });
+              }}
+            />
           
         </div>
 
@@ -88,18 +104,28 @@ function ReportFormat({reportData,setReportData}) {
               placeholder="Box1 Name"
               defaultValue={reportData.box1Name}
               onChange={(e) => {
-                setFormData({ ...reportData, box1Name: e.target.value });
+                setReportData({ ...reportData, box1Name: e.target.value });
               }}
-            />
+              />
 
             <Form.Check
               type="switch"
-              label="Box2 Investigation"
+              label="Box2"
               checked={reportData.box2}
               onChange={(e) => {
                 setReportData({ ...reportData, box2: !reportData.box2 });
               }}
             />
+              <input
+              disabled = {!reportData.box2 }
+              className="mb-3"
+              type="text"
+              placeholder="Box1 Name"
+              defaultValue={reportData.box2Name}
+              onChange={(e) => {
+                setReportData({ ...reportData, box2Name: e.target.value });
+              }}
+              />
             <Form.Check
               type="switch"
               label="Box3"
@@ -108,6 +134,16 @@ function ReportFormat({reportData,setReportData}) {
                 setReportData({ ...reportData, box3: !reportData.box3 });
               }}
             />
+              <input
+              disabled = {!reportData.box3 }
+              className="mb-3"
+              type="text"
+              placeholder="Box3 Name"
+              defaultValue={reportData.box3Name}
+              onChange={(e) => {
+                setReportData({ ...reportData, box3Name: e.target.value });
+              }}
+              />
             <Form.Check
               type="switch"
               label="Box4"
@@ -116,6 +152,16 @@ function ReportFormat({reportData,setReportData}) {
                 setReportData({ ...reportData, box4: !reportData.box4 });
               }}
             />
+            <input
+              disabled = {!reportData.box4 }
+              className="mb-3"
+              type="text"
+              placeholder="Box3 Name"
+              defaultValue={reportData.box4Name}
+              onChange={(e) => {
+                setReportData({ ...reportData, box4Name: e.target.value });
+              }}
+              />
             <Form.Check
               type="switch"
               label="Box5"
@@ -124,22 +170,17 @@ function ReportFormat({reportData,setReportData}) {
                 setReportData({ ...reportData, box5: !reportData.box5 });
               }}
             />
-            <Form.Check
-              type="switch"
-              label="Attachments"
-              checked={reportData.attachments}
+             <input
+              disabled = {!reportData.box5 }
+              className="mb-3"
+              type="text"
+              placeholder="Box5 Name"
+              defaultValue={reportData.box4Name}
               onChange={(e) => {
-                setReportData({ ...reportData, attachments: !reportData.attachments });
+                setReportData({ ...reportData, box5Name: e.target.value });
               }}
-            />
-            <Form.Check
-              type="switch"
-              label="Change Log"
-              checked={reportData.changeLog}
-              onChange={(e) => {
-                setReportData({ ...reportData, changeLog: !reportData.changeLog });
-              }}
-            />
+              />
+          
         </div>
         <div className="col"></div>
       </div>
