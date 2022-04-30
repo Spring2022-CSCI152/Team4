@@ -60,6 +60,7 @@ public class AccountsController {
      * */
     @PostMapping("/register_business")
     public AdminAccount registerBusinessAccount(@RequestBody BusinessRequest request){
+        System.out.println("Registration Request Received");
         return registrationService.registerBusiness(request);
     }
 
