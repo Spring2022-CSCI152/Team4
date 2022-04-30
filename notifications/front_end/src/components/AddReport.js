@@ -174,9 +174,6 @@ const AddReport = () => {
         <hr className="green"></hr>
       </div>
 
-
-
-
     </form>
   );
 };

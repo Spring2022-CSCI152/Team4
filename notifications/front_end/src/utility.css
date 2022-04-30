@@ -1,9 +1,38 @@
+.form-control2 {
+  display: block;
+  width: 100%;
+  padding: .375rem .75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212921;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: px solid #ced4da;
+  -webkit-appearance: none;
+  appearance: none;
+  border-radius: .25rem;
+  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.input-group {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items:center;
+  width: 100%;
+}
+
 hr.green {
   border: solid 2px #00f200;
 }
 
 .area-padding {
   padding: 0.5em;
+}
+
+.area-padding-large{
+  padding: 5rem;
 }
 
 .txt-align-right {
