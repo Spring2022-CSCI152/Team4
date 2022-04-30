@@ -18,7 +18,7 @@ public class AccountUpdater implements IAccountUpdater {
     private final AccountsRepoInterface repos;
 
     @Autowired
-    public AccountUpdater(AccountsRepoManager repos) {
+    public AccountUpdater(AccountsRepoInterface repos) {
         this.repos = repos;
     }
 

@@ -14,7 +14,7 @@ public class AuthenticationService {
     private final Authenticator tokenAuthenticator;
 
     @Autowired
-    public AuthenticationService(TokenAuthenticator tokenAuthenticator) {
+    public AuthenticationService(Authenticator tokenAuthenticator) {
         this.tokenAuthenticator = tokenAuthenticator;
     }
 

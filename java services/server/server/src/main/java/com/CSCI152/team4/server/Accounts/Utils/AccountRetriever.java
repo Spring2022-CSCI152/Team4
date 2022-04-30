@@ -22,7 +22,7 @@ public class AccountRetriever implements IAccountRetriever {
     private final AccountsRepoInterface repos;
 
     @Autowired
-    public AccountRetriever(AccountsRepoManager repos) {
+    public AccountRetriever(AccountsRepoInterface repos) {
         this.repos = repos;
     }
 

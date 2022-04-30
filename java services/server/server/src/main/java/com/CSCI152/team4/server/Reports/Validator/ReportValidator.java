@@ -6,6 +6,7 @@ import com.CSCI152.team4.server.Reports.Classes.Profile;
 import com.CSCI152.team4.server.Reports.Classes.Report;
 import com.CSCI152.team4.server.Reports.Interfaces.IReportValidator;
 import com.CSCI152.team4.server.Util.InstanceClasses.SettingsRepoManager;
+import com.CSCI152.team4.server.Util.Interfaces.SettingsRepoInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -19,10 +20,10 @@ import java.util.UUID;
 @Component
 public class ReportValidator implements IReportValidator {
 
-    private final SettingsRepoManager settingsRepoManager;
+    private final SettingsRepoInterface settingsRepoManager;
 
     @Autowired
-    public ReportValidator(SettingsRepoManager settingsRepoManager) {
+    public ReportValidator(SettingsRepoInterface settingsRepoManager) {
         this.settingsRepoManager = settingsRepoManager;
     }
 

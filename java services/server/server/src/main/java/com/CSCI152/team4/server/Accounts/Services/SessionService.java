@@ -8,6 +8,7 @@ import com.CSCI152.team4.server.Accounts.Requests.LoginRequest;
 import com.CSCI152.team4.server.Util.InstanceClasses.Request;
 import com.CSCI152.team4.server.Util.InstanceClasses.SecurityUtil;
 import com.CSCI152.team4.server.Util.InstanceClasses.TokenAuthenticator;
+import com.CSCI152.team4.server.Util.Interfaces.AccountsRepoInterface;
 import com.CSCI152.team4.server.Util.Interfaces.SecurityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,14 +21,13 @@ import org.springframework.web.server.ResponseStatusException;
 public class SessionService {
 
     private final SecurityManager securityManager;
-    private final AccountsRepoManager accounts;
+    private final AccountsRepoInterface accounts;
 
     @Autowired
-    public SessionService(SecurityUtil securityManager, AccountsRepoManager accounts) {
+    public SessionService(SecurityManager securityManager, AccountsRepoInterface accounts) {
         this.securityManager = securityManager;
         this.accounts = accounts;
     }
-
     public WorkerAccount login(LoginRequest request){
 
         WorkerAccount account =
@@ -55,21 +55,20 @@ public class SessionService {
     private void validateBusinessRelation(Integer businessId, String accountId){
 
         BusinessAccount businessAccount = accounts.getBusinessIfExists(businessId);
-
-        try{
-            String accountType = businessAccount.getAccountType(accountId);
-            boolean isValidated =
-                    (accountType.equals(BusinessAccount.adminAccountType)
-                            && businessAccount.getAdmins().contains(accountId))
-                    || (accountType.equals(BusinessAccount.employeeAccountType)
-                            && businessAccount.getEmployees().contains(accountId));
-
-            if(!isValidated){
-                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid Business ID");
-            }
-        }
-        catch(Exception e){
+        if(businessAccount == null){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Business Not Found");
+        }
+
+
+        String accountType = businessAccount.getAccountType(accountId);
+        boolean isValidated =
+                (accountType.equals(BusinessAccount.adminAccountType)
+                        && businessAccount.getAdmins().contains(accountId))
+                || (accountType.equals(BusinessAccount.employeeAccountType)
+                        && businessAccount.getEmployees().contains(accountId));
+
+        if(!isValidated){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid Business ID");
         }
 
     }

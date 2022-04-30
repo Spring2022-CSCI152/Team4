@@ -25,7 +25,7 @@ public class SettingsService {
     private final AccountsRepoInterface accounts;
 
     @Autowired
-    public SettingsService(SecurityUtil authenticator, SettingsRepoManager repoManager, AccountsRepoManager accounts) {
+    public SettingsService(SecurityManager authenticator, SettingsRepoInterface repoManager, AccountsRepoInterface accounts) {
         this.authenticator = authenticator;
         this.repoManager = repoManager;
         this.accounts = accounts;

@@ -40,8 +40,9 @@ class EmployeeAccountTest {
     }
     static Stream<Arguments> isShouldNotSaveInvalidPermissions(){
         return Stream.of(
-                Arguments.of(List.of("CR", "ER", "DR", "RAM"), List.of("CR", "ER", "DR")),
-                Arguments.of(List.of("ER", "MAR"), List.of("ER")),
+                Arguments.of(List.of("REPORT_CREATE", "REPORT_EDIT", "REPORT_DELETE", "RAM"),
+                        List.of("REPORT_CREATE", "REPORT_EDIT", "REPORT_DELETE")),
+                Arguments.of(List.of("REPORT_EDIT", "MAR"), List.of("REPORT_EDIT")),
                 Arguments.of(List.of("No", "Not Valid", "None"), List.of())
         );
     }
@@ -59,9 +60,11 @@ class EmployeeAccountTest {
     }
     static Stream<Arguments> itShouldEditPermissionsCorrectly(){
         return Stream.of(
-                Arguments.of(List.of("CR", "ER", "DR"), List.of("CR", "ER")),
-                Arguments.of(List.of("ER", "EN"), List.of("ER")),
-                Arguments.of(List.of("CR", "ER", "DR", "CA", "DA"), List.of())
+                Arguments.of(List.of("REPORT_CREATE", "REPORT_EDIT", "REPORT_DELETE"),
+                        List.of("REPORT_CREATE", "REPORT_EDIT")),
+                Arguments.of(List.of("REPORT_EDIT", "NOTIFICATIONS_EDIT"), List.of("REPORT_EDIT")),
+                Arguments.of(List.of("REPORT_CREATE", "REPORT_EDIT", "REPORT_DELETE", "ATTACHMENTS_CREATE", "ATTACHMENTS_DELETE"),
+                        List.of())
         );
     }
 }
