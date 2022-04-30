@@ -43,20 +43,32 @@ public class AccountRetriever implements IAccountRetriever {
 
     @Override
     public WorkerAccount getOtherAccountInfo(TargetAccountRequest request){
-        BusinessAccount businessAccount = repos.getBusinessIfExists(request.getBusinessId());
+//        BusinessAccount businessAccount = repos.getBusinessIfExists(request.getBusinessId());
 
-        String accountType = businessAccount.getAccountType(request.getAccountId().getAccountIdString());
-
-        switch(accountType){
-            case(BusinessAccount.adminAccountType):
-                return getOtherAdminAccountInfo(request);
-            case(BusinessAccount.employeeAccountType):
-                return getOtherEmployeeAccountInfo(request);
-            default:
-                break;
+        if(!repos.businessExists(request.getBusinessId())){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Business Account Not Found!");
         }
+//        String accountType = businessAccount.getAccountType(request.getAccountId().getAccountIdString());
+        // This is bad code and a new design is in mind
+        // AccountRetriever should know nothing about 'Account Types'
+        // And rely on the AccountManager to determine that for us
+//        switch(accountType){
+//            case(BusinessAccount.adminAccountType):
+//                return getOtherAdminAccountInfo(request);
+//            case(BusinessAccount.employeeAccountType):
+//                return getOtherEmployeeAccountInfo(request);
+//            default:
+//                break;
+//        }
 
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found");
+        WorkerAccount ret =
+                repos.getAccountByEmailAndBusinessId(
+                        request.getTargetId().getEmail(),
+                        request.getTargetId().getBusinessId());
+
+
+        ret.setPassword(null);
+        return ret;
     }
 
     @Override
@@ -64,21 +76,21 @@ public class AccountRetriever implements IAccountRetriever {
         return repos.getAccountsByBusinessId(request.getBusinessId());
     }
 
-    private AdminAccount getOtherAdminAccountInfo(TargetAccountRequest request) {
-        AdminAccount ret = (AdminAccount) repos.getAccountByEmailAndBusinessId(
-                        request.getTargetId().getEmail(), request.getTargetId().getBusinessId());
-        ret.setPassword(null);
-
-        return ret;
-    }
-
-    private EmployeeAccount getOtherEmployeeAccountInfo(TargetAccountRequest request) {
-        EmployeeAccount ret = (EmployeeAccount) repos.getAccountByEmailAndBusinessId(
-                request.getTargetId().getEmail(), request.getTargetId().getBusinessId());
-
-        ret.setPassword(null);
-
-        return ret;
-    }
+//    private AdminAccount getOtherAdminAccountInfo(TargetAccountRequest request) {
+//        AdminAccount ret = (AdminAccount) repos.getAccountByEmailAndBusinessId(
+//                        request.getTargetId().getEmail(), request.getTargetId().getBusinessId());
+//        ret.setPassword(null);
+//
+//        return ret;
+//    }
+//
+//    private EmployeeAccount getOtherEmployeeAccountInfo(TargetAccountRequest request) {
+//        EmployeeAccount ret = (EmployeeAccount) repos.getAccountByEmailAndBusinessId(
+//                request.getTargetId().getEmail(), request.getTargetId().getBusinessId());
+//
+//        ret.setPassword(null);
+//
+//        return ret;
+//    }
 
 }
