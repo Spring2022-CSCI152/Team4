@@ -73,25 +73,16 @@ function RegisterForms() {
 
     const newUser = JSON.parse(localStorage.getItem("newUser"))
     const accountId = {
-        accountIdString: newUser.accountIdString,
-        email: newUser.email,
-        businessId: newUser.businessId
-      }
+      accountIdString: newUser.accountIdString,
+      email: newUser.email,
+      businessId: newUser.businessId
+    }
 
-      // test
-      // const x =  {  
-      //       token: newUser.token,
-      //       accountId: accountId,
-      //       profileFormat: {...profileData,  businessId: newUser.businessId }
-            
-      //     }
-      // console.log('x: ',x )
-          
     const form2 = await axios.post("http://172.24.158.171:8080/api/v1/reports/set_profile_format",
-      {  
+      {
         token: newUser.token,
         accountId: accountId,
-        profileFormat: {...profileData,  businessId: newUser.businessId }
+        profileFormat: { ...profileData, businessId: newUser.businessId }
       })
       .then(form2 => {
         console.log('form2 data: :', form2.data)
@@ -104,7 +95,7 @@ function RegisterForms() {
       {
         token: newUser.token,
         accountId: accountId,
-        reportFormat: {...reportData,  businessId: newUser.businessId }
+        reportFormat: { ...reportData, businessId: newUser.businessId }
       })
       .then(form3 => {
         console.log(form3)
