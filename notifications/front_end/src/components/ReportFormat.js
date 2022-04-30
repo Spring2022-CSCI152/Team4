@@ -78,11 +78,20 @@ function ReportFormat({reportData,setReportData}) {
               label="Box1"
               checked={reportData.box1}
               onChange={(e) => {
-                setReportData({ ...reportData, box1: !reportData.box1 });
-                setReportData({ ...reportData, box1Name: e.target.value });
-                
+                setReportData({ ...reportData, box1: !reportData.box1 }); 
+              }}/>
+             
+              <input
+              disabled = {!reportData.box1 }
+              className="mb-3"
+              type="text"
+              placeholder="Box1 Name"
+              defaultValue={reportData.box1Name}
+              onChange={(e) => {
+                setFormData({ ...reportData, box1Name: e.target.value });
               }}
             />
+
             <Form.Check
               type="switch"
               label="Box2 Investigation"
