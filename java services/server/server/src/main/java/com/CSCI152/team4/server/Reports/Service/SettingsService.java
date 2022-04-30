@@ -76,6 +76,9 @@ public class SettingsService {
     }
 
     private void validateReportFormat(ReportFormat reportFormat){
+        if(reportFormat == null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Request, Report Format is null");
+        }
         if(reportFormat.getBusinessId() == null){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Business Id!");
         }

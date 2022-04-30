@@ -56,9 +56,8 @@ public class ReportsController {
     }
 
     @PostMapping("/save_report")
-    public ResponseEntity<Enum<HttpStatus>> saveReport(@RequestBody ReportSubmissionRequest request){
-        reportsService.saveReport(request);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public Report saveReport(@RequestBody ReportSubmissionRequest request){
+        return reportsService.saveReport(request);
     }
 
     @PutMapping("/update_profile")
