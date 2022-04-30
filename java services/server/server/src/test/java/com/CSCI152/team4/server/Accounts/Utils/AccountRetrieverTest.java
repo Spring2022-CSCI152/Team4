@@ -13,6 +13,8 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
@@ -140,11 +142,45 @@ class AccountRetrieverTest {
         verify(repos, times(1)).businessExists(businessId);
         verifyNoMoreInteractions(repos, request);
     }
-    
+
+    /*On 4-30-2022 this test caught a missed check in the respective
+    * function being tested*/
     @Test
     void itShouldGetAccounts() {
         // Given
+        Integer businessId = 100;
+        List<WorkerAccount> expected = List.of(account, account, account);
+        given(request.getBusinessId()).willReturn(businessId);
+        given(repos.businessExists(businessId)).willReturn(true);
+        given(repos.getAccountsByBusinessId(businessId)).willReturn(expected);
+        doNothing().when(account).setPassword(null);
         // When
+        List<WorkerAccount> actual = underTest.getAccounts(request);
         // Then
+        assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+        verify(account, times(expected.size())).setPassword(null);
+        verify(repos, times(1)).businessExists(businessId);
+
     }
+
+    @Test
+    void itShouldThrowOnBusinessNotFoundOnGetOtherAccountsInfo(){
+        Integer businessId = 100;
+        given(request.getBusinessId()).willReturn(businessId);
+        given(repos.businessExists(any())).willReturn(false);
+
+        // When
+        Exception e = assertThrows(ResponseStatusException.class,
+                () -> underTest.getAccounts(request));
+
+        // Then
+        assertThat(e)
+                .hasMessageContaining(HttpStatus.NOT_FOUND.name())
+                .hasMessageContaining("Business Account Not Found!");
+
+        verify(request, times(1)).getBusinessId();
+        verify(repos, times(1)).businessExists(businessId);
+        verifyNoMoreInteractions(repos, request);
+    }
+
 }
