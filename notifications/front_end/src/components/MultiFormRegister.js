@@ -64,7 +64,7 @@ function RegisterForms() {
   async function postRegistrationForm() {
     const form1 = await axios.post("http://172.24.158.171:8080/api/v1/accounts/register_business", formData)
       .then(form1 => {
-        console.log(form1)
+        console.log(form1.data)
         localStorage.setItem("newUser", JSON.stringify(form1.data))
         console.log('first res ', form1.status)
       }).catch(error =>
@@ -78,18 +78,23 @@ function RegisterForms() {
         businessId: newUser.businessId
       }
 
-
+      // test
+      // const x =  {  
+      //       token: newUser.token,
+      //       accountId: accountId,
+      //       profileFormat: {...profileData,  businessId: newUser.businessId }
+            
+      //     }
+      // console.log('x: ',x )
+          
     const form2 = await axios.post("http://172.24.158.171:8080/api/v1/reports/set_profile_format",
       {  
         token: newUser.token,
         accountId: accountId,
-        profileFormat: {
-          businessId: newUser.businessId,
-          profileData
-        }
+        profileFormat: {...profileData,  businessId: newUser.businessId }
       })
       .then(form2 => {
-        console.log(form2)
+        console.log('form2 data: :', form2.data)
         console.log('res 2', form2.status)
       }).catch(error =>
         console.log(error)
@@ -99,10 +104,7 @@ function RegisterForms() {
       {
         token: newUser.token,
         accountId: accountId,
-        reportFormat: {
-          businessId: newUser.businessId,
-          reportData
-        }
+        reportFormat: {...reportData,  businessId: newUser.businessId }
       })
       .then(form3 => {
         console.log(form3)
