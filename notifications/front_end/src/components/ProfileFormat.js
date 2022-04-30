@@ -1,103 +1,89 @@
 import React, { useState, useEffect } from "react";
 import { Form } from "react-bootstrap";
 
-function ProfileFormat() {
-  const [isCheck, setCheck] = useState({
-    name: false,
-    status: true,
-    address: true,
-    banDuration: true,
-    attributes: true,
-    imageName: true,
-    involvement: true,
-    reports: true,
-  });
-
+function ProfileFormat({profileData, setProfileData}) {
+  
   useEffect(() => {
     const data = window.localStorage.getItem("profileCheckStates");
-    if (data !== null) setCheck(JSON.parse(data));
+    if (data !== null) setProfileData(JSON.parse(data));
   }, []);
 
   useEffect(() => {
-    window.localStorage.setItem("profileCheckStates", JSON.stringify(isCheck));
-  }, [isCheck]);
+    window.localStorage.setItem("profileCheckStates", JSON.stringify(profileData));
+  }, [profileData]);
 
   return (
     <div className="row justify-content-center">
       <h6>Select fields to display on profiles</h6>
       <div className="col"></div>
       <div className="col">
-        <Form>
           <Form.Check
             type="switch"
             label="Name"
-            checked={isCheck.name}
+            checked={profileData.name}
             onChange={(e) => {
-              setCheck({ ...isCheck, name: !isCheck.name });
+              setProfileData({ ...profileData, name: !profileData.name });
             }}
           />
           <Form.Check
             type="switch"
             label="Status"
-            checked={isCheck.status}
+            checked={profileData.status}
             onChange={(e) => {
-              setCheck({ ...isCheck, status: !isCheck.status });
+              setProfileData({ ...profileData, status: !profileData.status });
             }}
           />
           <Form.Check
             type="switch"
             label="Address"
-            checked={isCheck.address}
+            checked={profileData.address}
             onChange={(e) => {
-              setCheck({ ...isCheck, address: !isCheck.address });
+              setProfileData({ ...profileData, address: !profileData.address });
             }}
           />
           <Form.Check
             type="switch"
             label="Ban Duration"
-            checked={isCheck.banDuration}
+            checked={profileData.banDuration}
             onChange={(e) => {
-              setCheck({ ...isCheck, banDuration: !isCheck.banDuration });
+              setProfileData({ ...profileData, banDuration: !profileData.banDuration });
             }}
           />
-        </Form>
       </div>
 
       <div className="col">
-        <Form>
           <Form.Check
             type="switch"
             label="Attributes"
-            checked={isCheck.attributes}
+            checked={profileData.attributes}
             onChange={(e) => {
-              setCheck({ ...isCheck, attributes: !isCheck.attributes });
+              setProfileData({ ...profileData, attributes: !profileData.attributes });
             }}
           />
           <Form.Check
             type="switch"
             label="Image Name"
-            checked={isCheck.imageName}
+            checked={profileData.imageName}
             onChange={(e) => {
-              setCheck({ ...isCheck, imageName: !isCheck.imageName });
+              setProfileData({ ...profileData, imageName: !profileData.imageName });
             }}
           />
           <Form.Check
             type="switch"
             label="Involvement"
-            checked={isCheck.involvement}
+            checked={profileData.involvement}
             onChange={(e) => {
-              setCheck({ ...isCheck, involvement: !isCheck.involvement });
+              setProfileData({ ...profileData, involvement: !profileData.involvement });
             }}
           />
           <Form.Check
             type="switch"
             label="Reports"
-            checked={isCheck.reports}
+            checked={profileData.reports}
             onChange={(e) => {
-              setCheck({ ...isCheck, reports: !isCheck.reports });
+              setProfileData({ ...profileData, reports: !profileData.reports });
             }}
           />
-        </Form>
       </div>
       <div className="col"></div>
     </div>

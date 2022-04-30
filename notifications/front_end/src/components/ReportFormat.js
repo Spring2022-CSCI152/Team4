@@ -1,36 +1,17 @@
 import { Form } from "react-bootstrap";
 import React, { useState, useEffect } from "react";
 
-function ReportFormat() {
-  const [isCheck, setCheck] = useState({
-    reportId: false,
-    profiles: false,
-    date: false,
-    time: false,
-    author: false,
-    type: false,
-    box1: false,
-    box1Name: "Source of Activity",
-    box2: false,
-    box2Name: "Investigation",
-    box3: false,
-    box3Name: "Resolution",
-    box4: false,
-    box4Name: "Conclusion",
-    box5: false,
-    box5Name: "Dispositional Information",
-    attachments: false,
-    changeLog: false,
-  });
+function ReportFormat({reportData,setReportData}) {
+  
 
   useEffect(() => {
     const data = window.localStorage.getItem("reportCheckStates");
-    if (data !== null) setCheck(JSON.parse(data));
+    if (data !== null) setReportData(JSON.parse(data));
   }, []);
 
   useEffect(() => {
-    window.localStorage.setItem("reportCheckStates", JSON.stringify(isCheck));
-  }, [isCheck]);
+    window.localStorage.setItem("reportCheckStates", JSON.stringify(reportData));
+  }, [reportData]);
 
   return (
     <div className=" justify-content-center">
@@ -39,117 +20,115 @@ function ReportFormat() {
       <div className="row">
         <div className="col"></div>
         <div className="col">
-          <Form>
             <Form.Check
               type="switch"
               label="Name"
-              checked={isCheck.reportId}
+              checked={reportData.reportId}
               onChange={(e) => {
-                setCheck({ ...isCheck, reportId: !isCheck.reportId });
+                setReportData({ ...reportData, reportId: !reportData.reportId });
               }}
             />
             <Form.Check
               type="switch"
               label="Status"
-              checked={isCheck.profiles}
+              checked={reportData.profiles}
               onChange={(e) => {
-                setCheck({ ...isCheck, profiles: !isCheck.profiles });
+                setReportData({ ...reportData, profiles: !reportData.profiles });
               }}
             />
             <Form.Check
               type="switch"
               label="date"
-              checked={isCheck.date}
+              checked={reportData.date}
               onChange={(e) => {
-                setCheck({ ...isCheck, date: !isCheck.date });
+                setReportData({ ...reportData, date: !reportData.date });
               }}
             />
             <Form.Check
               type="switch"
               label="time"
-              checked={isCheck.time}
+              checked={reportData.time}
               onChange={(e) => {
-                setCheck({ ...isCheck, time: !isCheck.time });
+                setReportData({ ...reportData, time: !reportData.time });
               }}
             />
             <Form.Check
               type="switch"
               label="author"
-              checked={isCheck.author}
+              checked={reportData.author}
               onChange={(e) => {
-                setCheck({ ...isCheck, author: !isCheck.author });
+                setReportData({ ...reportData, author: !reportData.author });
               }}
             />
             <Form.Check
               type="switch"
               label="type"
-              checked={isCheck.type}
+              checked={reportData.type}
               onChange={(e) => {
-                setCheck({ ...isCheck, type: !isCheck.type });
+                setReportData({ ...reportData, type: !reportData.type });
               }}
             />
-          </Form>
+          
         </div>
 
         <div className="col">
-          <Form>
+          
             <Form.Check
               type="switch"
               label="Box1 Source of Activity"
-              checked={isCheck.box1}
+              checked={reportData.box1}
               onChange={(e) => {
-                setCheck({ ...isCheck, box1: !isCheck.box1 });
+                setReportData({ ...reportData, box1: !reportData.box1 });
               }}
             />
             <Form.Check
               type="switch"
               label="Box2 Investigation"
-              checked={isCheck.box1}
+              checked={reportData.box1}
               onChange={(e) => {
-                setCheck({ ...isCheck, box2: !isCheck.box2 });
+                setReportData({ ...reportData, box2: !reportData.box2 });
               }}
             />
             <Form.Check
               type="switch"
               label="Box3 Resolution"
-              checked={isCheck.box3}
+              checked={reportData.box3}
               onChange={(e) => {
-                setCheck({ ...isCheck, box3: !isCheck.box3 });
+                setReportData({ ...reportData, box3: !reportData.box3 });
               }}
             />
             <Form.Check
               type="switch"
               label="Box4 Conclusion"
-              checked={isCheck.box4}
+              checked={reportData.box4}
               onChange={(e) => {
-                setCheck({ ...isCheck, box4: !isCheck.box4 });
+                setReportData({ ...reportData, box4: !reportData.box4 });
               }}
             />
             <Form.Check
               type="switch"
               label="Box5 Dispositional Information"
-              checked={isCheck.box5}
+              checked={reportData.box5}
               onChange={(e) => {
-                setCheck({ ...isCheck, box5: !isCheck.box5 });
+                setReportData({ ...reportData, box5: !reportData.box5 });
               }}
             />
             <Form.Check
               type="switch"
               label="Attachments"
-              checked={isCheck.attachments}
+              checked={reportData.attachments}
               onChange={(e) => {
-                setCheck({ ...isCheck, attachments: !isCheck.attachments });
+                setReportData({ ...reportData, attachments: !reportData.attachments });
               }}
             />
             <Form.Check
               type="switch"
               label="Change Log"
-              checked={isCheck.changeLog}
+              checked={reportData.changeLog}
               onChange={(e) => {
-                setCheck({ ...isCheck, changeLog: !isCheck.changeLog });
+                setReportData({ ...reportData, changeLog: !reportData.changeLog });
               }}
             />
-          </Form>
         </div>
         <div className="col"></div>
       </div>

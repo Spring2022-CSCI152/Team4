@@ -8,7 +8,6 @@ function RegisterForms() {
   const [page, setPage] = useState(0);
 
   const [formData, setFormData] = useState({
-    token: "someToken",
     firstName: "",
     lastName: "",
     email: "",
@@ -17,34 +16,78 @@ function RegisterForms() {
     jobTitle: "Admin",
   });
 
+  const [profileData, setProfileData] = useState({
+    name: false,
+    status: true,
+    address: true,
+    banDuration: true,
+    attributes: true,
+    imageName: true,
+    involvement: true,
+    reports: true,
+  });
+
+  const [reportData, setReportData] = useState({
+    reportId: false,
+    profiles: false,
+    date: false,
+    time: false,
+    author: false,
+    type: false,
+    box1: false,
+    box1Name: "Source of Activity",
+    box2: false,
+    box2Name: "Investigation",
+    box3: false,
+    box3Name: "Resolution",
+    box4: false,
+    box4Name: "Conclusion",
+    box5: false,
+    box5Name: "Dispositional Information",
+    attachments: false,
+    changeLog: false,
+  });
+
+ 
   const FormTitles = ["Register Business", "Profile Format", "Report Format"];
 
   const PageDisplay = () => {
     if (page === 0) {
       return <Register formData={formData} setFormData={setFormData} />;
     } else if (page === 1) {
-      return <ProfileFormat formData={formData} setFormData={setFormData} />;
+      return <ProfileFormat profileData={profileData} setProfileData={setProfileData} />;
     } else {
-      return <ReportFormat formData={formData} setFormData={setFormData} />;
+      return <ReportFormat reportData={reportData} setReportData={setReportData} />;
     }
   };
 
-  async function postRegistrationForm(e) {
-    e.preventDefault();
+  async function postRegistrationForm() {
+    const response = await axios.post("http://172.24.158.171:8080/api/v1/accounts/register_business", formData)
+      .then(response => {
+        console.log(response)
+        localStorage.setItem("newUser", JSON.stringify(response.data))
+        console.log(response.status)
 
-    try {
-      await axios.post("http://localhost:4000/post_registration_form",
-     // await axios.post("http://spiritfinder5-6n152234f068o0n2.socketxp.com",
-      {
-        formData,
-      });
-    } catch (error) {
-      console.log(error);
-    }
+      }).catch(error =>
+        console.log(error)
+      )
+
+      let a = JSON.parse(localStorage.getItem("newUser"))
+        const token = a.token
+        
+
+      console.log('token ',a, a.token, a.accountIdString, a.email, a.businessId)
+      console.log( 'test profile format ', profileData.name, profileData.status, profileData.address, profileData.banDuration, profileData.attributes, profileData.imageName, profileData.involvement, profileData.reports)
+  
+      console.log(profileData)
+      console.log(reportData)
+  
   }
 
+
+
   return (
-    <form onSubmit={postRegistrationForm}>
+    <form >
       <div className="form-container">
         <div className="header">
           <h4>{FormTitles[page]}</h4>
@@ -61,6 +104,8 @@ function RegisterForms() {
               }}
             ></div>
           </div>
+
+
           <button
             className="btn btn-dark btn-lg btn-block"
             disabled={page == 0}
@@ -71,17 +116,26 @@ function RegisterForms() {
             Prev
           </button>
 
+         <div>{page}, {FormTitles.length - 1 }</div>
+
           <button
-            type="submit"
+           type="submit"
             className="btn btn-dark btn-lg btn-block"
-            onClick={() => {
-              if (page === FormTitles.length - 1) {
+            onClick={(e) => {
+              e.preventDefault();
+              if (page == FormTitles.length - 1) {
+               
+            
+              
                 <input
-                  type="text"
                   value={formData}
                   onChange={(e) => setFormData(e.target.value)}
+                  
                 />;
+                { postRegistrationForm(e) }
+               
               } else {
+                
                 setPage((currPage) => currPage + 1);
               }
             }}

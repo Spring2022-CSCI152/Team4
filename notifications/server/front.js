@@ -1,43 +1,8 @@
-import React ,{useState, useEffect, Component}from "react";
-import NotificationCard from "./components/NotificationCard";
-import { w3cwebsocket as W3CWebSocket } from "websocket";
-//const { resolvePath } = require("react-router");
+//front end
 
-//const client = new W3CWebSocket('ws://localhost:4000/ws');
-const Notifications = () => {
+const { resolvePath } = require("react-router");
 
-onButtonClicked = (value) => {
-    client.send(JSON.stringify({
-        type:"message",
-        msg: value
-    }))
-}
-
-  client.onopen =()=>{console.log('socket open')}
-  client.onmessage = (message) =>{
-    const dataFromServer = JSON.parse(message.data);
-    console.log('message seen', dataFromServer);      
-}
-
-
- 
-    return (
-      <div className="container">
-      
-          <NotificationCard/>
-          
-          
-
-        
-      </div>
-    );
-  };
- 
-    //front end
-
-
-
-/* let socket = new WebSocket("ws://localhost:8080/ws")
+// let socket = new WebSocket("ws://localhost:8080/ws")
 // socket.onopen = function(e) {
 //     socket.send(JSON.stringify({"business_id": business_id})
 //     )
@@ -85,9 +50,3 @@ onButtonClicked = (value) => {
     }
 })
 
-
-  );
- 
-}; */
-
-export default Notifications;
