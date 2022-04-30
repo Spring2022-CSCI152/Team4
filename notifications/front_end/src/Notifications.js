@@ -3,7 +3,7 @@ import {IoMdNotifications} from "react-icons/io";
 import {MdBubbleChart, MdOutlineBubbleChart} from "react-icons/md";
 
 const Notifications = () => {
-  const NoNewNotif = 1;
+  const NoNewNotif = 0;
 
   // No New Notifications
   if(NoNewNotif){
@@ -39,8 +39,8 @@ const Notifications = () => {
 
           {/* Opened Notifications */}
           <div className="row">
-            <div  className="card acct area-padding" style={{ width: "90rem"}}> <MdOutlineBubbleChart size="1.5em" style={{ fill: "#00f200"}}/> 
-              {"Notification description .."} 
+            <div  className="card acct area-padding" style={{ width: "90rem", backgroundColor: "#eeeeee"}}> 
+            {"Notification description .."} 
             </div>      
           </div>
 
