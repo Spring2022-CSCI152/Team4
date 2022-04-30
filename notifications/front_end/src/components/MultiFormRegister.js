@@ -35,15 +35,15 @@ function RegisterForms() {
     author: false,
     type: false,
     box1: false,
-    box1Name: "Source of Activity",
+    box1Name: "",
     box2: false,
-    box2Name: "Investigation",
+    box2Name: "",
     box3: false,
-    box3Name: "Resolution",
+    box3Name: "",
     box4: false,
-    box4Name: "Conclusion",
+    box4Name: "",
     box5: false,
-    box5Name: "Dispositional Information",
+    box5Name: "",
     attachments: false,
     changeLog: false,
   });
@@ -130,7 +130,6 @@ function RegisterForms() {
               }}
             ></div>
           </div>
-
 
           <button
             className="btn btn-dark btn-lg btn-block"

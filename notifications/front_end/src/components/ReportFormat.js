@@ -75,10 +75,12 @@ function ReportFormat({reportData,setReportData}) {
           
             <Form.Check
               type="switch"
-              label="Box1 Source of Activity"
+              label="Box1"
               checked={reportData.box1}
               onChange={(e) => {
                 setReportData({ ...reportData, box1: !reportData.box1 });
+                setReportData({ ...reportData, box1Name: e.target.value });
+                
               }}
             />
             <Form.Check
@@ -91,7 +93,7 @@ function ReportFormat({reportData,setReportData}) {
             />
             <Form.Check
               type="switch"
-              label="Box3 Resolution"
+              label="Box3"
               checked={reportData.box3}
               onChange={(e) => {
                 setReportData({ ...reportData, box3: !reportData.box3 });
@@ -99,7 +101,7 @@ function ReportFormat({reportData,setReportData}) {
             />
             <Form.Check
               type="switch"
-              label="Box4 Conclusion"
+              label="Box4"
               checked={reportData.box4}
               onChange={(e) => {
                 setReportData({ ...reportData, box4: !reportData.box4 });
@@ -107,7 +109,7 @@ function ReportFormat({reportData,setReportData}) {
             />
             <Form.Check
               type="switch"
-              label="Box5 Dispositional Information"
+              label="Box5"
               checked={reportData.box5}
               onChange={(e) => {
                 setReportData({ ...reportData, box5: !reportData.box5 });
