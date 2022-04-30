@@ -62,26 +62,27 @@ function RegisterForms() {
   };
 
   async function postRegistrationForm() {
-    const response = await axios.post("http://172.24.158.171:8080/api/v1/accounts/register_business", formData)
-      .then(response => {
-        console.log(response)
-        localStorage.setItem("newUser", JSON.stringify(response.data))
-        console.log('first res ', response.status)
-
+    const form1 = await axios.post("http://172.24.158.171:8080/api/v1/accounts/register_business", formData)
+      .then(form1 => {
+        console.log(form1)
+        localStorage.setItem("newUser", JSON.stringify(form1.data))
+        console.log('first res ', form1.status)
       }).catch(error =>
         console.log(error)
       )
 
     const newUser = JSON.parse(localStorage.getItem("newUser"))
+    const accountId = {
+        accountIdString: newUser.accountIdString,
+        email: newUser.email,
+        businessId: newUser.businessId
+      }
+
 
     const form2 = await axios.post("http://172.24.158.171:8080/api/v1/reports/set_profile_format",
-      {
+      {  
         token: newUser.token,
-        accountId: {
-          accountIdString: newUser.accountIdString,
-          email: newUser.email,
-          businessId: newUser.businessId
-        },
+        accountId: accountId,
         profileFormat: {
           businessId: newUser.businessId,
           profileData
@@ -94,33 +95,22 @@ function RegisterForms() {
         console.log(error)
       )
 
-    const form3 = await axios.post("http://172.24.158.171:8080/api/v1/reports/set_report_format", 
-    {
-      token: newUser.token,
-      accountId: {
-        accountIdString: newUser.accountIdString,
-        email: newUser.email,
-        businessId: newUser.businessId
-      },
-      reportFormat: {
-        businessId: newUser.businessId,
-        reportData
-      }
-    })
+    const form3 = await axios.post("http://172.24.158.171:8080/api/v1/reports/set_report_format",
+      {
+        token: newUser.token,
+        accountId: accountId,
+        reportFormat: {
+          businessId: newUser.businessId,
+          reportData
+        }
+      })
       .then(form3 => {
         console.log(form3)
         console.log('res 3', form3.status)
-
       }).catch(error =>
         console.log(error)
       )
-    
-    //console.log(profileData)
-    //    console.log(reportData)
-
   }
-
-
 
   return (
     <form >
@@ -152,37 +142,26 @@ function RegisterForms() {
             Prev
           </button>
 
-          <div>{page}, {FormTitles.length - 1}</div>
-
           <button
             type="submit"
             className="btn btn-dark btn-lg btn-block"
             onClick={(e) => {
               e.preventDefault();
               if (page == FormTitles.length - 1) {
-
-
-
                 <input
                   value={formData}
                   onChange={(e) => setFormData(e.target.value)}
                 />;
-                
                 <input
                   value={profileData}
                   onChange={(e) => setProfileData(e.target.value)}
-
                 />;
-                
                 <input
                   value={reportData}
                   onChange={(e) => setReportData(e.target.value)}
-
                 />;
                 { postRegistrationForm(e) }
-
               } else {
-
                 setPage((currPage) => currPage + 1);
               }
             }}
