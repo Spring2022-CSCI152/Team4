@@ -72,13 +72,25 @@ function RegisterForms() {
         console.log(error)
       )
 
-      let a = JSON.parse(localStorage.getItem("newUser"))
-        const token = a.token
+      let newUser = JSON.parse(localStorage.getItem("newUser"))
+        
         
 
       console.log('token ',a, a.token, a.accountIdString, a.email, a.businessId)
       console.log( 'test profile format ', profileData.name, profileData.status, profileData.address, profileData.banDuration, profileData.attributes, profileData.imageName, profileData.involvement, profileData.reports)
-  
+          //testing git reset head
+
+          ({
+            token: newUser.token, newUser.accountIdString, newUser.email
+            accountId: {
+                accountIdString: newUser.accountIdString,
+                email: newUser.email,
+                "businessId": newUser.businessId
+            },
+            profileFormat:{
+                profileData
+            }
+        })
       console.log(profileData)
       console.log(reportData)
   
