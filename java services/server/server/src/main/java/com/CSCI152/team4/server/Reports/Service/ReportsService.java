@@ -59,7 +59,7 @@ public class ReportsService {
         return reports.findAllByBusinessId(request.getBusinessId(), request.getPageable());
     }
 
-    public void saveReport(ReportSubmissionRequest request){
+    public Report saveReport(ReportSubmissionRequest request){
         securityManager.validateTokenAndPermission(request.getAccountId(), request.getToken(), Permissions.REPORT_CREATE);
 
         Report reportToSave = request.getReport();
@@ -88,7 +88,7 @@ public class ReportsService {
         reportToSave.setProfiles(newProfiles);
 
         /*Save Report Entity*/
-        reports.save(request.getReport());
+        return reports.save(request.getReport());
 
     }
 
