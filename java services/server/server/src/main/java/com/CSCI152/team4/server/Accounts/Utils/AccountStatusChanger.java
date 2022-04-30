@@ -64,7 +64,7 @@ public class AccountStatusChanger implements IAccountStatusChanger {
                 return accounts.getAdminIfExists(accountToPromote);
             }
         }catch(Exception e){
-            e.printStackTrace();
+
         }
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Something went wrong during promotion!");
     }
