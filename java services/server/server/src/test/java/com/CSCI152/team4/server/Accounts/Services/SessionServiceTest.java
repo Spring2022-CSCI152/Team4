@@ -7,6 +7,7 @@ import com.CSCI152.team4.server.Util.Interfaces.SecurityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,7 +22,8 @@ class SessionServiceTest {
 
     @BeforeEach
     void setUp() {
-
+        MockitoAnnotations.openMocks(this);
+        underTest = new SessionService(securityManager, repos);
     }
 
     @Test

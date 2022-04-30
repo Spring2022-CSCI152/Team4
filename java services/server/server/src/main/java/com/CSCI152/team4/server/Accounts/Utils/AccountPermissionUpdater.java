@@ -15,7 +15,7 @@ public class AccountPermissionUpdater implements IAccountPermissionUpdater {
     private final AccountsRepoInterface accounts;
 
     @Autowired
-    public AccountPermissionUpdater(AccountsRepoManager accounts) {
+    public AccountPermissionUpdater(AccountsRepoInterface accounts) {
         this.accounts = accounts;
     }
 

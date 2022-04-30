@@ -17,7 +17,7 @@ public class SecurityUtil implements SecurityManager {
     private AccountsRepoInterface accounts;
 
     @Autowired
-    public SecurityUtil(TokenAuthenticator authenticator, AccountsRepoInterface accounts) {
+    public SecurityUtil(Authenticator authenticator, AccountsRepoInterface accounts) {
         this.authenticator = authenticator;
         this.accounts = accounts;
     }

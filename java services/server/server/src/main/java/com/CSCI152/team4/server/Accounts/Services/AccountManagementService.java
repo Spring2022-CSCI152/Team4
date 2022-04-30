@@ -34,8 +34,7 @@ public class AccountManagementService {
     @Autowired
     public AccountManagementService(SecurityManager securityManager,
                                     IAccountRetriever accounts, IAccountUpdater updater,
-                                    IAccountPermissionUpdater permissions,
-                                    IAccountStatusChanger status) {
+                                    IAccountPermissionUpdater permissions, IAccountStatusChanger status) {
         this.securityManager = securityManager;
         this.accounts = accounts;
         this.updater = updater;

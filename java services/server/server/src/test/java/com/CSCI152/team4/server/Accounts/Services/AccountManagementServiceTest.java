@@ -4,17 +4,18 @@ import com.CSCI152.team4.server.Accounts.Classes.AccountId;
 import com.CSCI152.team4.server.Accounts.Classes.AdminAccount;
 import com.CSCI152.team4.server.Accounts.Classes.EmployeeAccount;
 import com.CSCI152.team4.server.Accounts.Classes.WorkerAccount;
+import com.CSCI152.team4.server.Accounts.Interfaces.IAccountPermissionUpdater;
+import com.CSCI152.team4.server.Accounts.Interfaces.IAccountRetriever;
+import com.CSCI152.team4.server.Accounts.Interfaces.IAccountStatusChanger;
+import com.CSCI152.team4.server.Accounts.Interfaces.IAccountUpdater;
 import com.CSCI152.team4.server.Accounts.Requests.PermissionUpdateRequest;
 import com.CSCI152.team4.server.Accounts.Requests.TargetAccountRequest;
 import com.CSCI152.team4.server.Accounts.Requests.UpdateOtherRequest;
 import com.CSCI152.team4.server.Accounts.Requests.UpdateRequest;
 import com.CSCI152.team4.server.Accounts.Settings.Permissions;
-import com.CSCI152.team4.server.Accounts.Utils.AccountPermissionUpdater;
-import com.CSCI152.team4.server.Accounts.Utils.AccountRetriever;
-import com.CSCI152.team4.server.Accounts.Utils.AccountStatusChanger;
-import com.CSCI152.team4.server.Accounts.Utils.AccountUpdater;
 import com.CSCI152.team4.server.Util.InstanceClasses.Request;
-import com.CSCI152.team4.server.Util.InstanceClasses.SecurityUtil;
+import com.CSCI152.team4.server.Util.Interfaces.AccountsRepoInterface;
+import com.CSCI152.team4.server.Util.Interfaces.SecurityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -31,18 +32,18 @@ import static org.mockito.Mockito.*;
 
 class AccountManagementServiceTest {
 
-    AccountManagementService underTest;
+    private AccountManagementService underTest;
 
     @Mock
-    private SecurityUtil securityManager;
+    private SecurityManager securityManager;
     @Mock
-    private AccountRetriever accounts;
+    private IAccountRetriever accounts;
     @Mock
-    private AccountUpdater updater;
+    private IAccountUpdater updater;
     @Mock
-    private AccountPermissionUpdater permissions;
+    private IAccountPermissionUpdater permissions;
     @Mock
-    private AccountStatusChanger status;
+    private IAccountStatusChanger status;
 
     @Mock
     private Request request;

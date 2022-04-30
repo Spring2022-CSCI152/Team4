@@ -18,7 +18,7 @@ public class AccountStatusChanger implements IAccountStatusChanger {
     private final IAccountTransposer transposer;
 
     @Autowired
-    public AccountStatusChanger(AccountsRepoManager accounts, AccountTransposer transposer) {
+    public AccountStatusChanger(AccountsRepoInterface accounts, IAccountTransposer transposer) {
         this.accounts = accounts;
         this.transposer = transposer;
     }

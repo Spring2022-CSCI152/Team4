@@ -13,6 +13,9 @@ import com.CSCI152.team4.server.Accounts.Settings.ReportFormat;
 import com.CSCI152.team4.server.Util.InstanceClasses.AccountsRepoManager;
 import com.CSCI152.team4.server.Util.InstanceClasses.SecurityUtil;
 import com.CSCI152.team4.server.Util.InstanceClasses.SettingsRepoManager;
+import com.CSCI152.team4.server.Util.Interfaces.AccountsRepoInterface;
+import com.CSCI152.team4.server.Util.Interfaces.SecurityManager;
+import com.CSCI152.team4.server.Util.Interfaces.SettingsRepoInterface;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -31,11 +34,11 @@ import static org.mockito.Mockito.*;
 class RegistrationServiceTest {
 
     @Mock
-    private AccountsRepoManager repos;
+    private AccountsRepoInterface repos;
     @Mock
-    private SecurityUtil securityManager;
+    private SecurityManager securityManager;
     @Mock
-    private SettingsRepoManager settings;
+    private SettingsRepoInterface settings;
 
     @Mock
     private BusinessRequest businessRequest;
