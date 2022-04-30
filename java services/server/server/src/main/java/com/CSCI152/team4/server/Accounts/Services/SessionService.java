@@ -55,21 +55,20 @@ public class SessionService {
     private void validateBusinessRelation(Integer businessId, String accountId){
 
         BusinessAccount businessAccount = accounts.getBusinessIfExists(businessId);
-
-        try{
-            String accountType = businessAccount.getAccountType(accountId);
-            boolean isValidated =
-                    (accountType.equals(BusinessAccount.adminAccountType)
-                            && businessAccount.getAdmins().contains(accountId))
-                    || (accountType.equals(BusinessAccount.employeeAccountType)
-                            && businessAccount.getEmployees().contains(accountId));
-
-            if(!isValidated){
-                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid Business ID");
-            }
-        }
-        catch(Exception e){
+        if(businessAccount == null){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Business Not Found");
+        }
+
+
+        String accountType = businessAccount.getAccountType(accountId);
+        boolean isValidated =
+                (accountType.equals(BusinessAccount.adminAccountType)
+                        && businessAccount.getAdmins().contains(accountId))
+                || (accountType.equals(BusinessAccount.employeeAccountType)
+                        && businessAccount.getEmployees().contains(accountId));
+
+        if(!isValidated){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid Business ID");
         }
 
     }
