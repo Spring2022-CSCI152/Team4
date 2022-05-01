@@ -10,13 +10,21 @@ import axios from 'axios';
   const navigate = useNavigate();
 
   async function handleSignOut(e) {
+
     const user = JSON.parse(localStorage.getItem("user"))
+
     const accountId = {
           accountIdString: user.accountIdString,
           email: user.email,
           businessId: user.businessId
     }
-    console.log(accountId)
+   
+    const x=
+      {
+        token: user.token,
+        accountId: accountId
+      }
+    console.log('x = ',x)
 
     const signOut = await axios.put("http://172.24.158.171:8080/api/v1/accounts/logout",
       {
@@ -25,12 +33,12 @@ import axios from 'axios';
       })
       .then(signOut => {
         console.log(signOut.data)
-        console.log('ressponse ', signOut.status)
-        navigate("/SplashPage");
-      }).catch(error =>
-        console.log(error),
+        console.log('response ', signOut.status)
+        
+      }).catch(error =>{
+        console.log(error)}
       )
-      
+    
   };
     
     
