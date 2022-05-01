@@ -4,16 +4,12 @@ import com.CSCI152.team4.server.Accounts.Classes.AdminAccount;
 import com.CSCI152.team4.server.Accounts.Classes.BusinessAccount;
 import com.CSCI152.team4.server.Accounts.Classes.EmployeeAccount;
 import com.CSCI152.team4.server.Accounts.Classes.WorkerAccount;
+import com.CSCI152.team4.server.Accounts.Requests.*;
 import com.CSCI152.team4.server.Accounts.Settings.CustomerProfileFormat;
 import com.CSCI152.team4.server.Accounts.Settings.Permissions;
 import com.CSCI152.team4.server.Accounts.Settings.ReportFormat;
-import com.CSCI152.team4.server.Util.InstanceClasses.AccountsRepoManager;
-import com.CSCI152.team4.server.Accounts.Requests.AccountCreationRequest;
-import com.CSCI152.team4.server.Accounts.Requests.AdminRequest;
-import com.CSCI152.team4.server.Accounts.Requests.BusinessRequest;
-import com.CSCI152.team4.server.Accounts.Requests.EmployeeRequest;
-import com.CSCI152.team4.server.Util.InstanceClasses.SecurityUtil;
-import com.CSCI152.team4.server.Util.InstanceClasses.SettingsRepoManager;
+import com.CSCI152.team4.server.Accounts.Requests.AccountCreationRequestDAO;
+import com.CSCI152.team4.server.Accounts.Requests.AdminRequestDAO;
 import com.CSCI152.team4.server.Util.Interfaces.AccountsRepoInterface;
 import com.CSCI152.team4.server.Util.Interfaces.SecurityManager;
 import com.CSCI152.team4.server.Util.Interfaces.SettingsRepoInterface;
@@ -67,7 +63,7 @@ public class RegistrationService {
      *
      * @return AdminAccount containing the accounts information and am empty
      * password field*/
-    public AdminAccount registerBusiness(BusinessRequest request){
+    public AdminAccount registerBusiness(BusinessRequestDAO request){
         /*Ensure Fields are Non-null*/
         request.validate();
         //1. Extract the AdminAccount and encrypt the Password
@@ -93,7 +89,7 @@ public class RegistrationService {
         return returnable;
     }
 
-    public ResponseEntity<Enum<HttpStatus>> registerAdmin(AdminRequest request){
+    public ResponseEntity<Enum<HttpStatus>> registerAdmin(AdminRequestDAO request){
 
         /*Ensure Auth and Permissions*/
         securityManager.validateTokenAndPermission(request.getAccountId(), request.getToken(), Permissions.ACCOUNTS_REGISTER);
@@ -117,7 +113,7 @@ public class RegistrationService {
 
 
 
-    public ResponseEntity<Enum<HttpStatus>> registerEmployee(EmployeeRequest request){
+    public ResponseEntity<Enum<HttpStatus>> registerEmployee(EmployeeRequestDAO request){
 
         /*Ensure Auth and Permissions*/
         securityManager.validateTokenAndPermission(request.getAccountId(), request.getToken(), Permissions.ACCOUNTS_REGISTER);
@@ -150,7 +146,7 @@ public class RegistrationService {
                 BCrypt.gensalt(10)));
     }
 
-    private void checkForPriorRegistration(AccountCreationRequest request){
+    private void checkForPriorRegistration(AccountCreationRequestDAO request){
         if(repos.getAccountByEmailAndBusinessId(
                 request.getEmail(), request.getBusinessId()) != null){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Account already registered!");

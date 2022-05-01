@@ -1,12 +1,12 @@
 package com.CSCI152.team4.server.Accounts.Interfaces;
 
 import com.CSCI152.team4.server.Accounts.Classes.WorkerAccount;
-import com.CSCI152.team4.server.Accounts.Requests.UpdateOtherRequest;
-import com.CSCI152.team4.server.Accounts.Requests.UpdateRequest;
+import com.CSCI152.team4.server.Accounts.Requests.UpdateOtherRequestDAO;
+import com.CSCI152.team4.server.Accounts.Requests.UpdateRequestDAO;
 
 public interface IAccountUpdater {
 
-    WorkerAccount updateOther(UpdateOtherRequest request);
+    WorkerAccount updateOther(UpdateOtherRequestDAO request);
 
-    WorkerAccount updateSelf(UpdateRequest request);
+    WorkerAccount updateSelf(UpdateRequestDAO request);
 }

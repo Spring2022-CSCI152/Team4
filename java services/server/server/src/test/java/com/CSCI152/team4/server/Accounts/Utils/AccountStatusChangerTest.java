@@ -2,7 +2,7 @@ package com.CSCI152.team4.server.Accounts.Utils;
 
 import com.CSCI152.team4.server.Accounts.Classes.*;
 import com.CSCI152.team4.server.Accounts.Interfaces.IAccountTransposer;
-import com.CSCI152.team4.server.Accounts.Requests.TargetAccountRequest;
+import com.CSCI152.team4.server.Accounts.Requests.TargetAccountRequestDAO;
 import com.CSCI152.team4.server.Util.Interfaces.AccountsRepoInterface;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,7 +38,7 @@ class AccountStatusChangerTest {
     BusinessAccount businessAccount;
 
     @Mock
-    private TargetAccountRequest request;
+    private TargetAccountRequestDAO request;
 
     @Captor
     ArgumentCaptor<AdminAccount> adminAccountArgumentCaptor;

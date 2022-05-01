@@ -1,20 +1,20 @@
 package com.CSCI152.team4.server.Accounts.Requests;
 
 import com.CSCI152.team4.server.Accounts.Classes.AccountId;
-import com.CSCI152.team4.server.Util.InstanceClasses.Request;
+import com.CSCI152.team4.server.Util.InstanceClasses.RequestDAO;
 
-public class TargetAccountRequest extends Request {
+public class TargetAccountRequestDAO extends RequestDAO {
 
     private AccountId targetId;
 
-    public  TargetAccountRequest(){
+    public TargetAccountRequestDAO(){
         super();
     }
-    public TargetAccountRequest(AccountId targetId) {
+    public TargetAccountRequestDAO(AccountId targetId) {
         this.targetId = targetId;
     }
 
-    public TargetAccountRequest(String token, AccountId accountId, AccountId targetId) {
+    public TargetAccountRequestDAO(String token, AccountId accountId, AccountId targetId) {
         super(token, accountId);
         this.targetId = targetId;
     }

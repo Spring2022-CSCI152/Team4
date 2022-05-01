@@ -5,19 +5,19 @@ import com.CSCI152.team4.server.Accounts.Classes.BusinessAccount;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
-public class BusinessRequest extends AccountCreationRequest {
+public class BusinessRequestDAO extends AccountCreationRequestDAO {
 
     private String businessName;
 
-    public BusinessRequest(){}
+    public BusinessRequestDAO(){}
 
-    public BusinessRequest(String businessName) {
+    public BusinessRequestDAO(String businessName) {
         this.businessName = businessName;
     }
 
-    public BusinessRequest(String email, String password,
-                           String firstName, String lastName,
-                           String jobTitle, String businessName) {
+    public BusinessRequestDAO(String email, String password,
+                              String firstName, String lastName,
+                              String jobTitle, String businessName) {
         super(email, password, firstName, lastName, jobTitle);
         this.businessName = businessName;
     }

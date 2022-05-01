@@ -2,21 +2,21 @@ package com.CSCI152.team4.server.Reports.Requests;
 
 import com.CSCI152.team4.server.Accounts.Classes.AccountId;
 import com.CSCI152.team4.server.Accounts.Settings.ReportFormat;
-import com.CSCI152.team4.server.Util.InstanceClasses.Request;
+import com.CSCI152.team4.server.Util.InstanceClasses.RequestDAO;
 
-public class ReportFormatUpdateRequest extends Request {
+public class ReportFormatUpdateRequestDAO extends RequestDAO {
 
     private ReportFormat reportFormat;
 
-    public ReportFormatUpdateRequest() {
+    public ReportFormatUpdateRequestDAO() {
         super();
     }
 
-    public ReportFormatUpdateRequest(ReportFormat reportFormat) {
+    public ReportFormatUpdateRequestDAO(ReportFormat reportFormat) {
         this.reportFormat = reportFormat;
     }
 
-    public ReportFormatUpdateRequest(String token, AccountId accountId, ReportFormat reportFormat) {
+    public ReportFormatUpdateRequestDAO(String token, AccountId accountId, ReportFormat reportFormat) {
         super(token, accountId);
         this.reportFormat = reportFormat;
     }
