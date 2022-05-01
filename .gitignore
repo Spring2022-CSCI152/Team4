@@ -40,4 +40,5 @@ application.properties
 **/.env
 **/suspects/**
 **/node_modules/**
-
+**/**.properties
+**/resources/**
