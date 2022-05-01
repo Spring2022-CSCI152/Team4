@@ -16,22 +16,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().anyRequest().permitAll();
-        http.csrf().disable();/*Allow local requests for testing*/
+        http.authorizeRequests()
+                .antMatchers(HttpMethod.OPTIONS,"/api/v1/*").permitAll()
+                .anyRequest().permitAll()
+                .and().csrf().disable();/*Allow local requests for testing*/
+
         http.headers().addHeaderWriter(
-                new StaticHeadersWriter("Access-Control-Allow-Origin", "*"));
-        http.cors().configurationSource(new CorsConfigurationSource() {
-            @Override
-            public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
-                CorsConfiguration config = new CorsConfiguration();
-                config.addAllowedMethod(CorsConfiguration.ALL);
-                config.addAllowedMethod(HttpMethod.PUT);
-                config.addAllowedMethod(HttpMethod.POST);
-                config.addAllowedMethod(HttpMethod.GET);
-                config.addAllowedOrigin(CorsConfiguration.ALL);
-                return config;
-            }
-        });
+                new StaticHeadersWriter("Access-Control-Allow-Origin", "*"))
+                .addHeaderWriter(
+                new StaticHeadersWriter("Access-Control-Allow-Methods",
+                        HttpMethod.OPTIONS.name(),
+                        HttpMethod.GET.name(),
+                        HttpMethod.POST.name(),
+                        HttpMethod.PUT.name()));
     }
 
 
