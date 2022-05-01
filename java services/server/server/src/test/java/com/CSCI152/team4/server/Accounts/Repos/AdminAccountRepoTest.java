@@ -1,6 +1,7 @@
 package com.CSCI152.team4.server.Accounts.Repos;
 
 import com.CSCI152.team4.server.Accounts.Classes.AdminAccount;
+import com.CSCI152.team4.server.Accounts.Classes.EmployeeAccount;
 import com.CSCI152.team4.server.Repos.AdminAccountRepo;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,8 +21,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
@@ -167,5 +167,18 @@ class AdminAccountRepoTest {
                     assertThat(c).usingRecursiveComparison()
                             .ignoringFields("timestamp").isEqualTo(original);
                 });
+    }
+    @Test
+    void itShouldDeleteEntry(){
+        //Given
+        AdminAccount account = getAdminAccount(127);
+
+        underTest.save(account);
+
+        //When
+        underTest.delete(account);
+
+        //Then
+        assertFalse(underTest.existsById(account.getAccountId()));
     }
 }
