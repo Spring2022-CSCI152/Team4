@@ -3,7 +3,7 @@ package com.CSCI152.team4.server.Accounts.Utils;
 import com.CSCI152.team4.server.Accounts.Classes.AccountId;
 import com.CSCI152.team4.server.Accounts.Classes.EmployeeAccount;
 import com.CSCI152.team4.server.Accounts.Classes.WorkerAccount;
-import com.CSCI152.team4.server.Accounts.Requests.PermissionUpdateRequest;
+import com.CSCI152.team4.server.Accounts.Requests.PermissionUpdateRequestDAO;
 import com.CSCI152.team4.server.Util.Interfaces.AccountsRepoInterface;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,7 +15,6 @@ import org.mockito.MockitoAnnotations;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
@@ -26,7 +25,7 @@ class AccountPermissionUpdaterTest {
     private AccountsRepoInterface accounts;
 
     @Mock
-    private PermissionUpdateRequest request;
+    private PermissionUpdateRequestDAO request;
 
     @Mock
     private EmployeeAccount account;

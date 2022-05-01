@@ -4,9 +4,7 @@ import com.CSCI152.team4.server.Accounts.Classes.AccountId;
 import com.CSCI152.team4.server.Accounts.Classes.BusinessAccount;
 import com.CSCI152.team4.server.Accounts.Classes.WorkerAccount;
 import com.CSCI152.team4.server.Accounts.Requests.LoginRequest;
-import com.CSCI152.team4.server.Util.InstanceClasses.AccountsRepoManager;
-import com.CSCI152.team4.server.Util.InstanceClasses.Request;
-import com.CSCI152.team4.server.Util.InstanceClasses.SecurityUtil;
+import com.CSCI152.team4.server.Util.InstanceClasses.RequestDAO;
 import com.CSCI152.team4.server.Util.Interfaces.AccountsRepoInterface;
 import com.CSCI152.team4.server.Util.Interfaces.SecurityManager;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,7 +37,7 @@ class SessionServiceTest {
     @Mock
     private LoginRequest loginRequest;
     @Mock
-    private Request request;
+    private RequestDAO requestDAO;
 
     @Mock
     private BusinessAccount businessAccount;
@@ -238,11 +236,11 @@ class SessionServiceTest {
         // Given
         String token = "token";
         AccountId accountId = new AccountId();
-        given(request.getToken()).willReturn(token);
-        given(request.getAccountId()).willReturn(accountId);
+        given(requestDAO.getToken()).willReturn(token);
+        given(requestDAO.getAccountId()).willReturn(accountId);
         doNothing().when(securityManager).invalidateToken(accountId, token);
         // When
-        ResponseEntity e = underTest.logout(request);
+        ResponseEntity e = underTest.logout(requestDAO);
         // Then
 
         verify(securityManager, times(1)).invalidateToken(accountId, token);

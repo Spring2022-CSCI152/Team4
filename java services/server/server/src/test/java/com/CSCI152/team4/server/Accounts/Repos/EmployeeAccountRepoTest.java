@@ -21,8 +21,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
@@ -208,10 +207,26 @@ class EmployeeAccountRepoTest {
     }
     static Stream<Arguments> itShouldSavePermissionsList(){
         return Stream.of(
-                Arguments.of(List.of("CR", "ER", "DR", "CU", "EU", "DU", "CA", "DA", "CI", "EI", "CP", "EP", "DP", "EN")),
-                Arguments.of(List.of("ER")),
+                Arguments.of(List.of("REPORT_CREATE", "REPORT_EDIT", "REPORT_DELETE", "UPDATE_CREATE",
+                        "UPDATE_EDIT", "UPDATE_DELETE", "ATTACHMENTS_CREATE",
+                        "ATTACHMENTS_DELETE", "IMAGES_CREATE", "IMAGES_EDIT")),
+                Arguments.of(List.of("REPORT_EDIT")),
                 Arguments.of(List.of())
         );
+    }
+
+    @Test
+    void itShouldDeleteEntry(){
+        //Given
+        EmployeeAccount account = getEmployeeAccount(127);
+
+        underTest.save(account);
+
+        //When
+        underTest.delete(account);
+
+        //Then
+        assertFalse(underTest.existsById(account.getAccountId()));
     }
 
 }

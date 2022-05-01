@@ -6,14 +6,12 @@ import com.CSCI152.team4.server.Reports.Classes.ProfileId;
 import com.CSCI152.team4.server.Reports.Classes.Report;
 import com.CSCI152.team4.server.Reports.Classes.ReportId;
 import com.CSCI152.team4.server.Reports.Interfaces.IReportValidator;
-import com.CSCI152.team4.server.Reports.Requests.PageableRequest;
-import com.CSCI152.team4.server.Reports.Requests.ProfileSubmissionRequest;
-import com.CSCI152.team4.server.Reports.Requests.ReportSubmissionRequest;
-import com.CSCI152.team4.server.Reports.Validator.ReportValidator;
+import com.CSCI152.team4.server.Reports.Requests.PageableRequestDAO;
+import com.CSCI152.team4.server.Reports.Requests.ProfileSubmissionRequestDAO;
+import com.CSCI152.team4.server.Reports.Requests.ReportSubmissionRequestDAO;
 import com.CSCI152.team4.server.Repos.CustomerProfilesRepo;
 import com.CSCI152.team4.server.Repos.ReportsRepo;
-import com.CSCI152.team4.server.Util.InstanceClasses.Request;
-import com.CSCI152.team4.server.Util.InstanceClasses.SecurityUtil;
+import com.CSCI152.team4.server.Util.InstanceClasses.RequestDAO;
 import com.CSCI152.team4.server.Util.Interfaces.SecurityManager;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -50,7 +48,7 @@ public class ReportsService {
         this.securityManager = securityManager;
     }
 
-    public Page<Report> getReports(PageableRequest request){
+    public Page<Report> getReports(PageableRequestDAO request){
         securityManager.validateToken(request.getAccountId(), request.getToken());
 
         if(request.getPage() == null){
@@ -59,7 +57,7 @@ public class ReportsService {
         return reports.findAllByBusinessId(request.getBusinessId(), request.getPageable());
     }
 
-    public Report saveReport(ReportSubmissionRequest request){
+    public Report saveReport(ReportSubmissionRequestDAO request){
         securityManager.validateTokenAndPermission(request.getAccountId(), request.getToken(), Permissions.REPORT_CREATE);
 
         Report reportToSave = request.getReport();
@@ -101,10 +99,10 @@ public class ReportsService {
         validator.validateProfiles(profiles);
     }
 
-    public Profile getProfile(String profileIdString, Request request){
-        securityManager.validateToken(request.getAccountId(), request.getToken());
+    public Profile getProfile(String profileIdString, RequestDAO requestDAO){
+        securityManager.validateToken(requestDAO.getAccountId(), requestDAO.getToken());
 
-        ProfileId profileId = new ProfileId(request.getBusinessId(), profileIdString);
+        ProfileId profileId = new ProfileId(requestDAO.getBusinessId(), profileIdString);
 
         if(!profiles.existsById(profileId)){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Profile not found!" );
@@ -113,7 +111,7 @@ public class ReportsService {
         return profiles.findById(profileId).get();
     }
 
-    public Page<Profile> getProfilesByPage(PageableRequest request){
+    public Page<Profile> getProfilesByPage(PageableRequestDAO request){
         securityManager.validateToken(request.getAccountId(), request.getToken());
 
         if(request.getPage() == null){
@@ -122,7 +120,7 @@ public class ReportsService {
         return profiles.findAllByBusinessId(request.getBusinessId(), request.getPageable());
     }
 
-    public Report updateReport(ReportSubmissionRequest request){
+    public Report updateReport(ReportSubmissionRequestDAO request){
         securityManager.validateTokenAndPermission(request.getAccountId(), request.getToken(), Permissions.REPORT_EDIT);
 
         ReportId reportId = request.getReport().getReportId();
@@ -159,7 +157,7 @@ public class ReportsService {
     }
 
 
-    public Profile updateProfile(ProfileSubmissionRequest request){
+    public Profile updateProfile(ProfileSubmissionRequestDAO request){
         securityManager.validateTokenAndPermission(request.getAccountId(), request.getToken(), Permissions.PROFILES_EDIT);
 
         ProfileId profileId = request.getProfile().getProfileId();

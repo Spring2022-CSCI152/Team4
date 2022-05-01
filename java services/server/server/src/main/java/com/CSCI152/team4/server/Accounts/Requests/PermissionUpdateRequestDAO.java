@@ -1,27 +1,26 @@
 package com.CSCI152.team4.server.Accounts.Requests;
 
 import com.CSCI152.team4.server.Accounts.Classes.AccountId;
-import com.CSCI152.team4.server.Util.InstanceClasses.Request;
 
 import java.util.List;
 import java.util.Objects;
 
-public class PermissionUpdateRequest extends TargetAccountRequest {
+public class PermissionUpdateRequestDAO extends TargetAccountRequestDAO {
 
 
     List<String> permissions;
 
-    public PermissionUpdateRequest() {
+    public PermissionUpdateRequestDAO() {
         super();
     }
 
-    public PermissionUpdateRequest(List<String> permissions) {
+    public PermissionUpdateRequestDAO(List<String> permissions) {
         super();
         this.permissions = permissions;
     }
 
 
-    public PermissionUpdateRequest(String token, AccountId accountId, AccountId targetId, List<String> permissions) {
+    public PermissionUpdateRequestDAO(String token, AccountId accountId, AccountId targetId, List<String> permissions) {
         super(token, accountId, targetId);
         this.permissions = permissions;
     }
@@ -37,8 +36,8 @@ public class PermissionUpdateRequest extends TargetAccountRequest {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof PermissionUpdateRequest)) return false;
-        PermissionUpdateRequest that = (PermissionUpdateRequest) o;
+        if (!(o instanceof PermissionUpdateRequestDAO)) return false;
+        PermissionUpdateRequestDAO that = (PermissionUpdateRequestDAO) o;
         return super.getAccountId().equals(that.getAccountId())
                 && super.getTargetId().equals(that.getTargetId())
                 && Objects.equals(getPermissions(), that.getPermissions())

@@ -1,11 +1,11 @@
 package com.CSCI152.team4.server.Accounts.Requests;
 
 import com.CSCI152.team4.server.Accounts.Classes.AccountId;
-import com.CSCI152.team4.server.Util.InstanceClasses.Request;
+import com.CSCI152.team4.server.Util.InstanceClasses.RequestDAO;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
-public class AccountCreationRequest extends Request {
+public class AccountCreationRequestDAO extends RequestDAO {
 
 
     private String email;
@@ -14,11 +14,11 @@ public class AccountCreationRequest extends Request {
     private String lastName;
     private String jobTitle;
 
-    public AccountCreationRequest(){}
+    public AccountCreationRequestDAO(){}
 
-    public AccountCreationRequest(String email, String password,
-                                  String firstName, String lastName,
-                                  String jobTitle) {
+    public AccountCreationRequestDAO(String email, String password,
+                                     String firstName, String lastName,
+                                     String jobTitle) {
         this.email = email;
         this.password = password;
         this.firstName = firstName;
@@ -26,10 +26,10 @@ public class AccountCreationRequest extends Request {
         this.jobTitle = jobTitle;
     }
 
-    public AccountCreationRequest(String token, AccountId accountId,
-                                  String email, String password,
-                                  String firstName, String lastName,
-                                  String jobTitle) {
+    public AccountCreationRequestDAO(String token, AccountId accountId,
+                                     String email, String password,
+                                     String firstName, String lastName,
+                                     String jobTitle) {
         super(token, accountId);
         this.email = email;
         this.password = password;

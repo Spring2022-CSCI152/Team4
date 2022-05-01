@@ -52,7 +52,7 @@ public class SettingsRepoManager implements SettingsRepoInterface {
             return optional.get();
         }
 
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Report Format Not Found!");
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Report Format Not Found!");
     }
 
     @Override
@@ -63,6 +63,6 @@ public class SettingsRepoManager implements SettingsRepoInterface {
             return optional.get();
         }
 
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Profile Format Not Found!");
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Profile Format Not Found!");
     }
 }

@@ -1,10 +1,9 @@
 package com.CSCI152.team4.server.Accounts.Utils;
 
 import com.CSCI152.team4.server.Accounts.Classes.AccountId;
-import com.CSCI152.team4.server.Accounts.Classes.AdminAccount;
 import com.CSCI152.team4.server.Accounts.Classes.EmployeeAccount;
 import com.CSCI152.team4.server.Accounts.Classes.WorkerAccount;
-import com.CSCI152.team4.server.Accounts.Requests.TargetAccountRequest;
+import com.CSCI152.team4.server.Accounts.Requests.TargetAccountRequestDAO;
 import com.CSCI152.team4.server.Util.Interfaces.AccountsRepoInterface;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,7 +31,7 @@ class AccountRetrieverTest {
     private EmployeeAccount employeeAccount;
 
     @Mock
-    private TargetAccountRequest request;
+    private TargetAccountRequestDAO request;
 
     private AccountRetriever underTest;
 

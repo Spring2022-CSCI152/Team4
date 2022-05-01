@@ -3,19 +3,16 @@ package com.CSCI152.team4.server.Reports.Service;
 import com.CSCI152.team4.server.Accounts.Settings.CustomerProfileFormat;
 import com.CSCI152.team4.server.Accounts.Settings.Permissions;
 import com.CSCI152.team4.server.Accounts.Settings.ReportFormat;
-import com.CSCI152.team4.server.Reports.Requests.ProfileFormatUpdateRequest;
-import com.CSCI152.team4.server.Reports.Requests.ReportFormatUpdateRequest;
+import com.CSCI152.team4.server.Reports.Requests.ProfileFormatUpdateRequestDAO;
+import com.CSCI152.team4.server.Reports.Requests.ReportFormatUpdateRequestDAO;
 import com.CSCI152.team4.server.Util.InstanceClasses.*;
 import com.CSCI152.team4.server.Util.Interfaces.AccountsRepoInterface;
-import com.CSCI152.team4.server.Util.Interfaces.Authenticator;
 import com.CSCI152.team4.server.Util.Interfaces.SecurityManager;
 import com.CSCI152.team4.server.Util.Interfaces.SettingsRepoInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
-import javax.persistence.criteria.CriteriaBuilder;
 
 @Service
 public class SettingsService {
@@ -31,30 +28,30 @@ public class SettingsService {
         this.accounts = accounts;
     }
 
-    public void setReportFormat(ReportFormatUpdateRequest request){
+    public void setReportFormat(ReportFormatUpdateRequestDAO request){
         authenticator.validateTokenAndPermission(request.getAccountId(), request.getToken(), Permissions.REPORT_FORMAT);
         validateBusinessId(request);
         validateAndSaveReportFormat(request.getBusinessId(), request.getReportFormat());
 
     }
 
-    public ReportFormat getReportFormat(Request request){
-        authenticator.validateToken(request.getAccountId(), request.getToken());
-        validateBusinessId(request);
-        return repoManager.getReportFormatIfExists(request.getBusinessId());
+    public ReportFormat getReportFormat(RequestDAO requestDAO){
+        authenticator.validateToken(requestDAO.getAccountId(), requestDAO.getToken());
+        validateBusinessId(requestDAO);
+        return repoManager.getReportFormatIfExists(requestDAO.getBusinessId());
     }
 
-    public void setProfileFormat(ProfileFormatUpdateRequest request){
+    public void setProfileFormat(ProfileFormatUpdateRequestDAO request){
         authenticator.validateTokenAndPermission(request.getAccountId(), request.getToken(), Permissions.PROFILES_FORMAT);
         validateBusinessId(request);
         validateAndSaveProfileFormat(request.getBusinessId(), request.getProfileFormat());
 
     }
 
-    public CustomerProfileFormat getProfileFormat(Request request){
-        authenticator.validateToken(request.getAccountId(), request.getToken());
-        validateBusinessId(request);
-        return repoManager.getCustomerProfileFormatIfExists(request.getBusinessId());
+    public CustomerProfileFormat getProfileFormat(RequestDAO requestDAO){
+        authenticator.validateToken(requestDAO.getAccountId(), requestDAO.getToken());
+        validateBusinessId(requestDAO);
+        return repoManager.getCustomerProfileFormatIfExists(requestDAO.getBusinessId());
     }
 
     private boolean isAdminForBusiness(Integer businessId, String accountIdString){
@@ -95,8 +92,8 @@ public class SettingsService {
         }
     }
 
-    private void validateBusinessId(Request request){
-        if(!isValidBusinessIdAndAccount(request.getBusinessId(), request.getAccountIdString())){
+    private void validateBusinessId(RequestDAO requestDAO){
+        if(!isValidBusinessIdAndAccount(requestDAO.getBusinessId(), requestDAO.getAccountIdString())){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Business ID");
         }
     }

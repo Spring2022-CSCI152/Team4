@@ -3,21 +3,21 @@ package com.CSCI152.team4.server.Accounts.Requests;
 import com.CSCI152.team4.server.Accounts.Classes.AccountId;
 import com.CSCI152.team4.server.Accounts.Classes.AdminAccount;
 
-public class AdminRequest extends AccountCreationRequest{
+public class AdminRequestDAO extends AccountCreationRequestDAO {
 
-    public AdminRequest() {
+    public AdminRequestDAO() {
     }
 
-    public AdminRequest(String email, String password,
-                        String firstName, String lastName,
-                        String jobTitle) {
+    public AdminRequestDAO(String email, String password,
+                           String firstName, String lastName,
+                           String jobTitle) {
         super(email, password, firstName, lastName, jobTitle);
     }
 
-    public AdminRequest(String token, AccountId accountId,
-                        String email, String password,
-                        String firstName, String lastName,
-                        String jobTitle) {
+    public AdminRequestDAO(String token, AccountId accountId,
+                           String email, String password,
+                           String firstName, String lastName,
+                           String jobTitle) {
         super(token, accountId, email, password, firstName, lastName, jobTitle);
     }
 

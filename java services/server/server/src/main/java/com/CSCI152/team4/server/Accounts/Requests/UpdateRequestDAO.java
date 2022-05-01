@@ -1,9 +1,9 @@
 package com.CSCI152.team4.server.Accounts.Requests;
 
 import com.CSCI152.team4.server.Accounts.Classes.AccountId;
-import com.CSCI152.team4.server.Util.InstanceClasses.Request;
+import com.CSCI152.team4.server.Util.InstanceClasses.RequestDAO;
 
-public class UpdateRequest extends Request {
+public class UpdateRequestDAO extends RequestDAO {
 
     private String email;
     private String password;
@@ -11,10 +11,10 @@ public class UpdateRequest extends Request {
     private String lastName;
     private String jobTitle;
 
-    public UpdateRequest() {
+    public UpdateRequestDAO() {
     }
 
-    public UpdateRequest(String email, String password, String firstName, String lastName, String jobTitle) {
+    public UpdateRequestDAO(String email, String password, String firstName, String lastName, String jobTitle) {
         this.email = email;
         this.password = password;
         this.firstName = firstName;
@@ -22,7 +22,7 @@ public class UpdateRequest extends Request {
         this.jobTitle = jobTitle;
     }
 
-    public UpdateRequest(String token, AccountId accountId, String email, String password, String firstName, String lastName, String jobTitle) {
+    public UpdateRequestDAO(String token, AccountId accountId, String email, String password, String firstName, String lastName, String jobTitle) {
         super(token, accountId);
         this.email = email;
         this.password = password;
