@@ -326,6 +326,44 @@ class AccountManagementServiceTest {
     }
 
     @Test
+    void itShouldThrowErrorOnSelfPermissionUpdate(){
+        String accountIdString = "SomeAcctId";
+        String email = "someEmail";
+        Integer businessId = 100;
+        Integer invalidBusinessId = 102;
+        String token = "token";
+        AccountId requester = new AccountId(accountIdString, email, businessId);
+        AccountId target = new AccountId("targetId", "targetEmail", invalidBusinessId);
+
+        EmployeeAccount expected = getEmployeeFromId(target);
+
+        given(permissionUpdateRequest.getAccountId()).willReturn(requester);
+        given(permissionUpdateRequest.getTargetId()).willReturn(requester);
+        given(permissionUpdateRequest.getToken()).willReturn(token);
+        given(permissionUpdateRequest.getBusinessId()).willReturn(businessId);
+        given(permissionUpdateRequest.getPermissions()).willReturn(List.of(
+                Permissions.REPORT_CREATE.name(),
+                Permissions.REPORT_EDIT.name(),
+                Permissions.PROFILES_EDIT.name(),
+                Permissions.REPORT_FORMAT.name()
+        ));
+        given(permissions.updatePermissions(permissionUpdateRequest)).willReturn(expected);
+
+        Permissions expectedPermission = Permissions.PERMISSIONS_EDIT;
+        doNothing().when(securityManager).validateTokenAndPermission(requester, token, expectedPermission);
+
+        //When
+        //Then
+        Exception e = assertThrows(ResponseStatusException.class,
+                () -> underTest.updateEmployeePermissions(permissionUpdateRequest));
+        assertThat(e).hasMessageContaining(HttpStatus.FORBIDDEN.name())
+                .hasMessageContaining("CANNOT UPDATE OWN PERMISSIONS!");
+
+        verify(securityManager, times(1)).validateTokenAndPermission(requester, token, expectedPermission);
+        verifyNoInteractions(permissions);
+        verifyNoMoreInteractions(securityManager);
+    }
+    @Test
     void itShouldThrowErrorOnPermissionUpdateWithInvalidBusinessId(){
         // Given
         String accountIdString = "SomeAcctId";

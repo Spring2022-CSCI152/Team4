@@ -6,6 +6,7 @@ import com.CSCI152.team4.server.Accounts.Interfaces.IAccountStatusChanger;
 import com.CSCI152.team4.server.Accounts.Requests.TargetAccountRequest;
 import com.CSCI152.team4.server.Util.InstanceClasses.AccountsRepoManager;
 import com.CSCI152.team4.server.Util.Interfaces.AccountsRepoInterface;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -22,10 +23,12 @@ public class AccountStatusChanger implements IAccountStatusChanger {
         this.accounts = accounts;
         this.transposer = transposer;
     }
-
     @Override
     public WorkerAccount promote(TargetAccountRequest request) {
         BusinessAccount businessAccount = accounts.getBusinessIfExists(request.getBusinessId());
+        if(businessAccount == null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Business Account not found!");
+        }
         if (businessAccount.getAccountType(request.getTargetId().getAccountIdString())
                 .equals(BusinessAccount.employeeAccountType)){
 
@@ -35,10 +38,12 @@ public class AccountStatusChanger implements IAccountStatusChanger {
         }
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Target is not Employee Account");
     }
-
     @Override
     public WorkerAccount demote(TargetAccountRequest request) {
         BusinessAccount businessAccount = accounts.getBusinessIfExists(request.getBusinessId());
+        if(businessAccount == null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Business Account not found!");
+        }
         if (businessAccount.getAccountType(request.getTargetId().getAccountIdString())
                 .equals(BusinessAccount.adminAccountType)){
 
@@ -46,26 +51,24 @@ public class AccountStatusChanger implements IAccountStatusChanger {
             ret.setPassword(null);
             return ret;
         }
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Target is not Employee Account");
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Target is not Admin Account");
     }
 
     private AdminAccount promoteToAdmin(BusinessAccount businessAccount, AccountId accountToPromote){
         businessAccount.promote(accountToPromote.getAccountIdString());
         accounts.saveBusinessAccount(businessAccount);
         try{
-            /* Transpose EmployeeAccount to AdminAccount*/
+//            /* Transpose EmployeeAccount to AdminAccount*/
             AdminAccount newAdmin = (AdminAccount) transposer.transposeTo(AdminAccount.class, accounts.getEmployeeIfExists(accountToPromote));
-            /*Save to AdminTable*/
+//            /*Save to AdminTable*/
             accounts.saveAdminAccount(newAdmin);
-            /*Remove from EmployeeTable*/
+//            /*Remove from EmployeeTable*/
             accounts.removeEmployeeAccount(accountToPromote);
-            /* Return database successfully swapped entries*/
+//            /* Return database successfully swapped entries*/
             if(accounts.adminExists(accountToPromote) && !accounts.employeeExists(accountToPromote)){
                 return accounts.getAdminIfExists(accountToPromote);
             }
-        }catch(Exception e){
-
-        }
+        }catch(Exception e){}
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Something went wrong during promotion!");
     }
 
@@ -73,19 +76,17 @@ public class AccountStatusChanger implements IAccountStatusChanger {
         businessAccount.demote(accountToDemote.getAccountIdString());
         accounts.saveBusinessAccount(businessAccount);
         try{
-            /*Transpose AdminAccount to EmployeeAccount*/
+//            /*Transpose AdminAccount to EmployeeAccount*/
             EmployeeAccount newEmployee = (EmployeeAccount) transposer.transposeTo(EmployeeAccount.class, accounts.getAdminIfExists(accountToDemote));
-            /*Save to Employee Table*/
+//            /*Save to Employee Table*/
             accounts.saveEmployeeAccount(newEmployee);
-            /*Delete From Admin Table*/
+//            /*Delete From Admin Table*/
             accounts.removeAdminAccount(accountToDemote);
-            /* Return database successfully swapped entries*/
+//            /* Return database successfully swapped entries*/
             if(!accounts.adminExists(accountToDemote) && accounts.employeeExists(accountToDemote)){
-                return accounts.getEmployeeIfExists(newEmployee.getAccountId());
+                return accounts.getEmployeeIfExists(accountToDemote);
             }
-        }catch(Exception e){
-            e.printStackTrace();
-        }
+        }catch(Exception e){}
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Something went wrong during demotion!");
     }
 }

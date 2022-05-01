@@ -72,6 +72,9 @@ public class AccountManagementService {
     public WorkerAccount updateEmployeePermissions(PermissionUpdateRequest request){
         securityManager.validateTokenAndPermission(request.getAccountId(), request.getToken(), Permissions.PERMISSIONS_EDIT);
         checkForSameBusinessIds(request.getAccountId(), request.getTargetId());
+        if(request.getAccountId().equals(request.getTargetId())){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "CANNOT UPDATE OWN PERMISSIONS!");
+        }
         return permissions.updatePermissions(request);
     }
 
