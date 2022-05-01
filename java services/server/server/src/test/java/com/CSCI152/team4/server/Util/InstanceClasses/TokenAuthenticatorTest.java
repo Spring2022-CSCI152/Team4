@@ -64,6 +64,28 @@ class TokenAuthenticatorTest {
         assertThat(tokenArgumentCaptor.getValue()).usingRecursiveComparison()
                 .isEqualTo(token);
     }
+    @Test
+    void itShouldThrowErrorOnExpiredValidateToken() {
+        // Given
+        String tokenString = "token";
+        String accountId = "idString";
+        given(tokenRepo.existsById(tokenString)).willReturn(true);
+        given(tokenRepo.findById(tokenString)).willReturn(Optional.of(token));
+        given(token.isExpired()).willReturn(true);
+        given(token.getAccountId()).willReturn(accountId);
+        given(token.getToken()).willReturn(tokenString);
+        doNothing().when(token).setExp(any(Timestamp.class));
+        given(tokenRepo.save(token)).willReturn(token);
+        // When
+        Exception e = assertThrows(ResponseStatusException.class,
+                () -> underTest.validateToken(accountId, tokenString));
+        // Then
+
+        assertThat(e)
+                .isInstanceOf(ResponseStatusException.class)
+                .hasMessageContaining(HttpStatus.FORBIDDEN.name())
+                .hasMessageContaining("Token has been invalidated!");
+    }
 
     @Test
     void itShouldGenerateToken() {
@@ -88,6 +110,23 @@ class TokenAuthenticatorTest {
         given(tokenRepo.findById(tokenString)).willReturn(Optional.of(token));
         given(token.isExpired()).willReturn(false);
         given(token.getAccountId()).willReturn(accountId);
+        given(token.getToken()).willReturn(tokenString);
+        // When
+        underTest.invalidateToken(accountId, tokenString);
+        // Then
+        verify(tokenRepo).delete(tokenArgumentCaptor.capture());
+
+    }
+
+    @Test
+    void itShouldInvalidateExpiredToken() {
+        // Given
+        String tokenString = "token";
+        String accountId = "idString";
+        given(tokenRepo.existsById(tokenString)).willReturn(true);
+        given(tokenRepo.findById(tokenString)).willReturn(Optional.of(token));
+        given(token.isExpired()).willReturn(true);
+        given(token.getAccountId()).willReturn(accountId + "some");
         given(token.getToken()).willReturn(tokenString);
         // When
         underTest.invalidateToken(accountId, tokenString);

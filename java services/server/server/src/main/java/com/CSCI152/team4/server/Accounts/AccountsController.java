@@ -81,10 +81,15 @@ public class AccountsController {
         return sessionService.login(request);
     }
 
-    @PostMapping("/logout")
-    public ResponseEntity logout(@RequestBody RequestDAO requestDAO){
+    @PutMapping("/logout")
+    public ResponseEntity logoutPut(@RequestBody RequestDAO requestDAO){
         return sessionService.logout(requestDAO);
     }
+    @PostMapping("/logout")
+    public ResponseEntity logoutPost(@RequestBody RequestDAO requestDAO){
+        return sessionService.logout(requestDAO);
+    }
+
 
     /**
      * Account Management Services
