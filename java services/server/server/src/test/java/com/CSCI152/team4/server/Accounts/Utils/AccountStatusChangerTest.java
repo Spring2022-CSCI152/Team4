@@ -10,6 +10,8 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -121,7 +123,18 @@ class AccountStatusChangerTest {
             InvocationTargetException,
             InstantiationException,
             IllegalAccessException{
+        //Given
+        Integer businessId = 100;
+        given(request.getBusinessId()).willReturn(businessId);
+        given(accounts.getBusinessIfExists(businessId)).willReturn(null);
 
+        //When
+        Exception e = assertThrows(ResponseStatusException.class, () -> underTest.promote(request));
+
+        // Then
+        assertThat(e)
+                .hasMessageContaining(HttpStatus.NOT_FOUND.name())
+                .hasMessageContaining("Business Account not found!");
     }
 
     @Test

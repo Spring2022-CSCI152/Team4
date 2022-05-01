@@ -26,6 +26,9 @@ public class AccountStatusChanger implements IAccountStatusChanger {
     @Override
     public WorkerAccount promote(TargetAccountRequest request) {
         BusinessAccount businessAccount = accounts.getBusinessIfExists(request.getBusinessId());
+        if(businessAccount == null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Business Account not found!");
+        }
         if (businessAccount.getAccountType(request.getTargetId().getAccountIdString())
                 .equals(BusinessAccount.employeeAccountType)){
 
@@ -39,6 +42,9 @@ public class AccountStatusChanger implements IAccountStatusChanger {
     @Override
     public WorkerAccount demote(TargetAccountRequest request) {
         BusinessAccount businessAccount = accounts.getBusinessIfExists(request.getBusinessId());
+        if(businessAccount == null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Business Account not found!");
+        }
         if (businessAccount.getAccountType(request.getTargetId().getAccountIdString())
                 .equals(BusinessAccount.adminAccountType)){
 
