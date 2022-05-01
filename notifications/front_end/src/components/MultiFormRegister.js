@@ -4,11 +4,10 @@ import ProfileFormat from "./ProfileFormat";
 import ReportFormat from "./ReportFormat";
 import axios from "axios";
 
-function RegisterForms() {
+function RegisterForms( {signInTrigger}) {
   const [page, setPage] = useState(0);
 
   const [formData, setFormData] = useState({
-    token: "someToken",
     firstName: "",
     lastName: "",
     email: "",
@@ -17,38 +16,98 @@ function RegisterForms() {
     jobTitle: "Admin",
   });
 
+  const [profileData, setProfileData] = useState({
+    name: false,
+    status: true,
+    address: true,
+    banDuration: true,
+    attributes: true,
+    imageName: true,
+    involvement: true,
+    reports: true,
+  });
+
+  const [reportData, setReportData] = useState({
+    reportId: false,
+    profiles: false,
+    date: false,
+    time: false,
+    author: false,
+    type: false,
+    box1: false,
+    box1Name: "",
+    box2: false,
+    box2Name: "",
+    box3: false,
+    box3Name: "",
+    box4: false,
+    box4Name: "",
+    box5: false,
+    box5Name: "",
+    attachments: false,
+    changeLog: false,
+  });
+
+
   const FormTitles = ["Register Business", "Profile Format", "Report Format"];
 
   const PageDisplay = () => {
     if (page === 0) {
       return <Register formData={formData} setFormData={setFormData} />;
     } else if (page === 1) {
-      return <ProfileFormat formData={formData} setFormData={setFormData} />;
+      return <ProfileFormat profileData={profileData} setProfileData={setProfileData} />;
     } else {
-      return <ReportFormat formData={formData} setFormData={setFormData} />;
+      return <ReportFormat reportData={reportData} setReportData={setReportData} />;
     }
   };
 
-  async function postRegistrationForm(e) {
-    e.preventDefault();
-
-    const response = await axios
-      .post(
-        "http://172.24.158.171:8080/api/v1/accounts/register_business",
-        formData
+  async function postRegistrationForm() {
+    const form1 = await axios.post("http://172.24.158.171:8080/api/v1/accounts/register_business", formData)
+      .then(form1 => {
+        console.log(form1.data)
+        localStorage.setItem("newUser", JSON.stringify(form1.data))
+        console.log('first res ', form1.status)
+      }).catch(error =>
+        console.log(error)
       )
-      .then((res) => {
-        console.log("back ", res);
-        localStorage.setItem("newUser", JSON.stringify(res.data));
-        console.log(response.status);
+
+    const newUser = JSON.parse(localStorage.getItem("newUser"))
+    const accountId = {
+      accountIdString: newUser.accountIdString,
+      email: newUser.email,
+      businessId: newUser.businessId
+    }
+
+    const form2 = await axios.post("http://172.24.158.171:8080/api/v1/reports/set_profile_format",
+      {
+        token: newUser.token,
+        accountId: accountId,
+        profileFormat: { ...profileData, businessId: newUser.businessId }
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .then(form2 => {
+        console.log('form2 data: :', form2.data)
+        console.log('res 2', form2.status)
+      }).catch(error =>
+        console.log(error)
+      )
+
+    const form3 = await axios.post("http://172.24.158.171:8080/api/v1/reports/set_report_format",
+      {
+        token: newUser.token,
+        accountId: accountId,
+        reportFormat: { ...reportData, businessId: newUser.businessId }
+      })
+      .then(form3 => {
+        console.log(form3)
+        console.log('res 3', form3.status)
+        signInTrigger();
+      }).catch(error =>
+        console.log(error)
+      )
   }
 
   return (
-    <form onSubmit={postRegistrationForm}>
+    <form >
       <div className="form-container">
         <div className="header">
           <h4>{FormTitles[page]}</h4>
@@ -64,6 +123,7 @@ function RegisterForms() {
               }}
             ></div>
           </div>
+
           <button
             className="btn btn-dark btn-lg btn-block"
             disabled={page == 0}
@@ -77,13 +137,22 @@ function RegisterForms() {
           <button
             type="submit"
             className="btn btn-dark btn-lg btn-block"
-            onClick={() => {
-              if (page === FormTitles.length - 1) {
+            onClick={(e) => {
+              e.preventDefault();
+              if (page == FormTitles.length - 1) {
                 <input
-                  type="text"
                   value={formData}
                   onChange={(e) => setFormData(e.target.value)}
                 />;
+                <input
+                  value={profileData}
+                  onChange={(e) => setProfileData(e.target.value)}
+                />;
+                <input
+                  value={reportData}
+                  onChange={(e) => setReportData(e.target.value)}
+                />;
+                { postRegistrationForm(e) }
               } else {
                 setPage((currPage) => currPage + 1);
               }

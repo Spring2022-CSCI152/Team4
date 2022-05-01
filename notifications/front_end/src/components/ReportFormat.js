@@ -1,157 +1,222 @@
 import { Form } from "react-bootstrap";
 import React, { useState, useEffect } from "react";
 
-function ReportFormat() {
-  const [isCheck, setCheck] = useState({
-    reportId: false,
-    profiles: false,
-    date: false,
-    time: false,
-    author: false,
-    type: false,
-    box1: false,
-    box1Name: "Source of Activity",
-    box2: false,
-    box2Name: "Investigation",
-    box3: false,
-    box3Name: "Resolution",
-    box4: false,
-    box4Name: "Conclusion",
-    box5: false,
-    box5Name: "Dispositional Information",
-    attachments: false,
-    changeLog: false,
-  });
+function ReportFormat({reportData,setReportData}) {
+  
 
   useEffect(() => {
     const data = window.localStorage.getItem("reportCheckStates");
-    if (data !== null) setCheck(JSON.parse(data));
+    if (data !== null) setReportData(JSON.parse(data));
   }, []);
 
   useEffect(() => {
-    window.localStorage.setItem("reportCheckStates", JSON.stringify(isCheck));
-  }, [isCheck]);
+    window.localStorage.setItem("reportCheckStates", JSON.stringify(reportData));
+  }, [reportData]);
 
   return (
     <div className=" justify-content-center">
       <h6>Select fields to display on Reports</h6>
     
       <div className="row">
-        <div className="col"></div>
         <div className="col">
-          <Form>
             <Form.Check
+              className="pt-2"
               type="switch"
               label="Name"
-              checked={isCheck.reportId}
+              checked={reportData.reportId}
               onChange={(e) => {
-                setCheck({ ...isCheck, reportId: !isCheck.reportId });
+                setReportData({ ...reportData, reportId: !reportData.reportId });
               }}
             />
             <Form.Check
+              className="pt-2"
               type="switch"
               label="Status"
-              checked={isCheck.profiles}
+              checked={reportData.profiles}
               onChange={(e) => {
-                setCheck({ ...isCheck, profiles: !isCheck.profiles });
+                setReportData({ ...reportData, profiles: !reportData.profiles });
               }}
             />
             <Form.Check
+              className="pt-2"
               type="switch"
-              label="date"
-              checked={isCheck.date}
+              label="Date"
+              checked={reportData.date}
               onChange={(e) => {
-                setCheck({ ...isCheck, date: !isCheck.date });
+                setReportData({ ...reportData, date: !reportData.date });
               }}
             />
             <Form.Check
+              className="pt-2"
               type="switch"
-              label="time"
-              checked={isCheck.time}
+              label="Time"
+              checked={reportData.time}
               onChange={(e) => {
-                setCheck({ ...isCheck, time: !isCheck.time });
+                setReportData({ ...reportData, time: !reportData.time });
               }}
             />
             <Form.Check
+              className="pt-2"
               type="switch"
-              label="author"
-              checked={isCheck.author}
+              label="Author"
+              checked={reportData.author}
               onChange={(e) => {
-                setCheck({ ...isCheck, author: !isCheck.author });
+                setReportData({ ...reportData, author: !reportData.author });
               }}
             />
             <Form.Check
+              className="pt-2"
               type="switch"
-              label="type"
-              checked={isCheck.type}
+              label="Type"
+              checked={reportData.type}
               onChange={(e) => {
-                setCheck({ ...isCheck, type: !isCheck.type });
+                setReportData({ ...reportData, type: !reportData.type });
               }}
             />
-          </Form>
-        </div>
-
-        <div className="col">
-          <Form>
-            <Form.Check
-              type="switch"
-              label="Box1 Source of Activity"
-              checked={isCheck.box1}
-              onChange={(e) => {
-                setCheck({ ...isCheck, box1: !isCheck.box1 });
-              }}
-            />
-            <Form.Check
-              type="switch"
-              label="Box2 Investigation"
-              checked={isCheck.box1}
-              onChange={(e) => {
-                setCheck({ ...isCheck, box2: !isCheck.box2 });
-              }}
-            />
-            <Form.Check
-              type="switch"
-              label="Box3 Resolution"
-              checked={isCheck.box3}
-              onChange={(e) => {
-                setCheck({ ...isCheck, box3: !isCheck.box3 });
-              }}
-            />
-            <Form.Check
-              type="switch"
-              label="Box4 Conclusion"
-              checked={isCheck.box4}
-              onChange={(e) => {
-                setCheck({ ...isCheck, box4: !isCheck.box4 });
-              }}
-            />
-            <Form.Check
-              type="switch"
-              label="Box5 Dispositional Information"
-              checked={isCheck.box5}
-              onChange={(e) => {
-                setCheck({ ...isCheck, box5: !isCheck.box5 });
-              }}
-            />
-            <Form.Check
+              <Form.Check
+                className="pt-2"
               type="switch"
               label="Attachments"
-              checked={isCheck.attachments}
+              checked={reportData.attachments}
               onChange={(e) => {
-                setCheck({ ...isCheck, attachments: !isCheck.attachments });
+                setReportData({ ...reportData, attachments: !reportData.attachments });
               }}
             />
             <Form.Check
+              className="pt-2"
               type="switch"
               label="Change Log"
-              checked={isCheck.changeLog}
+              checked={reportData.changeLog}
               onChange={(e) => {
-                setCheck({ ...isCheck, changeLog: !isCheck.changeLog });
+                setReportData({ ...reportData, changeLog: !reportData.changeLog });
               }}
             />
-          </Form>
+          
         </div>
-        <div className="col"></div>
+
+
+        {/* Boxes */}
+        <div className="col-2">
+          
+            <Form.Check
+              className="pt-2"
+              type="switch"
+              label="Box1"
+              checked={reportData.box1}
+              onChange={(e) => {
+                setReportData({ ...reportData, box1: !reportData.box1 }); 
+              }}/>
+
+            <Form.Check
+              className="pt-2"
+              type="switch"
+              label="Box2"
+              checked={reportData.box2}
+              onChange={(e) => {
+                setReportData({ ...reportData, box2: !reportData.box2 });
+              }}
+            />
+
+            <Form.Check
+              className="pt-2"
+              type="switch"
+              label="Box3"
+              checked={reportData.box3}
+              onChange={(e) => {
+                setReportData({ ...reportData, box3: !reportData.box3 });
+              }}
+            />
+
+            <Form.Check
+              className="pt-2"
+              type="switch"
+              label="Box4"
+              checked={reportData.box4}
+              onChange={(e) => {
+                setReportData({ ...reportData, box4: !reportData.box4 });
+              }}
+            />
+
+            <Form.Check
+              className="pt-2"
+              type="switch"
+              label="Box5"
+              checked={reportData.box5}
+              onChange={(e) => {
+                setReportData({ ...reportData, box5: !reportData.box5 });
+              }}
+            />
+          
+        </div>
+
+
+        {/* Box Entries */}
+        <div className="col">
+          <div>
+          <input
+          disabled = {!reportData.box1 }
+          className="mt-3"
+          type="text"
+          placeholder="Enter report field"
+          defaultValue={reportData.box1Name}
+          onChange={(e) => {
+            setReportData({ ...reportData, box1Name: e.target.value });
+          }}
+          />
+          </div>
+
+          <div>
+            <input
+            disabled = {!reportData.box2 }
+            className="mt-3"
+            type="text"
+            placeholder="Enter report field"
+            defaultValue={reportData.box2Name}
+            onChange={(e) => {
+              setReportData({ ...reportData, box2Name: e.target.value });
+            }}
+            />
+          </div>
+          
+          <div>
+          <input
+          disabled = {!reportData.box3 }
+          className="mt-3"
+          type="text"
+          placeholder="Enter report field"
+          defaultValue={reportData.box3Name}
+          onChange={(e) => {
+            setReportData({ ...reportData, box3Name: e.target.value });
+          }}
+          />
+          </div>
+
+          <div>
+          <input
+          disabled = {!reportData.box4 }
+          className="mt-3"
+          type="text"
+          placeholder="Enter report field"
+          defaultValue={reportData.box4Name}
+          onChange={(e) => {
+            setReportData({ ...reportData, box4Name: e.target.value });
+          }}
+          />
+          </div>
+
+          <div>
+          <input
+          disabled = {!reportData.box5 }
+          className="mt-3"
+          type="text"
+          placeholder="Enter report field"
+          defaultValue={reportData.box4Name}
+          onChange={(e) => {
+            setReportData({ ...reportData, box5Name: e.target.value });
+          }}
+          />
+          </div>
+        </div>
       </div>
      
     </div>

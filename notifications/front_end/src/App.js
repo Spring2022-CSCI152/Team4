@@ -17,7 +17,7 @@ const App = () => {
 
   const Layout = () => (
     <>
-      <NavBarComp authenticate={() => setUser(false)} />
+      <NavBarComp signInComplete={() => setUser(false)} />
       <Outlet />
     </>
   );
@@ -28,7 +28,7 @@ const App = () => {
         <>
           <Route
             path="/"
-            element={<SplashPage authenticate={() => setUser(true)} />}
+            element={<SplashPage signInComplete={() => setUser(true)} />}
           />
           <Route path="/Register" element={<Register />} />
         </>
