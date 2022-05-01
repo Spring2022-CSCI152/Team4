@@ -29,9 +29,9 @@ function Accounts(){
       </div>        
 
       {/* Search Bar */}
-      <div class="container-fluid p-3 card-label">
-        <form class="d-flex ">
-          <input class="form-control me-2" type="search" placeholder="Search Account" aria-label="Search" style={{ background: "#eeeeee" }}/>
+      <div className="container-fluid p-3 card-label">
+        <form className="d-flex ">
+          <input classname="form-control me-2" type="search" placeholder="Search Account" aria-label="Search" style={{ background: "#eeeeee" }}/>
           <button type="button" className="btn btn-outline-secondary" style={{ background: "#00f200" }}>Search</button>
         </form>
       </div>
