@@ -12,11 +12,10 @@ const SignIn = ({ signInTrigger }) => {
         console.log(signIn.data)
         console.log('ressponse ', signIn.status)
         signInTrigger();
-      }).catch(error =>
+      }).catch(error => {
         console.log(error),
-        alert("Incorrect Information")
-      )
-     
+        alert("Invalid Credentials")
+      })
   };
 
   const [formData, setFormData] = useState({
@@ -32,33 +31,40 @@ const SignIn = ({ signInTrigger }) => {
       <hr className="green"></hr>
 
       <Form.Group>
-        <input
-          className="mb-3"
-          type="text"
-          placeholder="Email"
-          defaultValue={formData.email}
-          onChange={(e) => {
-            setFormData({ ...formData, email: e.target.value });
-          }}
-        />
-        <input
-          className="mb-3"
-          type="password"
-          placeholder="Password"
-          defaultValue={formData.password}
-          onChange={(e) => {
-            setFormData({ ...formData, password: e.target.value });
-          }}
-        />
-        <input
-          className="mb-3"
-          type="text"
-          placeholder="Business Id"
-          defaultValue={formData.businessId}
-          onChange={(e) => {
-            setFormData({ ...formData, businessId: e.target.value });
-          }}
-        />
+        <div className="row">
+          <input
+            type="text"
+            placeholder="Email"
+            defaultValue={formData.email}
+            onChange={(e) => {
+              setFormData({ ...formData, email: e.target.value });
+            }}
+          />
+        </div>
+
+        <div className="row">
+          <input
+            type="password"
+            placeholder="Password"
+            defaultValue={formData.password}
+            onChange={(e) => {
+              setFormData({ ...formData, password: e.target.value });
+            }}
+          />
+        </div>
+
+        <div className="row">
+          <input
+            type="text"
+            placeholder="Business Id"
+            defaultValue={formData.businessId}
+            onChange={(e) => {
+              setFormData({ ...formData, businessId: e.target.value });
+            }}
+          />
+        </div>
+
+        
       </Form.Group>
 
       <div className="d-flex justify-content-center">
