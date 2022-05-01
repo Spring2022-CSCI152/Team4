@@ -43,14 +43,14 @@ public class AccountUpdater implements IAccountUpdater {
 
     private WorkerAccount updateAndSave(AccountId accountToUpdate, String accountType, UpdateRequest request){
         /*BECAUSE OF DIFFERENT REPOS, IMPLEMENTATION WAS STUCK TO THIS METHOD, IT VIOLATES OPEN/CLOSE PRINCIPAL*/
-        switch(accountType){
-            case BusinessAccount.adminAccountType:
-                return updateAndSaveAdminAccount(accountToUpdate, request);
-            case BusinessAccount.employeeAccountType:
-                return updateAndSaveEmployeeAccount(accountToUpdate, request);
-            default:
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Invalid Account Type!");
+
+        if(accountType.equals(BusinessAccount.adminAccountType)){
+            return updateAndSaveAdminAccount(accountToUpdate, request);
         }
+        else if(accountType.equals(BusinessAccount.employeeAccountType)){
+            return updateAndSaveEmployeeAccount(accountToUpdate, request);
+        }
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Invalid Account Type!");
     }
 
     private AdminAccount updateAndSaveAdminAccount(AccountId accountIdToUpdate, UpdateRequest request){
