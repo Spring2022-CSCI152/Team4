@@ -4,15 +4,12 @@ import com.CSCI152.team4.server.Accounts.Classes.AccountId;
 import com.CSCI152.team4.server.Accounts.Classes.AdminAccount;
 import com.CSCI152.team4.server.Accounts.Classes.BusinessAccount;
 import com.CSCI152.team4.server.Accounts.Classes.EmployeeAccount;
-import com.CSCI152.team4.server.Accounts.Requests.AdminRequest;
-import com.CSCI152.team4.server.Accounts.Requests.BusinessRequest;
-import com.CSCI152.team4.server.Accounts.Requests.EmployeeRequest;
+import com.CSCI152.team4.server.Accounts.Requests.AdminRequestDAO;
+import com.CSCI152.team4.server.Accounts.Requests.BusinessRequestDAO;
+import com.CSCI152.team4.server.Accounts.Requests.EmployeeRequestDAO;
 import com.CSCI152.team4.server.Accounts.Settings.CustomerProfileFormat;
 import com.CSCI152.team4.server.Accounts.Settings.Permissions;
 import com.CSCI152.team4.server.Accounts.Settings.ReportFormat;
-import com.CSCI152.team4.server.Util.InstanceClasses.AccountsRepoManager;
-import com.CSCI152.team4.server.Util.InstanceClasses.SecurityUtil;
-import com.CSCI152.team4.server.Util.InstanceClasses.SettingsRepoManager;
 import com.CSCI152.team4.server.Util.Interfaces.AccountsRepoInterface;
 import com.CSCI152.team4.server.Util.Interfaces.SecurityManager;
 import com.CSCI152.team4.server.Util.Interfaces.SettingsRepoInterface;
@@ -41,11 +38,11 @@ class RegistrationServiceTest {
     private SettingsRepoInterface settings;
 
     @Mock
-    private BusinessRequest businessRequest;
+    private BusinessRequestDAO businessRequest;
     @Mock
-    private AdminRequest adminRequest;
+    private AdminRequestDAO adminRequest;
     @Mock
-    private EmployeeRequest employeeRequest;
+    private EmployeeRequestDAO employeeRequest;
 
     @Mock
     AdminAccount adminAccount;

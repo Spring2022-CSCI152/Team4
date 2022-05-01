@@ -1,12 +1,12 @@
 package com.CSCI152.team4.server.Accounts.Interfaces;
 
 import com.CSCI152.team4.server.Accounts.Classes.WorkerAccount;
-import com.CSCI152.team4.server.Accounts.Requests.TargetAccountRequest;
+import com.CSCI152.team4.server.Accounts.Requests.TargetAccountRequestDAO;
 
 public interface IAccountStatusChanger {
 
-    WorkerAccount promote(TargetAccountRequest request);
+    WorkerAccount promote(TargetAccountRequestDAO request);
 
-    WorkerAccount demote(TargetAccountRequest request);
+    WorkerAccount demote(TargetAccountRequestDAO request);
 
 }

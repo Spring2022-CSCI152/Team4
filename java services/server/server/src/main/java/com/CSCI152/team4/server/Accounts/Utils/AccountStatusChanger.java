@@ -3,10 +3,8 @@ package com.CSCI152.team4.server.Accounts.Utils;
 import com.CSCI152.team4.server.Accounts.Classes.*;
 import com.CSCI152.team4.server.Accounts.Interfaces.IAccountTransposer;
 import com.CSCI152.team4.server.Accounts.Interfaces.IAccountStatusChanger;
-import com.CSCI152.team4.server.Accounts.Requests.TargetAccountRequest;
-import com.CSCI152.team4.server.Util.InstanceClasses.AccountsRepoManager;
+import com.CSCI152.team4.server.Accounts.Requests.TargetAccountRequestDAO;
 import com.CSCI152.team4.server.Util.Interfaces.AccountsRepoInterface;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -24,7 +22,7 @@ public class AccountStatusChanger implements IAccountStatusChanger {
         this.transposer = transposer;
     }
     @Override
-    public WorkerAccount promote(TargetAccountRequest request) {
+    public WorkerAccount promote(TargetAccountRequestDAO request) {
         BusinessAccount businessAccount = accounts.getBusinessIfExists(request.getBusinessId());
         if(businessAccount == null){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Business Account not found!");
@@ -39,7 +37,7 @@ public class AccountStatusChanger implements IAccountStatusChanger {
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Target is not Employee Account");
     }
     @Override
-    public WorkerAccount demote(TargetAccountRequest request) {
+    public WorkerAccount demote(TargetAccountRequestDAO request) {
         BusinessAccount businessAccount = accounts.getBusinessIfExists(request.getBusinessId());
         if(businessAccount == null){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Business Account not found!");

@@ -1,8 +1,8 @@
 package com.CSCI152.team4.server.Accounts.Utils;
 
 import com.CSCI152.team4.server.Accounts.Classes.*;
-import com.CSCI152.team4.server.Accounts.Requests.UpdateOtherRequest;
-import com.CSCI152.team4.server.Accounts.Requests.UpdateRequest;
+import com.CSCI152.team4.server.Accounts.Requests.UpdateOtherRequestDAO;
+import com.CSCI152.team4.server.Accounts.Requests.UpdateRequestDAO;
 import com.CSCI152.team4.server.Util.Interfaces.AccountsRepoInterface;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,10 +32,10 @@ class AccountUpdaterTest {
     private EmployeeAccount employeeAccount;
 
     @Mock
-    private UpdateRequest updateRequest;
+    private UpdateRequestDAO updateRequest;
 
     @Mock
-    private UpdateOtherRequest updateOtherRequest;
+    private UpdateOtherRequestDAO updateOtherRequest;
 
 
     private AccountUpdater underTest;

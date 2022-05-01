@@ -2,22 +2,21 @@ package com.CSCI152.team4.server.Reports.Requests;
 
 import com.CSCI152.team4.server.Accounts.Classes.AccountId;
 import com.CSCI152.team4.server.Reports.Classes.Profile;
-import com.CSCI152.team4.server.Reports.Classes.ProfileId;
-import com.CSCI152.team4.server.Util.InstanceClasses.Request;
+import com.CSCI152.team4.server.Util.InstanceClasses.RequestDAO;
 
-public class ProfileSubmissionRequest extends Request {
+public class ProfileSubmissionRequestDAO extends RequestDAO {
 
     Profile profile;
 
-    public ProfileSubmissionRequest(){
+    public ProfileSubmissionRequestDAO(){
         super();
     }
 
-    public ProfileSubmissionRequest(Profile profile) {
+    public ProfileSubmissionRequestDAO(Profile profile) {
         this.profile = profile;
     }
 
-    public ProfileSubmissionRequest(String token, AccountId accountId, Profile profile) {
+    public ProfileSubmissionRequestDAO(String token, AccountId accountId, Profile profile) {
         super(token, accountId);
         this.profile = profile;
     }

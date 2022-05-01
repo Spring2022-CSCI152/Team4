@@ -1,15 +1,14 @@
 package com.CSCI152.team4.server.Reports.Requests;
 
 import com.CSCI152.team4.server.Accounts.Classes.AccountId;
-import com.CSCI152.team4.server.Util.InstanceClasses.Request;
+import com.CSCI152.team4.server.Util.InstanceClasses.RequestDAO;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import java.util.HashMap;
-import java.util.List;
 
-public class PageableRequest extends Request {
+public class PageableRequestDAO extends RequestDAO {
 
     /*Page is sent to Database to get the desired results*/
     Integer page;
@@ -17,17 +16,17 @@ public class PageableRequest extends Request {
     Sort sort;
     HashMap<String, String> sortProperties;
 
-    public PageableRequest() {
+    public PageableRequestDAO() {
     }
 
-    public PageableRequest(Integer page, Integer size, Sort sort, HashMap<String, String> sortProperties) {
+    public PageableRequestDAO(Integer page, Integer size, Sort sort, HashMap<String, String> sortProperties) {
         this.page = page;
         this.size = size;
         this.sort = sort;
         this.sortProperties = sortProperties;
     }
 
-    public PageableRequest(String token, AccountId accountId, Integer page, Integer size, Sort sort, HashMap<String, String> sortProperties) {
+    public PageableRequestDAO(String token, AccountId accountId, Integer page, Integer size, Sort sort, HashMap<String, String> sortProperties) {
         super(token, accountId);
         this.page = page;
         this.size = size;

@@ -2,17 +2,11 @@ package com.CSCI152.team4.server.Accounts.Services;
 
 import com.CSCI152.team4.server.Accounts.Classes.*;
 import com.CSCI152.team4.server.Accounts.Interfaces.*;
-import com.CSCI152.team4.server.Accounts.Requests.PermissionUpdateRequest;
-import com.CSCI152.team4.server.Accounts.Requests.TargetAccountRequest;
-import com.CSCI152.team4.server.Accounts.Requests.UpdateOtherRequest;
-import com.CSCI152.team4.server.Accounts.Requests.UpdateRequest;
+import com.CSCI152.team4.server.Accounts.Requests.*;
+import com.CSCI152.team4.server.Accounts.Requests.PermissionUpdateRequestDAO;
+import com.CSCI152.team4.server.Accounts.Requests.UpdateOtherRequestDAO;
 import com.CSCI152.team4.server.Accounts.Settings.Permissions;
-import com.CSCI152.team4.server.Accounts.Utils.AccountPermissionUpdater;
-import com.CSCI152.team4.server.Accounts.Utils.AccountRetriever;
-import com.CSCI152.team4.server.Accounts.Utils.AccountStatusChanger;
-import com.CSCI152.team4.server.Accounts.Utils.AccountUpdater;
-import com.CSCI152.team4.server.Util.InstanceClasses.Request;
-import com.CSCI152.team4.server.Util.InstanceClasses.SecurityUtil;
+import com.CSCI152.team4.server.Util.InstanceClasses.RequestDAO;
 import com.CSCI152.team4.server.Util.Interfaces.SecurityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,34 +36,34 @@ public class AccountManagementService {
         this.status = status;
     }
 
-    public WorkerAccount getAccountInfo(Request request){
-        securityManager.validateToken(request.getAccountId(), request.getToken());
-        return accounts.getAccountInfo(request);
+    public WorkerAccount getAccountInfo(RequestDAO requestDAO){
+        securityManager.validateToken(requestDAO.getAccountId(), requestDAO.getToken());
+        return accounts.getAccountInfo(requestDAO);
     }
 
-    public WorkerAccount getOtherAccountInfo(TargetAccountRequest request){
+    public WorkerAccount getOtherAccountInfo(TargetAccountRequestDAO request){
         securityManager.validateTokenAndPermission(request.getAccountId(), request.getToken(), Permissions.ACCOUNTS_VIEW);
         checkForSameBusinessIds(request.getAccountId(), request.getTargetId());
         return accounts.getOtherAccountInfo(request);
     }
 
-    public List<WorkerAccount> getAccounts(Request request){
-        securityManager.validateTokenAndPermission(request.getAccountId(), request.getToken(), Permissions.ACCOUNTS_VIEW);
-        return accounts.getAccounts(request);
+    public List<WorkerAccount> getAccounts(RequestDAO requestDAO){
+        securityManager.validateTokenAndPermission(requestDAO.getAccountId(), requestDAO.getToken(), Permissions.ACCOUNTS_VIEW);
+        return accounts.getAccounts(requestDAO);
     }
 
-    public WorkerAccount updateInfo(UpdateRequest request){
+    public WorkerAccount updateInfo(UpdateRequestDAO request){
         securityManager.validateToken(request.getAccountId(), request.getToken());
         return updater.updateSelf(request);
     }
 
-    public WorkerAccount updateOther(UpdateOtherRequest request){
+    public WorkerAccount updateOther(UpdateOtherRequestDAO request){
         securityManager.validateTokenAndPermission(request.getAccountId(), request.getToken(), Permissions.ACCOUNTS_UPDATE);
         checkForSameBusinessIds(request.getAccountId(), request.getTargetId());
         return updater.updateOther(request);
     }
 
-    public WorkerAccount updateEmployeePermissions(PermissionUpdateRequest request){
+    public WorkerAccount updateEmployeePermissions(PermissionUpdateRequestDAO request){
         securityManager.validateTokenAndPermission(request.getAccountId(), request.getToken(), Permissions.PERMISSIONS_EDIT);
         checkForSameBusinessIds(request.getAccountId(), request.getTargetId());
         if(request.getAccountId().equals(request.getTargetId())){
@@ -78,13 +72,13 @@ public class AccountManagementService {
         return permissions.updatePermissions(request);
     }
 
-    public WorkerAccount promote(TargetAccountRequest request){
+    public WorkerAccount promote(TargetAccountRequestDAO request){
         securityManager.validateTokenAndPermission(request.getAccountId(), request.getToken(), Permissions.ACCOUNTS_PROMOTE);
         checkForSameBusinessIds(request.getAccountId(), request.getTargetId());
         return status.promote(request);
     }
 
-    public WorkerAccount demote(TargetAccountRequest request){
+    public WorkerAccount demote(TargetAccountRequestDAO request){
         securityManager.validateTokenAndPermission(request.getAccountId(), request.getToken(), Permissions.ACCOUNTS_DEMOTE);
         checkForSameBusinessIds(request.getAccountId(), request.getTargetId());
         return status.demote(request);

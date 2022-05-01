@@ -7,16 +7,16 @@ import org.springframework.web.server.ResponseStatusException;
 
 /*
 * This serves as a base class for all requests except the Login Request*/
-public class Request implements RequestInterface {
+public class RequestDAO implements RequestInterface {
 
     private String token;
 
     private AccountId accountId;
 
-    public Request() {
+    public RequestDAO() {
     }
 
-    public Request(String token, AccountId accountId) {
+    public RequestDAO(String token, AccountId accountId) {
         this.token = token;
         this.accountId = accountId;
     }

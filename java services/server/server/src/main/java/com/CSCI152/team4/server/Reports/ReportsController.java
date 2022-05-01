@@ -7,7 +7,7 @@ import com.CSCI152.team4.server.Reports.Classes.Report;
 import com.CSCI152.team4.server.Reports.Requests.*;
 import com.CSCI152.team4.server.Reports.Service.ReportsService;
 import com.CSCI152.team4.server.Reports.Service.SettingsService;
-import com.CSCI152.team4.server.Util.InstanceClasses.Request;
+import com.CSCI152.team4.server.Util.InstanceClasses.RequestDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -28,55 +28,55 @@ public class ReportsController {
     }
 
     @PostMapping("/set_report_format")
-    public ResponseEntity<Enum<HttpStatus>> setReportFormat(@RequestBody ReportFormatUpdateRequest request){
+    public ResponseEntity<Enum<HttpStatus>> setReportFormat(@RequestBody ReportFormatUpdateRequestDAO request){
         settingsService.setReportFormat(request);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
     @PostMapping("/set_profile_format")
-    public ResponseEntity<Enum<HttpStatus>> setProfileFormat(@RequestBody ProfileFormatUpdateRequest request){
+    public ResponseEntity<Enum<HttpStatus>> setProfileFormat(@RequestBody ProfileFormatUpdateRequestDAO request){
         settingsService.setProfileFormat(request);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/get_report_format")
-    public ReportFormat getReportFormat(@RequestBody Request request){
-        return settingsService.getReportFormat(request);
+    public ReportFormat getReportFormat(@RequestBody RequestDAO requestDAO){
+        return settingsService.getReportFormat(requestDAO);
     }
 
     @GetMapping("/get_profile_format")
-    public CustomerProfileFormat getProfileFormat(@RequestBody Request request){
-        return settingsService.getProfileFormat(request);
+    public CustomerProfileFormat getProfileFormat(@RequestBody RequestDAO requestDAO){
+        return settingsService.getProfileFormat(requestDAO);
     }
 
     @GetMapping("/get_reports")
-    public Page<Report> getReports(@RequestBody PageableRequest request){
+    public Page<Report> getReports(@RequestBody PageableRequestDAO request){
         return reportsService.getReports(request);
     }
 
     @PostMapping("/save_report")
-    public Report saveReport(@RequestBody ReportSubmissionRequest request){
+    public Report saveReport(@RequestBody ReportSubmissionRequestDAO request){
         return reportsService.saveReport(request);
     }
 
     @PutMapping("/update_profile")
-    public Profile updateProfile(@RequestBody ProfileSubmissionRequest request){
+    public Profile updateProfile(@RequestBody ProfileSubmissionRequestDAO request){
         return reportsService.updateProfile(request);
     }
 
     @GetMapping("/get_profile/{profile_id}")
-    public Profile getProfile(@PathVariable("profile_id") String profileId, @RequestBody Request request ){
-        return reportsService.getProfile(profileId, request);
+    public Profile getProfile(@PathVariable("profile_id") String profileId, @RequestBody RequestDAO requestDAO){
+        return reportsService.getProfile(profileId, requestDAO);
     }
 
     @GetMapping("/get_profiles")
-    public Page<Profile> getProfiles(@RequestBody PageableRequest request){
+    public Page<Profile> getProfiles(@RequestBody PageableRequestDAO request){
         return reportsService.getProfilesByPage(request);
     }
 
     @PutMapping("/update_report")
-    public Report updateReport(@RequestBody ReportSubmissionRequest request){
+    public Report updateReport(@RequestBody ReportSubmissionRequestDAO request){
         return reportsService.updateReport(request);
     }
 }
