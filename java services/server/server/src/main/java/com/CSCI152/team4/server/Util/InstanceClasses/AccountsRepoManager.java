@@ -118,19 +118,19 @@ public class AccountsRepoManager implements AccountsRepoInterface {
 
     @Override
     public boolean removeEmployeeAccount(AccountId accountId) {
-        if(employees.existsById(accountId)){
-            employees.deleteById(accountId);
-            return !employees.existsById(accountId);
+        if(accountId == null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "AccountId must not be null!");
         }
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Account Not Found!");
+        employees.deleteById(accountId);
+        return !employees.existsById(accountId);
     }
 
     @Override
     public boolean removeAdminAccount(AccountId accountId) {
-        if(admins.existsById(accountId)){
-            admins.deleteById(accountId);
-            return !admins.existsById(accountId);
+        if(accountId == null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "AccountId must not be null!");
         }
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Account Not Found!");
+        admins.deleteById(accountId);
+        return !admins.existsById(accountId);
     }
 }
