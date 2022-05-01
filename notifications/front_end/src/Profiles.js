@@ -37,7 +37,6 @@ function Profiles(){
         }}
         >
           {AcctSrcResult}
-          Open
         </div>
         {openProfModal && <ProfModal setOpenProfModal={setOpenProfModal} />}
       </div>

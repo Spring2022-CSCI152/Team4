@@ -42,7 +42,6 @@ function Accounts(){
       }}
       >
         {AcctSrcResult}
-        Open
       </div>
       {openAcctModal && <AcctModal setOpenAcctModal={setOpenAcctModal} />}
     </div>

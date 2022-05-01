@@ -28,12 +28,12 @@ function AcctModal({setOpenAcctModal}){
 
                             {/* Name Field*/}
                             <div className=" input-group input-group-lg text-center" >
-                                <div className="form-control fw-bold" style={{border: "0px solid #ced4da", backgroundColor: "grey"}}>Ryan Anderson</div> 
+                                <div className="form-control fw-bold" style={{border: "0px solid #ced4da", backgroundColor: "grey"}}>Employee Name</div> 
                             </div>
 
                             {/* Job Title Field*/}
                             <div className="input-group input-group-md text-center mb-4">
-                                <div className="form-control fw-bold" style={{border: "0px solid #ced4da", backgroundColor: "grey", color: "lightgrey"}}>Backend Developer</div> 
+                                <div className="form-control fw-bold" style={{border: "0px solid #ced4da", backgroundColor: "grey", color: "lightgrey"}}>Job Title</div> 
 
                             </div>
 
