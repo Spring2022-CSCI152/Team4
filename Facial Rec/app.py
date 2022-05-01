@@ -3,7 +3,7 @@ from io import BytesIO
 import json
 import base64
 from PIL import Image
-from flask import Flask, requestDAO, send_file
+from flask import Flask, request, send_file
 from db import DBManager, RequestParams
 from decouple import config
 
@@ -15,7 +15,7 @@ database = DBManager(config('HOST'), config('UNAME'), config('PASSWORD'), config
 # Saves a base64 rep of an image to local system and corresponding info to db
 @app.route("/save_image", methods=['POST'])
 def post():
-	request_data = requestDAO.get_json()
+	request_data = request.get_json()
 	if 'image' in request_data:
 		profile_id, file_name, business_id = get_feilds(request_data)
 
@@ -39,7 +39,7 @@ def save_image_to_local_system(path, image_b64):
 		image = Image.open(BytesIO(base64.b64decode(image_b64)))
 		image.save(path)
 
-# extracts the fields in a requestDAO
+# extracts the fields in a request
 def get_feilds(request_data):
 	return request_data['profile_id'], request_data['file_name'], request_data['business_id']
 
@@ -65,7 +65,7 @@ def makeDirs(business_id, profile_id):
 # Finds an image by 'profile_id' and 'business_id' then returns it
 @app.route("/get_image", methods=["GET"])
 def get():
-	request_data = requestDAO.get_json()
+	request_data = request.get_json()
 
 	profile_id = request_data['profile_id']
 	business_id = request_data['business_id']

@@ -81,8 +81,7 @@ public class TokenAuthenticator implements Authenticator {
 
         Token toRefresh = getTokenIfExists(token);
         if(!toRefresh.getAccountId().equals(accountId) || toRefresh.isExpired()){
-
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unable to refresh token!");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unable to refresh token!");
         }
 
         toRefresh.setExp(Timestamp.valueOf(LocalDateTime.now().plusMinutes(expirationInMins)));

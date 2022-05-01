@@ -12,7 +12,7 @@ import com.CSCI152.team4.server.Accounts.Requests.*;
 import com.CSCI152.team4.server.Accounts.Requests.TargetAccountRequestDAO;
 import com.CSCI152.team4.server.Accounts.Requests.UpdateOtherRequestDAO;
 import com.CSCI152.team4.server.Accounts.Settings.Permissions;
-import com.CSCI152.team4.server.Util.InstanceClasses.RequestDAO;
+import com.CSCI152.team4.server.Util.InstanceClasses.Request;
 import com.CSCI152.team4.server.Util.Interfaces.SecurityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,7 +44,7 @@ class AccountManagementServiceTest {
     private IAccountStatusChanger status;
 
     @Mock
-    private RequestDAO requestDAO;
+    private Request request;
     @Mock
     private TargetAccountRequestDAO targetedRequest;
     @Mock
@@ -96,20 +96,20 @@ class AccountManagementServiceTest {
         Integer businessId = 100;
         String token = "token";
         AccountId accountId = new AccountId(accountIdString, email, businessId);
-        given(requestDAO.getAccountId()).willReturn(accountId);
-        given(requestDAO.getToken()).willReturn(token);
+        given(request.getAccountId()).willReturn(accountId);
+        given(request.getToken()).willReturn(token);
 
-        AdminAccount expected = getAdminFromId(requestDAO.getAccountId());
-        doReturn(expected).when(accounts).getAccountInfo(requestDAO);
+        AdminAccount expected = getAdminFromId(request.getAccountId());
+        doReturn(expected).when(accounts).getAccountInfo(request);
 
         doNothing().when(securityManager).validateToken(accountId, token);
 
         // When
-        WorkerAccount returnable = underTest.getAccountInfo(requestDAO);
+        WorkerAccount returnable = underTest.getAccountInfo(request);
         // Then
 
         verify(securityManager, times(1)).validateToken(accountId, token);
-        verify(accounts, times(1)).getAccountInfo(requestDAO);
+        verify(accounts, times(1)).getAccountInfo(request);
         verifyNoMoreInteractions(securityManager, accounts);
         assertThat(returnable).usingRecursiveComparison().isEqualTo(expected);
     }
@@ -187,18 +187,18 @@ class AccountManagementServiceTest {
         AccountId account2 = new AccountId("account2", "account2", targetedBusinessId);
         List<WorkerAccount> accountsList
                 = List.of(getAdminFromId(accountId), getAdminFromId(account1), getEmployeeFromId(account2));
-        given(requestDAO.getAccountId()).willReturn(accountId);
-        given(requestDAO.getToken()).willReturn(token);
-        given(accounts.getAccounts(requestDAO)).willReturn(accountsList);
+        given(request.getAccountId()).willReturn(accountId);
+        given(request.getToken()).willReturn(token);
+        given(accounts.getAccounts(request)).willReturn(accountsList);
         Permissions expectedPermission = Permissions.ACCOUNTS_VIEW;
         doNothing().when(securityManager).validateTokenAndPermission(accountId, token, expectedPermission);
 
 
         // When
-        List<WorkerAccount> actual = underTest.getAccounts(requestDAO);
+        List<WorkerAccount> actual = underTest.getAccounts(request);
         // Then
         assertThat(actual).usingRecursiveComparison().isEqualTo(accountsList);
-        verify(accounts, times(1)).getAccounts(requestDAO);
+        verify(accounts, times(1)).getAccounts(request);
         verify(securityManager, times(1))
                 .validateTokenAndPermission(accountId, token, expectedPermission);
         verifyNoMoreInteractions(securityManager, accounts);

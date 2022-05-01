@@ -1,9 +1,9 @@
 package com.CSCI152.team4.server.Accounts.Requests;
 
 import com.CSCI152.team4.server.Accounts.Classes.AccountId;
-import com.CSCI152.team4.server.Util.InstanceClasses.RequestDAO;
+import com.CSCI152.team4.server.Util.InstanceClasses.Request;
 
-public class UpdateRequestDAO extends RequestDAO {
+public class UpdateRequestDAO extends Request {
 
     private String email;
     private String password;

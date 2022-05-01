@@ -64,6 +64,24 @@ class TokenAuthenticatorTest {
         assertThat(tokenArgumentCaptor.getValue()).usingRecursiveComparison()
                 .isEqualTo(token);
     }
+
+    @Test
+    void itShouldThrowOnNoTokenFound(){
+        //Given
+        String accountId = "idString";
+        String token = "token";
+        given(tokenRepo.existsById(token)).willReturn(false);
+
+        //When
+        Exception e = assertThrows(ResponseStatusException.class,
+                () -> underTest.validateToken(accountId, token));
+
+        assertThat(e)
+                .isInstanceOf(ResponseStatusException.class)
+                .hasMessageContaining(HttpStatus.NOT_FOUND.name())
+                .hasMessageContaining("No token found!");
+
+    }
     @Test
     void itShouldThrowErrorOnExpiredValidateToken() {
         // Given

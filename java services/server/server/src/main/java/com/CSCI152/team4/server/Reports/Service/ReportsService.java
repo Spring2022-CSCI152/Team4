@@ -11,7 +11,7 @@ import com.CSCI152.team4.server.Reports.Requests.ProfileSubmissionRequestDAO;
 import com.CSCI152.team4.server.Reports.Requests.ReportSubmissionRequestDAO;
 import com.CSCI152.team4.server.Repos.CustomerProfilesRepo;
 import com.CSCI152.team4.server.Repos.ReportsRepo;
-import com.CSCI152.team4.server.Util.InstanceClasses.RequestDAO;
+import com.CSCI152.team4.server.Util.InstanceClasses.Request;
 import com.CSCI152.team4.server.Util.Interfaces.SecurityManager;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -99,10 +99,10 @@ public class ReportsService {
         validator.validateProfiles(profiles);
     }
 
-    public Profile getProfile(String profileIdString, RequestDAO requestDAO){
-        securityManager.validateToken(requestDAO.getAccountId(), requestDAO.getToken());
+    public Profile getProfile(String profileIdString, Request request){
+        securityManager.validateToken(request.getAccountId(), request.getToken());
 
-        ProfileId profileId = new ProfileId(requestDAO.getBusinessId(), profileIdString);
+        ProfileId profileId = new ProfileId(request.getBusinessId(), profileIdString);
 
         if(!profiles.existsById(profileId)){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Profile not found!" );

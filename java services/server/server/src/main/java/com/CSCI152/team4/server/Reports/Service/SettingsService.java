@@ -35,10 +35,10 @@ public class SettingsService {
 
     }
 
-    public ReportFormat getReportFormat(RequestDAO requestDAO){
-        authenticator.validateToken(requestDAO.getAccountId(), requestDAO.getToken());
-        validateBusinessId(requestDAO);
-        return repoManager.getReportFormatIfExists(requestDAO.getBusinessId());
+    public ReportFormat getReportFormat(Request request){
+        authenticator.validateToken(request.getAccountId(), request.getToken());
+        validateBusinessId(request);
+        return repoManager.getReportFormatIfExists(request.getBusinessId());
     }
 
     public void setProfileFormat(ProfileFormatUpdateRequestDAO request){
@@ -48,10 +48,10 @@ public class SettingsService {
 
     }
 
-    public CustomerProfileFormat getProfileFormat(RequestDAO requestDAO){
-        authenticator.validateToken(requestDAO.getAccountId(), requestDAO.getToken());
-        validateBusinessId(requestDAO);
-        return repoManager.getCustomerProfileFormatIfExists(requestDAO.getBusinessId());
+    public CustomerProfileFormat getProfileFormat(Request request){
+        authenticator.validateToken(request.getAccountId(), request.getToken());
+        validateBusinessId(request);
+        return repoManager.getCustomerProfileFormatIfExists(request.getBusinessId());
     }
 
     private boolean isAdminForBusiness(Integer businessId, String accountIdString){
@@ -92,8 +92,8 @@ public class SettingsService {
         }
     }
 
-    private void validateBusinessId(RequestDAO requestDAO){
-        if(!isValidBusinessIdAndAccount(requestDAO.getBusinessId(), requestDAO.getAccountIdString())){
+    private void validateBusinessId(Request request){
+        if(!isValidBusinessIdAndAccount(request.getBusinessId(), request.getAccountIdString())){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Business ID");
         }
     }

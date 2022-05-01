@@ -6,7 +6,7 @@ import com.CSCI152.team4.server.Accounts.Requests.*;
 import com.CSCI152.team4.server.Accounts.Requests.PermissionUpdateRequestDAO;
 import com.CSCI152.team4.server.Accounts.Requests.UpdateOtherRequestDAO;
 import com.CSCI152.team4.server.Accounts.Settings.Permissions;
-import com.CSCI152.team4.server.Util.InstanceClasses.RequestDAO;
+import com.CSCI152.team4.server.Util.InstanceClasses.Request;
 import com.CSCI152.team4.server.Util.Interfaces.SecurityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,9 +36,9 @@ public class AccountManagementService {
         this.status = status;
     }
 
-    public WorkerAccount getAccountInfo(RequestDAO requestDAO){
-        securityManager.validateToken(requestDAO.getAccountId(), requestDAO.getToken());
-        return accounts.getAccountInfo(requestDAO);
+    public WorkerAccount getAccountInfo(Request request){
+        securityManager.validateToken(request.getAccountId(), request.getToken());
+        return accounts.getAccountInfo(request);
     }
 
     public WorkerAccount getOtherAccountInfo(TargetAccountRequestDAO request){
@@ -47,9 +47,9 @@ public class AccountManagementService {
         return accounts.getOtherAccountInfo(request);
     }
 
-    public List<WorkerAccount> getAccounts(RequestDAO requestDAO){
-        securityManager.validateTokenAndPermission(requestDAO.getAccountId(), requestDAO.getToken(), Permissions.ACCOUNTS_VIEW);
-        return accounts.getAccounts(requestDAO);
+    public List<WorkerAccount> getAccounts(Request request){
+        securityManager.validateTokenAndPermission(request.getAccountId(), request.getToken(), Permissions.ACCOUNTS_VIEW);
+        return accounts.getAccounts(request);
     }
 
     public WorkerAccount updateInfo(UpdateRequestDAO request){

@@ -7,7 +7,7 @@ import com.CSCI152.team4.server.Reports.Classes.Report;
 import com.CSCI152.team4.server.Reports.Requests.*;
 import com.CSCI152.team4.server.Reports.Service.ReportsService;
 import com.CSCI152.team4.server.Reports.Service.SettingsService;
-import com.CSCI152.team4.server.Util.InstanceClasses.RequestDAO;
+import com.CSCI152.team4.server.Util.InstanceClasses.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -42,17 +42,17 @@ public class ReportsController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/get_report_format")
-    public ReportFormat getReportFormat(@RequestBody RequestDAO requestDAO){
-        return settingsService.getReportFormat(requestDAO);
+    @PostMapping("/get_report_format")
+    public ReportFormat getReportFormat(@RequestBody Request request){
+        return settingsService.getReportFormat(request);
     }
 
-    @GetMapping("/get_profile_format")
-    public CustomerProfileFormat getProfileFormat(@RequestBody RequestDAO requestDAO){
-        return settingsService.getProfileFormat(requestDAO);
+    @PostMapping("/get_profile_format")
+    public CustomerProfileFormat getProfileFormat(@RequestBody Request request){
+        return settingsService.getProfileFormat(request);
     }
 
-    @GetMapping("/get_reports")
+    @PostMapping("/get_reports")
     public Page<Report> getReports(@RequestBody PageableRequestDAO request){
         return reportsService.getReports(request);
     }
@@ -67,12 +67,12 @@ public class ReportsController {
         return reportsService.updateProfile(request);
     }
 
-    @GetMapping("/get_profile/{profile_id}")
-    public Profile getProfile(@PathVariable("profile_id") String profileId, @RequestBody RequestDAO requestDAO){
-        return reportsService.getProfile(profileId, requestDAO);
+    @PostMapping("/get_profile/{profile_id}")
+    public Profile getProfile(@PathVariable("profile_id") String profileId, @RequestBody Request request){
+        return reportsService.getProfile(profileId, request);
     }
 
-    @GetMapping("/get_profiles")
+    @PostMapping("/get_profiles")
     public Page<Profile> getProfiles(@RequestBody PageableRequestDAO request){
         return reportsService.getProfilesByPage(request);
     }

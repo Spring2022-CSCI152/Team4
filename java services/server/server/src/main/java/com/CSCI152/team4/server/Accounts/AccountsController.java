@@ -6,7 +6,7 @@ import com.CSCI152.team4.server.Accounts.Requests.*;
 import com.CSCI152.team4.server.Accounts.Services.AccountManagementService;
 import com.CSCI152.team4.server.Accounts.Services.RegistrationService;
 import com.CSCI152.team4.server.Accounts.Services.SessionService;
-import com.CSCI152.team4.server.Util.InstanceClasses.RequestDAO;
+import com.CSCI152.team4.server.Util.InstanceClasses.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -83,31 +83,34 @@ public class AccountsController {
     }
 
     @PutMapping("/logout")
-    public ResponseEntity logoutPut(@RequestBody RequestDAO requestDAO){
-        return sessionService.logout(requestDAO);
+    public ResponseEntity logoutPut(@RequestBody Request request){
+        System.out.println("Logging Out: " + request.getAccountEmail());
+        return sessionService.logout(request);
     }
+
     @PostMapping("/logout")
-    public ResponseEntity logoutPost(@RequestBody RequestDAO requestDAO){
-        return sessionService.logout(requestDAO);
+    public ResponseEntity logoutPost(@RequestBody Request request){
+        System.out.println("Logging Out: " + request.getAccountEmail());
+        return sessionService.logout(request);
     }
 
 
     /**
      * Account Management Services
      * */
-    @GetMapping("/my_account_info")
-    public WorkerAccount getMyInfo(@RequestBody RequestDAO requestDAO){
-        return managementService.getAccountInfo(requestDAO);
+    @PostMapping("/my_account_info")
+    public WorkerAccount getMyInfo(@RequestBody Request request){
+        return managementService.getAccountInfo(request);
     }
 
-    @GetMapping("/get_other_account_info")
+    @PostMapping("/get_other_account_info")
     public WorkerAccount getAdminAccountInfo(@RequestBody TargetAccountRequestDAO request){
         return managementService.getOtherAccountInfo(request);
     }
 
-    @GetMapping("/get_accounts")
-    public List<WorkerAccount> getAccounts(@RequestBody RequestDAO requestDAO){
-        return managementService.getAccounts(requestDAO);
+    @PostMapping("/get_accounts")
+    public List<WorkerAccount> getAccounts(@RequestBody Request request){
+        return managementService.getAccounts(request);
     }
 
     @PutMapping("/update_info")
