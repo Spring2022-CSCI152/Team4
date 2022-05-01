@@ -29,15 +29,17 @@ public class ReportsController {
 
     @PostMapping("/set_report_format")
     public ResponseEntity<Enum<HttpStatus>> setReportFormat(@RequestBody ReportFormatUpdateRequestDAO request){
+        System.out.println("Setting Report Format");
         settingsService.setReportFormat(request);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 
 
     @PostMapping("/set_profile_format")
     public ResponseEntity<Enum<HttpStatus>> setProfileFormat(@RequestBody ProfileFormatUpdateRequestDAO request){
+        System.out.println("Setting Profile Format");
         settingsService.setProfileFormat(request);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/get_report_format")

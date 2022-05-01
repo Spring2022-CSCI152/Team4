@@ -30,7 +30,7 @@ public class ReportValidator implements IReportValidator {
     @Override
     public void validateReport(Report report){
         if(!settingsRepoManager.reportFormatExistsById(report.getBusinessId())){
-            throw new ResponseStatusException(HttpStatus.OK, "Business Not Found!");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Business Not Found!");
         }
         if (report.getReportIdString() == null){
             report.setReportIdString(UUID.randomUUID().toString());
@@ -53,7 +53,7 @@ public class ReportValidator implements IReportValidator {
     @Override
     public void validateProfile(Profile profile){
         if(!settingsRepoManager.reportFormatExistsById(profile.getBusinessId())){
-            throw new ResponseStatusException(HttpStatus.OK, "Business Not Found!");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Business Not Found!");
         }
 
         if(profile.getProfileIdString() == null){

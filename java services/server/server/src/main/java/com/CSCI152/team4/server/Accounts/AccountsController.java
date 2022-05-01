@@ -81,7 +81,7 @@ public class AccountsController {
         return sessionService.login(request);
     }
 
-    @PutMapping("/logout")
+    @PostMapping("/logout")
     public ResponseEntity logout(@RequestBody RequestDAO requestDAO){
         return sessionService.logout(requestDAO);
     }

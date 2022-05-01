@@ -8,6 +8,8 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -96,8 +98,44 @@ class TokenAuthenticatorTest {
 
     @Test
     void itShouldRefreshToken() {
-        // Given
+        String tokenString = "token";
+        String accountId = "idString";
+        given(tokenRepo.existsById(tokenString)).willReturn(true);
+        given(tokenRepo.findById(tokenString)).willReturn(Optional.of(token));
+        given(token.isExpired()).willReturn(false);
+        given(token.getAccountId()).willReturn(accountId);
+        given(token.getToken()).willReturn(tokenString);
+        doNothing().when(token).setExp(any(Timestamp.class));
+        given(tokenRepo.save(token)).willReturn(token);
         // When
+        underTest.refreshToken(accountId, tokenString);
         // Then
+        verify(tokenRepo).save(tokenArgumentCaptor.capture());
+        verify(tokenRepo, times(1)).save(token);
+        verify(token, times(1)).setExp(any(Timestamp.class));
+        verify(token, times(1)).isExpired();
+        assertThat(tokenArgumentCaptor.getValue()).usingRecursiveComparison()
+                .isEqualTo(token);
+    }
+
+    @Test
+    void itShouldThrowExceptionOnExpiredTokenRefresh(){
+        String tokenString = "token";
+        String accountId = "idString";
+        given(tokenRepo.existsById(tokenString)).willReturn(true);
+        given(tokenRepo.findById(tokenString)).willReturn(Optional.of(token));
+        given(token.isExpired()).willReturn(true);
+        given(token.getAccountId()).willReturn(accountId);
+        given(token.getToken()).willReturn(tokenString);
+        doNothing().when(token).setExp(any(Timestamp.class));
+        given(tokenRepo.save(token)).willReturn(token);
+        // When
+        Exception e = assertThrows(ResponseStatusException.class,
+                () ->underTest.refreshToken(accountId, tokenString));
+        // Then
+        assertThat(e)
+                .isInstanceOf(ResponseStatusException.class)
+                .hasMessageContaining(HttpStatus.FORBIDDEN.name())
+                .hasMessageContaining("Unable to refresh token!");
     }
 }

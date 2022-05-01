@@ -28,7 +28,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         HttpMethod.OPTIONS.name(),
                         HttpMethod.GET.name(),
                         HttpMethod.POST.name(),
+                        HttpMethod.PUT.name()))
+                .addHeaderWriter(
+                new StaticHeadersWriter("Allow",
+                        HttpMethod.OPTIONS.name(),
+                        HttpMethod.GET.name(),
+                        HttpMethod.POST.name(),
                         HttpMethod.PUT.name()));
+        http.cors();
     }
 
 

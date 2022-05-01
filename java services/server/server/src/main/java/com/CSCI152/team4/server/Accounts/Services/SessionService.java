@@ -56,7 +56,6 @@ public class SessionService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Business Not Found");
         }
 
-
         String accountType = businessAccount.getAccountType(accountId);
         boolean isValidated =
                 (accountType.equals(BusinessAccount.adminAccountType)
