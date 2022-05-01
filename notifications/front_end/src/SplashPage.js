@@ -5,14 +5,14 @@ import RegisterForms from "./components/MultiFormRegister";
 import { useState } from "react";
 import { Navbar } from "react-bootstrap";
 
-const SplashPage = ({ authenticate }) => {
+const SplashPage = ({ signInComplete }) => {
 
   const [form, setForm] = useState(true);
-  const [text, setText] = useState(true);
+  const [buttonText, setButtonText] = useState(true);
 
   function handleFormToggleClick() {  
     setForm(!form);
-    setText(!text);
+    setButtonText(!buttonText);
   }
   
   return (
@@ -28,7 +28,7 @@ const SplashPage = ({ authenticate }) => {
         <div className="col-3"></div>
         <div className="col">
           {" "}
-          {form ? <SignIn signInClicked={()=>authenticate()} /> : <RegisterForms/>}
+          {form ? <SignIn signInTrigger={()=>signInComplete()} /> : <RegisterForms signInTrigger={()=>signInComplete()}/>}
           <button
             onClick={() => {
               handleFormToggleClick();
@@ -36,7 +36,7 @@ const SplashPage = ({ authenticate }) => {
             type="button"
             className="btn btn-link"
           >
-            {text ? "Register new business" : "Already a member ?"}
+            {buttonText ? "Register new business" : "Already a member ?"}
           </button>
         </div>
 

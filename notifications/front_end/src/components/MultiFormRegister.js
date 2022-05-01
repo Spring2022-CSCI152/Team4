@@ -4,7 +4,7 @@ import ProfileFormat from "./ProfileFormat";
 import ReportFormat from "./ReportFormat";
 import axios from "axios";
 
-function RegisterForms() {
+function RegisterForms( {signInTrigger}) {
   const [page, setPage] = useState(0);
 
   const [formData, setFormData] = useState({
@@ -100,6 +100,7 @@ function RegisterForms() {
       .then(form3 => {
         console.log(form3)
         console.log('res 3', form3.status)
+        signInTrigger();
       }).catch(error =>
         console.log(error)
       )

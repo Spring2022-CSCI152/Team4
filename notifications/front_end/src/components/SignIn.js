@@ -1,25 +1,22 @@
 import React, { useState } from "react";
-import { Form } from "react-bootstrap";
+import { Alert, Form } from "react-bootstrap";
 import axios from 'axios'
 
-const SignIn = ({ signInClicked }) => {
+const SignIn = ({ signInTrigger }) => {
 
-  //async function signInTrigger ()  {
-   // signInClicked();
-  //};
-
-  async function signInTrigger(e) {
-
-
-      const signIn = await axios.post("http://172.24.158.171:8080/api/v1/accounts/login",
-       formData)
-        .then(signIn => {
-          console.log(signIn.data)
-          localStorage.setItem("user", JSON.stringify(signIn.data))
-          console.log('first res ', signIn.status)
-        }).catch(error =>
-          console.log(error)
-        )    
+  async function handleSignIn(e) {
+    const signIn = await axios.post("http://172.24.158.171:8080/api/v1/accounts/login",
+      formData)
+      .then(signIn => {
+        localStorage.setItem("user", JSON.stringify(signIn.data))
+        console.log(signIn.data)
+        console.log('ressponse ', signIn.status)
+        signInTrigger();
+      }).catch(error =>
+        console.log(error),
+        alert("Incorrect Information")
+      )
+     
   };
 
   const [formData, setFormData] = useState({
@@ -27,8 +24,6 @@ const SignIn = ({ signInClicked }) => {
     password: "",
     businessId: "",
   });
-
-  
 
   return (
     <div className="row justify-content-center">
@@ -67,22 +62,19 @@ const SignIn = ({ signInClicked }) => {
       </Form.Group>
 
       <div className="d-flex justify-content-center">
-        <button 
+        <button
           type="button"
           className="btn btn-dark btn-lg"
-          onClick={(e)=>
-            { 
+          onClick={(e) => {
             <input
               value={formData}
               onChange={(e) => setFormData(e.target.value)}
             />;
-
             console.log('signIN w/ ', formData)
-              
-          
-              signInTrigger(e) }
+            handleSignIn(e)
           }
-         
+          }
+
         >
           Sign In
         </button>

@@ -4,13 +4,38 @@ import logo_white from '../assets/logo_white.png'
 import { Link } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import axios from 'axios';
 
- const NavBarComp = ({authenticate}) => {
+ const NavBarComp = () => {
   const navigate = useNavigate();
-  const signOut = () => {
-    authenticate();
-    navigate("/");
-};
+
+  async function handleSignOut(e) {
+    const user = JSON.parse(localStorage.getItem("user"))
+    const accountId = {
+          accountIdString: user.accountIdString,
+          email: user.email,
+          businessId: user.businessId
+    }
+    console.log(accountId)
+
+    const signOut = await axios.put("http://172.24.158.171:8080/api/v1/accounts/logout",
+      {
+        token: user.token,
+        accountId: accountId
+      })
+      .then(signOut => {
+        console.log(signOut.data)
+        console.log('ressponse ', signOut.status)
+        navigate("/SplashPage");
+      }).catch(error =>
+        console.log(error),
+      )
+      
+  };
+    
+    
+  
+
    
   return (
       <div>
@@ -25,7 +50,7 @@ import { useNavigate } from "react-router-dom";
                   <Nav.Link as={Link} to={"/Profiles"}>Profiles</Nav.Link>
                   <Nav.Link as={Link} to={"/Admin"}>Admin</Nav.Link>
               </Nav> 
-              <button type="button" className="btn btn-sm btn-signout" onClick={()=>signOut()}>Sign Out</button>
+              <button type="button" className="btn btn-sm btn-signout" onClick={()=>handleSignOut()}>Sign Out</button>
               <FaUserCircle size="1.5em"  style={{ fill: "#00f200" }} />
             </Container>
           </Navbar>
