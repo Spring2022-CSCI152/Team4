@@ -13,8 +13,8 @@ import org.springframework.web.server.ResponseStatusException;
 @Component
 public class SecurityUtil implements SecurityManager {
 
-    private Authenticator authenticator;
-    private AccountsRepoInterface accounts;
+    private final Authenticator authenticator;
+    private final AccountsRepoInterface accounts;
 
     @Autowired
     public SecurityUtil(Authenticator authenticator, AccountsRepoInterface accounts) {
@@ -48,7 +48,6 @@ public class SecurityUtil implements SecurityManager {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not Permitted!");
         }
     }
-
     @Override
     public void validateTokenAndPermission(AccountId accountId, String token, Permissions permission) throws ResponseStatusException {
         validateToken(accountId, token);
