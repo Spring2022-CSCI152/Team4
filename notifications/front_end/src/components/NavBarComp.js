@@ -11,7 +11,7 @@ import axios from 'axios';
 
   async function handleSignOut(e) {
 
-    const user = JSON.parse(localStorage.getItem("user"))
+    const user = JSON.parse(localStorage.getItem("User"))
 
     const accountId = {
           accountIdString: user.accountIdString,
@@ -19,13 +19,6 @@ import axios from 'axios';
           businessId: user.businessId
     }
    
-    const x=
-      {
-        token: user.token,
-        accountId: accountId
-      }
-    console.log('x = ',x)
-
     const signOut = await axios.put("http://172.24.158.171:8080/api/v1/accounts/logout",
       {
         token: user.token,

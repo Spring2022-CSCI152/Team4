@@ -65,13 +65,13 @@ function RegisterForms( {signInTrigger}) {
     const form1 = await axios.post("http://172.24.158.171:8080/api/v1/accounts/register_business", formData)
       .then(form1 => {
         console.log(form1.data)
-        localStorage.setItem("newUser", JSON.stringify(form1.data))
+        localStorage.setItem("User", JSON.stringify(form1.data))
         console.log('first res ', form1.status)
       }).catch(error =>
         console.log(error)
       )
 
-    const newUser = JSON.parse(localStorage.getItem("newUser"))
+    const newUser = JSON.parse(localStorage.getItem("User"))
     const accountId = {
       accountIdString: newUser.accountIdString,
       email: newUser.email,
