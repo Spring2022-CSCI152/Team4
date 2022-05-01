@@ -70,10 +70,8 @@ public class SessionService {
 
     }
 
-    public ResponseEntity<Enum<HttpStatus>> logout(RequestDAO requestDAO){
-
+    public ResponseEntity logout(RequestDAO requestDAO){
         securityManager.invalidateToken(requestDAO.getAccountId(), requestDAO.getToken());
-
-        return new ResponseEntity<Enum<HttpStatus>>(HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 }

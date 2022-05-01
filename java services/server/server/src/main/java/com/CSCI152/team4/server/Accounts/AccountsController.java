@@ -82,7 +82,7 @@ public class AccountsController {
     }
 
     @PutMapping("/logout")
-    public ResponseEntity<Enum<HttpStatus>> logout(@RequestBody RequestDAO requestDAO){
+    public ResponseEntity logout(@RequestBody RequestDAO requestDAO){
         return sessionService.logout(requestDAO);
     }
 
