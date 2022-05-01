@@ -6,34 +6,34 @@ import { w3cwebsocket as W3CWebSocket } from "websocket";
 //const client = new W3CWebSocket('ws://localhost:4000/ws');
 const Notifications = () => {
 
-onButtonClicked = (value) => {
-    client.send(JSON.stringify({
-        type:"message",
-        msg: value
-    }))
-}
+// onButtonClicked = (value) => {
+//     client.send(JSON.stringify({
+//         type:"message",
+//         msg: value
+//     }))
+// }
 
-  client.onopen =()=>{console.log('socket open')}
-  client.onmessage = (message) =>{
-    const dataFromServer = JSON.parse(message.data);
-    console.log('message seen', dataFromServer);      
-}
+//   client.onopen =()=>{console.log('socket open')}
+//   client.onmessage = (message) =>{
+//     const dataFromServer = JSON.parse(message.data);
+//     console.log('message seen', dataFromServer);      
+// }
 
 
  
-    return (
-      <div className="container">
+     return (
+       <div className="container">
       
-          <NotificationCard/>
+     <NotificationCard/>
           
           
 
         
-      </div>
-    );
-  };
+     </div>
+     );
+  //};
  
-    //front end
+//     //front end
 
 
 
@@ -86,8 +86,8 @@ onButtonClicked = (value) => {
 })
 
 
-  );
+  ); */
  
-}; */
+};
 
 export default Notifications;
