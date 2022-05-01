@@ -79,11 +79,13 @@ public class AccountsController {
      * */
     @PostMapping("/login")
     public WorkerAccount login(@RequestBody LoginRequest request){
+        System.out.println("Logging in for: " + request.getEmail());
         return sessionService.login(request);
     }
 
-    @PostMapping("/logout")
+    @PutMapping("/logout")
     public ResponseEntity<Enum<HttpStatus>> logout(@RequestBody Request request){
+        System.out.println("Logging out for: " + request.getAccountEmail());
         return sessionService.logout(request);
     }
 

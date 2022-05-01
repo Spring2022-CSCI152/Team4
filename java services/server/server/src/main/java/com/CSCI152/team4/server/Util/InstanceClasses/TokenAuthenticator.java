@@ -81,7 +81,7 @@ public class TokenAuthenticator implements Authenticator {
 
         Token toRefresh = getTokenIfExists(token);
         if(!toRefresh.getAccountId().equals(accountId) || toRefresh.isExpired()){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unable to refresh token!", new Exception());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unable to refresh token!");
         }
 
         toRefresh.setExp(Timestamp.valueOf(LocalDateTime.now().plusMinutes(expirationInMins)));
@@ -94,7 +94,7 @@ public class TokenAuthenticator implements Authenticator {
             return repo.findById(token).get();
         }
 
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No token found!", new Exception());
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No token found!");
     }
 
 }
