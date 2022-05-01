@@ -1,8 +1,11 @@
-import React from "react";
+import React, {useState} from "react";
+import AcctModal from "./components/AdminModal";
 import mockData from "./mockData";
 import {RiKeyFill, RiUserAddFill, RiProfileFill, RiFileCopy2Fill} from "react-icons/ri";
 
-const Admin = () => {
+function Accounts(){
+  const [openAcctModal, setOpenAcctModal] = useState(false);
+
   const AcctSrcResult = mockData.map((profiles) => {
     return profiles.profile.map((acct) => {
       return (
@@ -33,9 +36,16 @@ const Admin = () => {
         </form>
       </div>
 
-      <div className="txt-align-center">{AcctSrcResult}</div>
+      <div className="txt-align-center"
+      onClick={() => {
+        setOpenAcctModal(true);
+      }}
+      >
+        {AcctSrcResult}
+        Open
+      </div>
+      {openAcctModal && <AcctModal setOpenAcctModal={setOpenAcctModal} />}
     </div>
   );
-};
-
-export default Admin;
+}
+export default Accounts;

@@ -1,0 +1,35 @@
+  .view-modal-overlay{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+    background-color: rgba(0, 0, 0, .7);
+} 
+
+.view-modal-inner {
+    display: grid;
+    grid-template-rows: .25fr .5fr 1.5fr 3fr 1fr .5fr ;
+    grid-gap: 5px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    height: 90%;
+    z-index: 1000;
+    background: rgb(255, 255, 255);
+    padding: 2em;
+    overflow: auto;
+    /* border-radius: 1rem; */
+}
+
+.close-btn {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
