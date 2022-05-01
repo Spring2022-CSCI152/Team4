@@ -115,7 +115,6 @@ function RegisterForms( {signInTrigger}) {
         <hr className="green"></hr>
         <div className="body">{PageDisplay()}</div>
         <hr className="green"></hr>
-
         <div className="footer mx-auto">
           <div className="progressbar mx-auto ">
             <div
