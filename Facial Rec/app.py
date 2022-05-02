@@ -2,7 +2,7 @@ import os
 from io import BytesIO
 import json
 import base64
-from PIL import Image
+from PIL import Image, ExifTags
 from flask import Flask, request, send_file
 from db import DBManager, RequestParams
 from decouple import config
@@ -36,8 +36,13 @@ def build_and_get_save_dir(profile_id, file_name, business_id):
 
 # Saves an image locally, uses a base64 string rep of an image to build the saved image
 def save_image_to_local_system(path, image_b64):
-		image = Image.open(BytesIO(base64.b64decode(image_b64)))
-		image.save(path)
+	size = int(len(image_b64)/8)
+	image = Image.open(BytesIO(base64.b64decode(image_b64))) 
+	# if size > 80000:
+	# 	image=image.rotate(270, expand=True) # <- janky fix if needed
+	
+	image.save(path)
+	image.close()
 
 # extracts the fields in a request
 def get_feilds(request_data):
@@ -63,12 +68,10 @@ def makeDirs(business_id, profile_id):
 		os.mkdir(fullDir)
 
 # Finds an image by 'profile_id' and 'business_id' then returns it
-@app.route("/get_image", methods=["GET"])
-def get():
-	request_data = request.get_json()
-
-	profile_id = request_data['profile_id']
-	business_id = request_data['business_id']
+@app.route("/get_image/<path_business_id>/<path_profile_id>", methods=["GET"])
+def get(path_business_id, path_profile_id):
+	profile_id = path_profile_id
+	business_id = path_business_id
 	(profile_id, path, business_id) = database.get_entity_by_ids(RequestParams(profile_id, "", business_id))
 
 	image = Image.open(path)
