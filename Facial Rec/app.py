@@ -68,12 +68,10 @@ def makeDirs(business_id, profile_id):
 		os.mkdir(fullDir)
 
 # Finds an image by 'profile_id' and 'business_id' then returns it
-@app.route("/get_image", methods=["GET"])
-def get():
-	request_data = request.get_json()
-
-	profile_id = request_data['profile_id']
-	business_id = request_data['business_id']
+@app.route("/get_image/<path_business_id>/<path_profile_id>", methods=["GET"])
+def get(path_business_id, path_profile_id):
+	profile_id = path_profile_id
+	business_id = path_business_id
 	(profile_id, path, business_id) = database.get_entity_by_ids(RequestParams(profile_id, "", business_id))
 
 	image = Image.open(path)
