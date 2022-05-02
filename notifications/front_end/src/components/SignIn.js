@@ -10,7 +10,7 @@ const SignIn = ({ signInTrigger }) => {
       .then(signIn => {
         localStorage.setItem("User", JSON.stringify(signIn.data))
         console.log(signIn.data)
-        console.log('ressponse ', signIn.status)
+        console.log('response ', signIn.status)
         signInTrigger();
       }).catch(error => {
         console.log(error),

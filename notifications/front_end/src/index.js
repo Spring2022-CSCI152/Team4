@@ -6,6 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './reportDashboard.css';
 import './utility.css';
 import Notifications from './Notifications'
+import AddReport from './components/AddReport';
 
 
 ReactDOM.render(
