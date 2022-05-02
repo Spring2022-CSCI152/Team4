@@ -51,7 +51,7 @@ public class ReportValidator implements IReportValidator {
 
     @Override
     public void validateProfile(Profile profile){
-        if(!settingsRepoManager.reportFormatExistsById(profile.getBusinessId())){
+        if(!settingsRepoManager.customerProfileFormatExistsById(profile.getBusinessId())){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Business Not Found!");
         }
 
