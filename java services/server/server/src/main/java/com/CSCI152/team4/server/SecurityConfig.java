@@ -1,19 +1,41 @@
 package com.CSCI152.team4.server;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
 import org.springframework.security.web.header.writers.StaticHeadersWriter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().anyRequest().permitAll();
-        http.csrf().disable();/*Allow local requests for testing*/
+        http.authorizeRequests()
+                .antMatchers(HttpMethod.OPTIONS,"/api/v1/*").permitAll()
+                .anyRequest().permitAll()
+                .and().csrf().disable();/*Allow local requests for testing*/
+
         http.headers().addHeaderWriter(
-                new StaticHeadersWriter("Access-Control-Allow-Origin", "*"));
+                new StaticHeadersWriter("Access-Control-Allow-Origin", "*"))
+                .addHeaderWriter(
+                new StaticHeadersWriter("Access-Control-Allow-Methods",
+                        HttpMethod.OPTIONS.name(),
+                        HttpMethod.GET.name(),
+                        HttpMethod.POST.name(),
+                        HttpMethod.PUT.name()))
+                .addHeaderWriter(
+                new StaticHeadersWriter("Allow",
+                        HttpMethod.OPTIONS.name(),
+                        HttpMethod.GET.name(),
+                        HttpMethod.POST.name(),
+                        HttpMethod.PUT.name()));
+        http.cors();
     }
 
 

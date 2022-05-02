@@ -2,9 +2,9 @@ package com.CSCI152.team4.server.Reports.Requests;
 
 import com.CSCI152.team4.server.Accounts.Classes.AccountId;
 import com.CSCI152.team4.server.Reports.Classes.Profile;
-import com.CSCI152.team4.server.Util.InstanceClasses.RequestDAO;
+import com.CSCI152.team4.server.Util.InstanceClasses.Request;
 
-public class ProfileSubmissionRequestDAO extends RequestDAO {
+public class ProfileSubmissionRequestDAO extends Request {
 
     Profile profile;
 

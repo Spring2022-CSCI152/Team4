@@ -6,7 +6,7 @@ import com.CSCI152.team4.server.Accounts.Requests.*;
 import com.CSCI152.team4.server.Accounts.Services.AccountManagementService;
 import com.CSCI152.team4.server.Accounts.Services.RegistrationService;
 import com.CSCI152.team4.server.Accounts.Services.SessionService;
-import com.CSCI152.team4.server.Util.InstanceClasses.RequestDAO;
+import com.CSCI152.team4.server.Util.InstanceClasses.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -65,11 +65,13 @@ public class AccountsController {
 
     @PostMapping("/register_admin")
     public ResponseEntity<Enum<HttpStatus>> registerAdmin(@RequestBody AdminRequestDAO request){
+        System.out.println("Registering Admin: " + request.getAccountEmail());
         return registrationService.registerAdmin(request);
     }
 
     @PostMapping("/register_employee")
     public ResponseEntity<Enum<HttpStatus>> registerEmployee(@RequestBody EmployeeRequestDAO request){
+        System.out.println("Registering Employee: " + request.getAccountEmail());
         return registrationService.registerEmployee(request);
     }
 
@@ -78,55 +80,72 @@ public class AccountsController {
      * */
     @PostMapping("/login")
     public WorkerAccount login(@RequestBody LoginRequest request){
+        System.out.println("Logging in for: " + request.getEmail());
         return sessionService.login(request);
     }
 
     @PutMapping("/logout")
-    public ResponseEntity<Enum<HttpStatus>> logout(@RequestBody RequestDAO requestDAO){
-        return sessionService.logout(requestDAO);
+    public ResponseEntity logoutPut(@RequestBody Request request){
+        System.out.println("Logging Out: " + request.getAccountEmail());
+        return sessionService.logout(request);
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity logoutPost(@RequestBody Request request){
+        System.out.println("Logging Out: " + request.getAccountEmail());
+        return sessionService.logout(request);
+    }
+
 
     /**
      * Account Management Services
      * */
-    @GetMapping("/my_account_info")
-    public WorkerAccount getMyInfo(@RequestBody RequestDAO requestDAO){
-        return managementService.getAccountInfo(requestDAO);
+    @PostMapping("/my_account_info")
+    public WorkerAccount getMyInfo(@RequestBody Request request){
+        System.out.println("Getting Acct Info: " + request.getAccountEmail());
+        return managementService.getAccountInfo(request);
     }
 
-    @GetMapping("/get_other_account_info")
-    public WorkerAccount getAdminAccountInfo(@RequestBody TargetAccountRequestDAO request){
+    @PostMapping("/get_other_account_info")
+    public WorkerAccount getOtherAccountInfo(@RequestBody TargetAccountRequestDAO request){
+        System.out.println("Getting Other Acct Info: " + request.getAccountEmail());
         return managementService.getOtherAccountInfo(request);
     }
 
-    @GetMapping("/get_accounts")
-    public List<WorkerAccount> getAccounts(@RequestBody RequestDAO requestDAO){
-        return managementService.getAccounts(requestDAO);
+    @PostMapping("/get_accounts")
+    public List<WorkerAccount> getAccounts(@RequestBody Request request){
+        System.out.println("Getting All Other Acct Info: " + request.getAccountEmail());
+        return managementService.getAccounts(request);
     }
 
     @PutMapping("/update_info")
     public WorkerAccount updateInfo(@RequestBody UpdateRequestDAO request){
+        System.out.println("Updating Acct Info: " + request.getAccountEmail());
         return managementService.updateInfo(request);
     }
 
     @PutMapping("/update_other_info")
     public WorkerAccount updateOtherInfo(@RequestBody UpdateOtherRequestDAO request){
+        System.out.println("Updating Other Acct Info: " + request.getAccountEmail());
         return managementService.updateOther(request);
     }
 
 
     @PutMapping("/update_permissions")
     public WorkerAccount updateEmployeePermissions(@RequestBody PermissionUpdateRequestDAO request){
+        System.out.println("Updating Permissions: " + request.getAccountEmail());
         return managementService.updateEmployeePermissions(request);
     }
 
     @PutMapping("/promote")
     public WorkerAccount promote(@RequestBody TargetAccountRequestDAO request){
+        System.out.println("Promoting Acct: " + request.getAccountEmail());
         return managementService.promote(request);
     }
 
     @PutMapping("/demote")
     public WorkerAccount demote(@RequestBody TargetAccountRequestDAO request){
+        System.out.println("Demoting Acct: " + request.getAccountEmail());
         return managementService.demote(request);
     }
 }

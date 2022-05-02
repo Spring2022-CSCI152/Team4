@@ -4,7 +4,7 @@ import com.CSCI152.team4.server.Accounts.Classes.AccountId;
 import com.CSCI152.team4.server.Accounts.Classes.BusinessAccount;
 import com.CSCI152.team4.server.Accounts.Classes.WorkerAccount;
 import com.CSCI152.team4.server.Accounts.Requests.LoginRequest;
-import com.CSCI152.team4.server.Util.InstanceClasses.RequestDAO;
+import com.CSCI152.team4.server.Util.InstanceClasses.Request;
 import com.CSCI152.team4.server.Util.Interfaces.AccountsRepoInterface;
 import com.CSCI152.team4.server.Util.Interfaces.SecurityManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +56,6 @@ public class SessionService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Business Not Found");
         }
 
-
         String accountType = businessAccount.getAccountType(accountId);
         boolean isValidated =
                 (accountType.equals(BusinessAccount.adminAccountType)
@@ -70,10 +69,8 @@ public class SessionService {
 
     }
 
-    public ResponseEntity<Enum<HttpStatus>> logout(RequestDAO requestDAO){
-
-        securityManager.invalidateToken(requestDAO.getAccountId(), requestDAO.getToken());
-
-        return new ResponseEntity<Enum<HttpStatus>>(HttpStatus.OK);
+    public ResponseEntity logout(Request request){
+        securityManager.invalidateToken(request.getAccountId(), request.getToken());
+        return ResponseEntity.ok().build();
     }
 }

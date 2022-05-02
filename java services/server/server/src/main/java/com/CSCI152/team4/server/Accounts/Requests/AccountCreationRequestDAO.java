@@ -1,11 +1,11 @@
 package com.CSCI152.team4.server.Accounts.Requests;
 
 import com.CSCI152.team4.server.Accounts.Classes.AccountId;
-import com.CSCI152.team4.server.Util.InstanceClasses.RequestDAO;
+import com.CSCI152.team4.server.Util.InstanceClasses.Request;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
-public class AccountCreationRequestDAO extends RequestDAO {
+public class AccountCreationRequestDAO extends Request {
 
 
     private String email;

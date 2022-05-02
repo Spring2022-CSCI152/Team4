@@ -2,11 +2,11 @@ package com.CSCI152.team4.server.Reports.Requests;
 
 import com.CSCI152.team4.server.Accounts.Classes.AccountId;
 import com.CSCI152.team4.server.Accounts.Settings.CustomerProfileFormat;
-import com.CSCI152.team4.server.Util.InstanceClasses.RequestDAO;
+import com.CSCI152.team4.server.Util.InstanceClasses.Request;
 
 import java.util.Objects;
 
-public class ProfileFormatUpdateRequestDAO extends RequestDAO {
+public class ProfileFormatUpdateRequestDAO extends Request {
 
     CustomerProfileFormat profileFormat;
 
