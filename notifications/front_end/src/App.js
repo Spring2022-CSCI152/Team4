@@ -17,7 +17,7 @@ const App = () => {
 
   const Layout = () => (
     <>
-      <NavBarComp signInComplete={() => setUser(false)} />
+      <NavBarComp signOutComplete={() => setUser(false)} />
       <Outlet />
     </>
   );

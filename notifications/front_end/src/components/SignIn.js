@@ -81,7 +81,7 @@ const SignIn = ({ signInTrigger }) => {
                   onChange={(e) => setFormData(e.target.value)}
                 />;
                 clear_form(e)
-                console.log('signIN w/ ', formData)
+                console.log('user signed in: ', formData)
                 handleSignIn(e)
               }}
             >
