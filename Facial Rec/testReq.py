@@ -1,16 +1,16 @@
 import requests
 import base64
 import json
-
+from PIL import Image, ExifTags
 
 def execute():
 	#Saving images in local machine
 	url = "http://localhost:5000/save_image"
-	with open('AddresstoImage', 'rb') as f:
+	with open('C:\\Users\\Maaku\\Desktop\\CSCI152ProjectMain\\Team4\\Facial Rec\\Marc.jpg', 'rb') as f:
 		img_bytes = f.read()
 
 	img_b64 = base64.b64encode(img_bytes).decode('utf-8')
-	data = {'image': img_b64, 'file_name': 'DonnieYen.png', 'business_id': 123, 'profile_id': "ASap"}
+	data = {'image': img_b64, 'file_name': 'Marc2.jpg', 'business_id': 110, 'profile_id': "Alpaca"}
 	# data = {} #sets names of images 
 
 	# print(json.dumps(data))
