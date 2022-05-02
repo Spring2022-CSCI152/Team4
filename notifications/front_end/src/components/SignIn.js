@@ -8,7 +8,7 @@ const SignIn = ({ signInTrigger }) => {
     const signIn = await axios.post("http://172.24.158.171:8080/api/v1/accounts/login",
       formData)
       .then(signIn => {
-        localStorage.setItem("User", JSON.stringify(signIn.data))
+        localStorage.setItem("user", JSON.stringify(signIn.data))
         console.log(signIn.data)
         console.log('response ', signIn.status)
         signInTrigger();
