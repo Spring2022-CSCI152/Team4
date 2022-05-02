@@ -39,7 +39,7 @@ import Async from "react-async";
 const loadFormat = ()=>{
 
   const url = "http://172.24.158.171:8080/api/v1/reports/get_report_format"
-  const User = JSON.parse(localStorage.getItem("User"))
+  const User = JSON.parse(localStorage.getItem("user"))
   const bodyData = {
       token: User.token,
       accountId: {
