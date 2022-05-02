@@ -24,8 +24,9 @@ const NavBarComp = ({ signOutComplete }) => {
         accountId: accountId,
       })
       .then((signOut) => {
-        handleSignOut();
-        console.log("response ", signOut.status);
+        signOutComplete();
+        navigate("/")
+        console.log("signed out? ", signOut.status);
       })
       .catch((error) => {
         console.log(error);
