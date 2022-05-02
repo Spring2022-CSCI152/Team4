@@ -36,7 +36,8 @@ import axios from 'axios';
         console.log('response ', signOut.status)
         
       }).catch(error =>{
-        console.log(error)}
+        console.log(error)
+      }
       )
     
   };

@@ -62,22 +62,27 @@ function RegisterForms( {signInTrigger}) {
   };
 
   async function postRegistrationForm() {
+
+    // when posting form to register business, save info in localStorage
     const form1 = await axios.post("http://172.24.158.171:8080/api/v1/accounts/register_business", formData)
       .then(form1 => {
         console.log(form1.data)
-        localStorage.setItem("newUser", JSON.stringify(form1.data))
+        localStorage.setItem("user", JSON.stringify(form1.data)) // previously newUser
         console.log('first res ', form1.status)
-      }).catch(error =>
+      }).catch(error =>{
         console.log(error)
-      )
+      })
 
-    const newUser = JSON.parse(localStorage.getItem("newUser"))
+    // create newUser from localStorage infor
+    const newUser = JSON.parse(localStorage.getItem("user")) // previously newUser
+    
     const accountId = {
       accountIdString: newUser.accountIdString,
       email: newUser.email,
       businessId: newUser.businessId
     }
 
+    // post profile format
     const form2 = await axios.post("http://172.24.158.171:8080/api/v1/reports/set_profile_format",
       {
         token: newUser.token,
@@ -87,10 +92,11 @@ function RegisterForms( {signInTrigger}) {
       .then(form2 => {
         console.log('form2 data: :', form2.data)
         console.log('res 2', form2.status)
-      }).catch(error =>
+      }).catch(error =>{
         console.log(error)
-      )
+      })
 
+    // post report format
     const form3 = await axios.post("http://172.24.158.171:8080/api/v1/reports/set_report_format",
       {
         token: newUser.token,
@@ -101,9 +107,9 @@ function RegisterForms( {signInTrigger}) {
         console.log(form3)
         console.log('res 3', form3.status)
         signInTrigger();
-      }).catch(error =>
+      }).catch(error =>{
         console.log(error)
-      )
+      })
   }
 
   return (
