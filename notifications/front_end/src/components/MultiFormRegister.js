@@ -67,7 +67,7 @@ function RegisterForms( {signInTrigger}) {
     const form1 = await axios.post("http://172.24.158.171:8080/api/v1/accounts/register_business", formData)
       .then(form1 => {
         console.log(form1.data)
-        localStorage.setItem("user", JSON.stringify(form1.data)) // previously newUser
+        localStorage.setItem("user", JSON.stringify(form1.data))
         console.log('first res ', form1.status)
       }).catch(error =>{
         console.log(error)
