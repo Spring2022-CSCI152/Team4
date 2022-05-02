@@ -11,7 +11,6 @@ import org.mockito.MockitoAnnotations;
 import java.lang.reflect.InvocationTargetException;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 
 class AccountTransposerTest {

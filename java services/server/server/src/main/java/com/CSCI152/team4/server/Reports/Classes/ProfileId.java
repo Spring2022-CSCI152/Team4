@@ -13,6 +13,7 @@ public class ProfileId implements Serializable {
     private String profileId;
 
     public ProfileId() {
+        //noinspection ConstantConditions
         if(this.profileId == null){
             this.profileId = UUID.randomUUID().toString();
         }

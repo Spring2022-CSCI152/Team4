@@ -14,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+@SuppressWarnings("rawtypes")
 @Service
 public class SessionService {
 
@@ -45,7 +46,7 @@ public class SessionService {
 
     private void validatePassword(String plainText, String hashed){
         if(!BCrypt.checkpw(plainText, hashed)){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Password!");
         }
     }
 

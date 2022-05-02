@@ -12,12 +12,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
@@ -32,13 +30,12 @@ class TokenAuthenticatorTest {
     @Captor
     ArgumentCaptor<Token> tokenArgumentCaptor;
 
-    private Integer expirationInMinutes = 10;
-
     TokenAuthenticator underTest;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        Integer expirationInMinutes = 10;
         underTest = new TokenAuthenticator(tokenRepo, "secret", expirationInMinutes);
     }
 

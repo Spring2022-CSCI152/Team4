@@ -3,8 +3,6 @@ package com.CSCI152.team4.server.Reports.Service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class ReportsServiceTest {
 
     @BeforeEach

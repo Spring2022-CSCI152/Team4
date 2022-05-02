@@ -12,6 +12,7 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+@SuppressWarnings("unchecked")
 @SpringBootTest
 class EmployeeAccountTest {
 
@@ -28,9 +29,10 @@ class EmployeeAccountTest {
         underTest = null;
     }
 
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @ParameterizedTest
     @MethodSource
-    void isShouldNotSaveInvalidPermissions(List permissions, List expected) {
+    void isShouldNotSaveInvalidPermissions(@SuppressWarnings("rawtypes") List permissions, @SuppressWarnings("rawtypes") List expected) {
         // Given
         underTest.setPermissionsList(permissions);
         // When
@@ -47,10 +49,12 @@ class EmployeeAccountTest {
         );
     }
 
+    @SuppressWarnings("rawtypes")
     @ParameterizedTest
     @MethodSource
-    void itShouldEditPermissionsCorrectly(List initialPermissions, List updatedAndExpected){
+    void itShouldEditPermissionsCorrectly(@SuppressWarnings("rawtypes") List initialPermissions, @SuppressWarnings("rawtypes") List updatedAndExpected){
 
+        //noinspection unchecked
         underTest.setPermissionsList(initialPermissions);
 
         underTest.setPermissionsList(updatedAndExpected);

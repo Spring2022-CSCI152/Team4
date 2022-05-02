@@ -101,10 +101,7 @@ class AccountStatusChangerTest {
     }
 
     @Test
-    void itShouldThrowOnNoBusinessFoundOnPromote() throws
-            InvocationTargetException,
-            InstantiationException,
-            IllegalAccessException{
+    void itShouldThrowOnNoBusinessFoundOnPromote() {
         //Given
         Integer businessId = 100;
         given(request.getBusinessId()).willReturn(businessId);
@@ -218,10 +215,7 @@ class AccountStatusChangerTest {
 
 
     @Test
-    void itShouldThrowOnNoBusinessFoundOnDemote() throws
-            InvocationTargetException,
-            InstantiationException,
-            IllegalAccessException{
+    void itShouldThrowOnNoBusinessFoundOnDemote() {
         //Given
         Integer businessId = 100;
         given(request.getBusinessId()).willReturn(businessId);

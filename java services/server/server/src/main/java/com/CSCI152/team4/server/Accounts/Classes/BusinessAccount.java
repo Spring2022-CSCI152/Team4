@@ -12,7 +12,7 @@ import java.util.*;
 
 @Entity
 @Table(name = "Business_Account")
-@SequenceGenerator(name = "business_id_seq", initialValue = 100, allocationSize = 899)
+@SequenceGenerator(name = "business_id_seq", initialValue = 100)
 public class BusinessAccount {
 
     public static final String adminAccountType = "admin";

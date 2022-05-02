@@ -12,6 +12,7 @@ public class ReportId implements Serializable {
     private Integer businessId;
     private String reportId;
 
+    @SuppressWarnings("ConstantConditions")
     public ReportId() {
         if(this.reportId == null){
             this.reportId = UUID.randomUUID().toString();

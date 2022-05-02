@@ -9,8 +9,6 @@ import com.CSCI152.team4.server.Accounts.Interfaces.IAccountRetriever;
 import com.CSCI152.team4.server.Accounts.Interfaces.IAccountStatusChanger;
 import com.CSCI152.team4.server.Accounts.Interfaces.IAccountUpdater;
 import com.CSCI152.team4.server.Accounts.Requests.*;
-import com.CSCI152.team4.server.Accounts.Requests.TargetAccountRequestDAO;
-import com.CSCI152.team4.server.Accounts.Requests.UpdateOtherRequestDAO;
 import com.CSCI152.team4.server.Accounts.Settings.Permissions;
 import com.CSCI152.team4.server.Util.InstanceClasses.Request;
 import com.CSCI152.team4.server.Util.Interfaces.SecurityManager;

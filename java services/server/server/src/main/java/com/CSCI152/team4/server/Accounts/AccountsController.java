@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@SuppressWarnings("ALL")
 @RestController
 @RequestMapping("api/v1/accounts")
 public class AccountsController {
@@ -84,12 +85,14 @@ public class AccountsController {
         return sessionService.login(request);
     }
 
+    @SuppressWarnings("rawtypes")
     @PutMapping("/logout")
     public ResponseEntity logoutPut(@RequestBody Request request){
         System.out.println("Logging Out: " + request.getAccountEmail());
         return sessionService.logout(request);
     }
 
+    @SuppressWarnings("rawtypes")
     @PostMapping("/logout")
     public ResponseEntity logoutPost(@RequestBody Request request){
         System.out.println("Logging Out: " + request.getAccountEmail());

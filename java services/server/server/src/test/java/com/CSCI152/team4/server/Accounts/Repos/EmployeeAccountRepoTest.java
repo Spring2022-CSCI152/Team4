@@ -135,7 +135,6 @@ class EmployeeAccountRepoTest {
         underTest.save(account);
 
         //Then
-        optionalEmployeeAccount = Optional.empty();
         optionalEmployeeAccount = underTest.findById(account.getAccountId());
         assertThat(optionalEmployeeAccount).isPresent()
                 .hasValueSatisfying(c -> {
@@ -165,7 +164,6 @@ class EmployeeAccountRepoTest {
         underTest.save(account);
 
         //Then
-        optionalEmployeeAccount = Optional.empty();
         optionalEmployeeAccount = underTest.findById(account.getAccountId());
         assertThat(optionalEmployeeAccount).isPresent()
                 .hasValueSatisfying(c -> {
@@ -195,7 +193,6 @@ class EmployeeAccountRepoTest {
         underTest.save(account);
 
         //Then
-        optionalEmployeeAccount = Optional.empty();
         optionalEmployeeAccount = underTest.findById(account.getAccountId());
         assertThat(optionalEmployeeAccount).isPresent()
                 .hasValueSatisfying(c -> {

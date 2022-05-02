@@ -12,7 +12,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 import static java.time.LocalDateTime.now;
 
@@ -88,6 +87,7 @@ public class TokenAuthenticator implements Authenticator {
         repo.save(toRefresh);
     }
 
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
     private Token getTokenIfExists(String token){
 
         if(repo.existsById(token)) {

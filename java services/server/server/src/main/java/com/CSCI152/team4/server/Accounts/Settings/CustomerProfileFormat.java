@@ -1,11 +1,6 @@
 package com.CSCI152.team4.server.Accounts.Settings;
 
-import com.CSCI152.team4.server.Reports.Classes.Address;
-import com.CSCI152.team4.server.Reports.Classes.Attributes;
-import com.CSCI152.team4.server.Reports.Classes.BanDuration;
-
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "profile_format")
