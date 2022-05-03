@@ -173,7 +173,7 @@ public class Profile {
 
     public void appendToReports(String reportId){
         if(this.reports == null){
-            this.reports = new ArrayList<String>();
+            this.reports = new ArrayList<>();
         }
         if(!this.reports.contains(reportId)){
             this.reports.add(reportId);

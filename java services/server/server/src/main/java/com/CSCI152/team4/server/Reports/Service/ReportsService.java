@@ -30,11 +30,11 @@ import static java.time.LocalDateTime.now;
 @Service
 public class ReportsService {
 
-    private Integer defaultPageSize ;
-    private ReportsRepo reports;
-    private CustomerProfilesRepo profiles;
-    private IReportValidator validator;
-    private SecurityManager securityManager;
+    private final Integer defaultPageSize ;
+    private final ReportsRepo reports;
+    private final CustomerProfilesRepo profiles;
+    private final IReportValidator validator;
+    private final SecurityManager securityManager;
 
     public ReportsService(@Value("${spring.data.web.pageable.default-page-size}") Integer defaultPageSize,
                           ReportsRepo reports,
@@ -71,6 +71,7 @@ public class ReportsService {
             /*If the profiles already exists,
             * take it out of the database to update*/
             if(profiles.existsById(p.getProfileId())){
+                //noinspection OptionalGetWithoutIsPresent
                 p = profiles.findById(p.getProfileId()).get();
             }
 
@@ -108,6 +109,7 @@ public class ReportsService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Profile not found!" );
         }
 
+        //noinspection OptionalGetWithoutIsPresent
         return profiles.findById(profileId).get();
     }
 

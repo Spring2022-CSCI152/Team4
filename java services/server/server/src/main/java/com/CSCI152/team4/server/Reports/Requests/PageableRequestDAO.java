@@ -52,7 +52,7 @@ public class PageableRequestDAO extends Request {
 
     public Sort getSort() {
         for(String key : sortProperties.keySet())
-            sort = sort.by(sortProperties.get(key), key).and(sort);
+            sort = Sort.by(sortProperties.get(key), key).and(sort);
         return sort;
     }
 

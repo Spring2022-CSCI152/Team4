@@ -8,8 +8,6 @@ import com.CSCI152.team4.server.Accounts.Requests.*;
 import com.CSCI152.team4.server.Accounts.Settings.CustomerProfileFormat;
 import com.CSCI152.team4.server.Accounts.Settings.Permissions;
 import com.CSCI152.team4.server.Accounts.Settings.ReportFormat;
-import com.CSCI152.team4.server.Accounts.Requests.AccountCreationRequestDAO;
-import com.CSCI152.team4.server.Accounts.Requests.AdminRequestDAO;
 import com.CSCI152.team4.server.Util.Interfaces.AccountsRepoInterface;
 import com.CSCI152.team4.server.Util.Interfaces.SecurityManager;
 import com.CSCI152.team4.server.Util.Interfaces.SettingsRepoInterface;
@@ -34,13 +32,6 @@ public class RegistrationService {
     private final AccountsRepoInterface repos;
     private final SecurityManager securityManager;
     private final SettingsRepoInterface settings;
-
-//    @Autowired
-//    public RegistrationService(AccountsRepoManager repos, SecurityUtil securityManager, SettingsRepoManager settings) {
-//        this.repos = repos;
-//        this.securityManager = securityManager;
-//        this.settings = settings;
-//    }
 
     @Autowired
     public RegistrationService(AccountsRepoInterface repos, SecurityManager securityManager,

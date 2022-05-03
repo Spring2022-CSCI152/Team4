@@ -4,13 +4,13 @@ import com.CSCI152.team4.server.Accounts.Classes.AccountId;
 
 public interface RequestInterface {
 
-    public String getAccountIdString();
+    String getAccountIdString();
 
-    public String getAccountEmail();
+    String getAccountEmail();
 
-    public String getToken();
+    String getToken();
 
-    public Integer getBusinessId();
+    Integer getBusinessId();
 
-    public AccountId getAccountId();
+    AccountId getAccountId();
 }

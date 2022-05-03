@@ -1,7 +1,6 @@
 package com.CSCI152.team4.server.Accounts.Repos;
 
 import com.CSCI152.team4.server.Accounts.Classes.AdminAccount;
-import com.CSCI152.team4.server.Accounts.Classes.EmployeeAccount;
 import com.CSCI152.team4.server.Repos.AdminAccountRepo;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -129,7 +128,6 @@ class AdminAccountRepoTest {
         underTest.save(account);
 
         //Then
-        optionalAdminAccount = Optional.empty();
         optionalAdminAccount = underTest.findById(account.getAccountId());
         assertThat(optionalAdminAccount).isPresent()
                 .hasValueSatisfying(c -> {
@@ -159,7 +157,6 @@ class AdminAccountRepoTest {
         underTest.save(account);
 
         //Then
-        optionalAdminAccount = Optional.empty();
         optionalAdminAccount = underTest.findById(account.getAccountId());
         assertThat(optionalAdminAccount).isPresent()
                 .hasValueSatisfying(c -> {

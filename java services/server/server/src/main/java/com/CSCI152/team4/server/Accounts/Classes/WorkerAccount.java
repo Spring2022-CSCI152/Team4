@@ -124,7 +124,7 @@ public abstract class WorkerAccount implements IAccountId {
 
     public void setToken(String token){
         this.token = token;
-    };
+    }
 
     public abstract String getAccountIdString();
 

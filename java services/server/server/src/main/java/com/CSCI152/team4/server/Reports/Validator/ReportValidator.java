@@ -5,7 +5,6 @@ import com.CSCI152.team4.server.Accounts.Settings.ReportFormat;
 import com.CSCI152.team4.server.Reports.Classes.Profile;
 import com.CSCI152.team4.server.Reports.Classes.Report;
 import com.CSCI152.team4.server.Reports.Interfaces.IReportValidator;
-import com.CSCI152.team4.server.Util.InstanceClasses.SettingsRepoManager;
 import com.CSCI152.team4.server.Util.Interfaces.SettingsRepoInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -52,7 +51,7 @@ public class ReportValidator implements IReportValidator {
 
     @Override
     public void validateProfile(Profile profile){
-        if(!settingsRepoManager.reportFormatExistsById(profile.getBusinessId())){
+        if(!settingsRepoManager.customerProfileFormatExistsById(profile.getBusinessId())){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Business Not Found!");
         }
 

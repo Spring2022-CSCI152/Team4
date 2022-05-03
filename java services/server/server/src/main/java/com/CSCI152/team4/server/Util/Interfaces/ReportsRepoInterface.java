@@ -8,13 +8,13 @@ import java.util.List;
 
 public interface ReportsRepoInterface {
 
-    public Report saveReport(Report report);
+    Report saveReport(Report report);
 
-    public Profile saveProfile(Profile profile);
+    Profile saveProfile(Profile profile);
 
-    public Report saveReportAndProfiles(Report report, List<Profile> profiles);
+    Report saveReportAndProfiles(Report report, List<Profile> profiles);
 
-    public Report getReportById(ProfileId profileId);
+    Report getReportById(ProfileId profileId);
 
-    public List<Report> getReportsByBusinessId(Integer businessId);
+    List<Report> getReportsByBusinessId(Integer businessId);
 }

@@ -66,7 +66,7 @@ public class AccountStatusChanger implements IAccountStatusChanger {
             if(accounts.adminExists(accountToPromote) && !accounts.employeeExists(accountToPromote)){
                 return accounts.getAdminIfExists(accountToPromote);
             }
-        }catch(Exception e){}
+        }catch(Exception ignored){}
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Something went wrong during promotion!");
     }
 
@@ -84,7 +84,7 @@ public class AccountStatusChanger implements IAccountStatusChanger {
             if(!accounts.adminExists(accountToDemote) && accounts.employeeExists(accountToDemote)){
                 return accounts.getEmployeeIfExists(accountToDemote);
             }
-        }catch(Exception e){}
+        }catch(Exception ignored){}
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Something went wrong during demotion!");
     }
 }

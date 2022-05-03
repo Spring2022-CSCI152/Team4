@@ -6,7 +6,9 @@ import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Objects;
 
+@SuppressWarnings("ALL")
 @Component
 public class AccountTransposer implements IAccountTransposer {
 
@@ -22,7 +24,7 @@ public class AccountTransposer implements IAccountTransposer {
             }
         }
         /*Create new instance using 6 param constructor*/
-        WorkerAccount ret =  (WorkerAccount) con.newInstance(account.getBusinessId(),
+        WorkerAccount ret =  (WorkerAccount) Objects.requireNonNull(con).newInstance(account.getBusinessId(),
                 account.getEmail(), account.getPassword(),
                 account.getFirstName(), account.getLastName(),
                 account.getJobTitle());

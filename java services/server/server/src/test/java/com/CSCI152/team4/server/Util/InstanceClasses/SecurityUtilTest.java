@@ -3,7 +3,6 @@ package com.CSCI152.team4.server.Util.InstanceClasses;
 import com.CSCI152.team4.server.Accounts.Classes.AccountId;
 import com.CSCI152.team4.server.Accounts.Classes.EmployeeAccount;
 import com.CSCI152.team4.server.Accounts.Settings.Permissions;
-import com.CSCI152.team4.server.Auth.Classes.Token;
 import com.CSCI152.team4.server.Util.Interfaces.AccountsRepoInterface;
 import com.CSCI152.team4.server.Util.Interfaces.Authenticator;
 import org.junit.jupiter.api.BeforeEach;

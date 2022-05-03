@@ -9,6 +9,7 @@ public interface SettingsRepoInterface {
 
     CustomerProfileFormat saveCustomerProfileFormat(CustomerProfileFormat profileFormat);
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     boolean reportFormatExistsById(Integer businessId);
 
     boolean customerProfileFormatExistsById(Integer businessId);

@@ -21,6 +21,7 @@ import java.util.Optional;
  * class is intended to lower coupling and
  * increase overall code cohesion.
  * */
+@SuppressWarnings("OptionalGetWithoutIsPresent")
 @Service
 public class AccountsRepoManager implements AccountsRepoInterface {
 
