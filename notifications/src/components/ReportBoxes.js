@@ -5,11 +5,17 @@ import { ImDrive } from "react-icons/im";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import React from "react";
+<<<<<<< HEAD
 import Test from "./test";
 import usePromise from "react-promise";
 import Async from "react-async";
 
 const loadFormat = () => {
+=======
+import Async from "react-async";
+
+function loadFormat () {
+>>>>>>> c72089e5b573a6c2630811ac8ed4d3d9378f6d6e
   const url = "http://172.24.158.171:8080/api/v1/reports/get_report_format";
   const User = JSON.parse(localStorage.getItem("user"));
   const bodyData = {
@@ -53,6 +59,7 @@ const ReportBoxes = () => (
             }
           }
 
+<<<<<<< HEAD
        
         return (
             <div>
@@ -61,13 +68,23 @@ const ReportBoxes = () => (
                     <div>
                        <div>{boxes} </div>
                     
+=======
+        return (
+            <div>
+                  {boxesNames.map((boxes) => (
+                    <div>
+                       <div>{boxes} </div>
+>>>>>>> c72089e5b573a6c2630811ac8ed4d3d9378f6d6e
                     </div>
                     )) 
                 } 
 
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> c72089e5b573a6c2630811ac8ed4d3d9378f6d6e
                 {boxesTrue.map((boxes) => (
                     <div>
                        <div>{boxes} </div>
@@ -75,10 +92,15 @@ const ReportBoxes = () => (
                         type="text"
                         placeholder={boxes}
                         defaultValue=""
+<<<<<<< HEAD
                         onChange={(e) => {
                         e.target.value;
                         }}
                     />
+=======
+                       
+                      />
+>>>>>>> c72089e5b573a6c2630811ac8ed4d3d9378f6d6e
                     </div>
                     )) 
                 } 

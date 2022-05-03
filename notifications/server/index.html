@@ -1,0 +1,43 @@
+<!DocType html>
+<head>
+  <title>WS example</title>
+</head>
+
+<body>
+  <h2>Socket message response: </h2>
+  <pre id="response"></pre>
+  <script>
+
+  // Extremely simplified here, no error handling or anything
+document.body.onload = function() {
+
+    'use strict';
+    let business_id = 100; //<== you get this from UserData
+  // First the socket request
+    function socketExample() {
+        console.log('Creating socket...');
+        let socket = new WebSocket('ws://localhost:8080/'); //<== Create a New Instance of a connection to backend
+
+        //When it opens, send it the business id as a Json String
+        socket.onopen = function() {
+            console.log('Socket open. \nSending Business Id...');
+            socket.send(JSON.stringify({business_id: business_id}));
+            console.log('Business Id sent.')
+        };
+        //When you get something back (typically the profile_id and business_id, which is redundant, but oh well
+        socket.onmessage = function(message) {
+            
+            console.log('Socket server message', message.data);
+            console.log(message.data)
+            let data = JSON.parse(message.data) // turn it into an object
+            document.getElementById('response').innerHTML = JSON.stringify(data, null, 2);
+
+            //Your Notif Creation Code here==========================================
+        };
+  }
+
+  socketExample(); //This calls the code to connect to the WebSocket
+}
+  </script>
+</body>
+</html>
