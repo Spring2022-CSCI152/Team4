@@ -12,10 +12,10 @@ const SignIn = ({ signInTrigger }) => {
         console.log(signIn.data)
         console.log('response ', signIn.status)
         signInTrigger();
-      }).catch(error => {
-        console.log(error),
+      }).catch(
+       
         alert("Invalid Credentials")
-      })
+      )
   };
 
   const [formData, setFormData] = useState({

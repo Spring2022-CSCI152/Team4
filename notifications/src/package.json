@@ -15,14 +15,11 @@
     "http": "^0.0.1-security",
     "jake": "^10.8.5",
     "nodemon": "^2.0.15",
-    "promise": "^8.1.0",
     "react": "^17.0.2",
-    "react-async": "^10.0.1",
     "react-bootstrap": "^2.2.1",
     "react-dom": "^17.0.2",
     "react-icons": "^4.3.1",
     "react-paginate": "^8.1.0",
-    "react-promise": "^3.0.2",
     "react-query": "^3.34.12",
     "react-router": "^6.2.1",
     "react-router-dom": "^6.2.1",
@@ -57,7 +54,7 @@
     ]
   },
   "description": "Contents of this folder will contain the Notifications Microservice,\r Additionally, this will house our front end",
-  "main": "index.js",
+  "main": "./build/index.js",
   "author": "",
   "license": "ISC",
   "devDependencies": {

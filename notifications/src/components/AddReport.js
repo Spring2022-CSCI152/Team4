@@ -6,8 +6,6 @@ import {useState, useEffect} from "react";
 import axios from 'axios';
 import React from "react";
 import ReportBoxes from  './ReportBoxes';
-import usePromise from "react-promise";
-import Async from "react-async";
 
 
  function AddReport() {
@@ -329,7 +327,8 @@ import Async from "react-async";
 
       <div className="mt-3 mb-2"> <input type="file"
         onChange={
-          (event) => { uploadImageHandler(event.target.files); }
+         // (event) => { uploadImageHandler(event.target.files); }
+         console.log("a")
         } />
       </div>
       
