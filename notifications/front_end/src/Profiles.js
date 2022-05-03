@@ -7,11 +7,10 @@ import prof_pic from './assets/prof_pic.png'
 import axios from 'axios'
 import Async from "react-async";
 
-
-  // load format
+//   // load format
   const getProfileFormat = () => {
 
-    const url = "http://172.24.158.171:8080/api/v1/reports/get_profile_format"
+    const url = "http://172.24.158.171:8080/api/v1/reports/get_report_format"
 
     // newUser should be the user logged in
     const User = JSON.parse(localStorage.getItem("user")) 
@@ -31,9 +30,8 @@ import Async from "react-async";
           console.log(res)
           resolve(res.data)
       })
-      .catch(err => reject(err))
+      .catch(err => {reject(err)})
   })
-    
 }
 
 const ShowProfile = () => (
@@ -44,7 +42,7 @@ const ShowProfile = () => (
     console.log('data address:',data.address)
     if(isLoading) return "Loading..."
     if(error) return `Something went wrong: ${error.message}`
-    if(data.address == true){
+  if(data){
         return <>{data.address} </>
   
     }
@@ -53,16 +51,45 @@ const ShowProfile = () => (
   </Async>
   );
 
-  export default ShowProfile;
+
+  // --------------------------------- this works
+  const AddReport = () => (
+
+    <Async promiseFn={getProfileFormat}>
+    { ({data, error, isLoading}) => {
+      console.log('70 ',data)
+      if(isLoading) return "Loading..."
+      if(error) return `Something went wrong: ${error.message}`
+      if(data){
+          return <>{data.box2Name}
+
+        <div className="card acct area-padding txt-align-center mt-4"
+          onClick={(e) => { setOpenProfModal(true); }} >
+
+          <img src={prof_pic} style={{ borderRadius: "50%" }} /> {data.box2Name}
+        </div>
+        
+          </>
+      }
+      return  <ReportBoxes/>;
+    }}
+    </Async>
+    );
+    
+    export default AddReport;
+    // --------------------------------- delete
+
+
+  // export default ShowProfile;
 
 
 // function Profiles(){
 
 
 
-//   // ---------------------------------------------------------------
+// //   // ---------------------------------------------------------------
 
-//   // Individual profile is not initially opened
+  // Individual profile is not initially opened
 //   const [openProfModal, setOpenProfModal] = useState(false);
 
 //   return(
@@ -111,3 +138,17 @@ const ShowProfile = () => (
 // }
 
 // export default Profiles;
+
+
+
+
+
+
+
+
+
+
+
+
+
+

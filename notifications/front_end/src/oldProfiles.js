@@ -133,3 +133,41 @@ async function getAllProfiles(e){
 }
 
 export default Profiles;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const AddReport = () => (
+
+    <Async promiseFn={loadFormat}>
+    { ({data, error, isLoading}) => {
+      console.log('70 ',data)
+      if(isLoading) return "Loading..."
+      if(error) return `Something went wrong: ${error.message}`
+      if(data){
+          return <>{data.box2Name}
+        
+          </>
+      }
+      return  <ReportBoxes/>;
+    }}
+    </Async>
+    );
+    
+    export default AddReport;

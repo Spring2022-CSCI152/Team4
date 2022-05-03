@@ -28,7 +28,7 @@ const loadFormat = () => {
         console.log(res);
         resolve(res.data);
       })
-      .catch((err) => reject(err));
+      .catch((err) => {reject(err)});
   });
 };
 

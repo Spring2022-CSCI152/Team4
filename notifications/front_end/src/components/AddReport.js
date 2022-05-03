@@ -38,18 +38,6 @@ import Async from "react-async";
 
 // const loadFormat = ()=>{
 
-<<<<<<< HEAD
-  const url = "http://172.24.158.171:8080/api/v1/reports/get_report_format"
-  const User = JSON.parse(localStorage.getItem("user"))
-  const bodyData = {
-      token: User.token,
-      accountId: {
-          accountIdString: User.accountIdString,
-          email: User.email,
-          businessId: User.businessId 
-      }
-  }
-=======
 //   const url = "http://172.24.158.171:8080/api/v1/reports/get_report_format"
 //   const User = JSON.parse(localStorage.getItem("user"))
 //   const bodyData = {
@@ -60,7 +48,6 @@ import Async from "react-async";
 //           businessId: User.businessId 
 //       }
 //   }
->>>>>>> 5149fdd2f0f35fb629e191ab8f31f73086d8da37
 
 //   return new Promise((resolve, reject) => {
 //     axios.post(url, bodyData).then(res => {
@@ -73,21 +60,6 @@ import Async from "react-async";
 
 // const AddReport = () => (
 
-<<<<<<< HEAD
-<Async promiseFn={loadFormat}>
-{ ({data, error, isLoading}) => {
-  console.log('70 ',data)
-  if(isLoading) return "Loading..."
-  if(error) return `Something went wrong: ${error.message}`
-  if(data.box3Name != ""){
-      return <>{data.box3Name} {data.box2Name}</>
-
-  }
-  return null;
-}}
-</Async>
-);
-=======
 // <Async promiseFn={loadFormat}>
 // { ({data, error, isLoading}) => {
 //   console.log('70 ',data)
@@ -102,7 +74,6 @@ import Async from "react-async";
 // }}
 // </Async>
 // );
->>>>>>> 5149fdd2f0f35fb629e191ab8f31f73086d8da37
 
 // export default AddReport;
 
