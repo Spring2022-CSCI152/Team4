@@ -1,0 +1,133 @@
+hr.green {
+  border: solid 2px #00f200;
+}
+
+.area-padding {
+  padding: 0.5em;
+}
+
+.txt-align-right {
+  text-align: right;
+}
+
+.txt-align-left {
+  text-align: left;
+  align-self: left;
+  align-content: left;
+  align-items: left;
+}
+
+.txt-align-center {
+  text-align: center;
+  align-self: center;
+  align-content: center;
+  align-items: center;
+  justify-self: center;
+}
+
+.row img {
+  object-fit: cover;
+}
+
+.card img {
+  width: 4em;
+  height: 4em;
+  object-fit: cover;
+  margin: 0.5em;
+}
+
+/* buttons */
+.btn {
+  width: fit-content;
+  height: 3em;
+  margin: 10px;
+  border: none;
+}
+
+.btn-sm {
+  width: fit-content;
+  color: #999999;
+  white-space: nowrap;
+  background-color: transparent;
+}
+
+.btn-sm:hover {
+  width: fit-content;
+  color: #000000;
+  background-color: #dbdbdb;
+  white-space: nowrap;
+}
+
+.btn.blk {
+  color: #999999;
+  background: #333333;
+  font-size: 1.15rem;
+  width: 6rem;
+  height: 2em;
+  border-radius: 5px;
+}
+
+.btn-dark:hover {
+  color: #000000;
+  background: #00f200;
+}
+
+.btn-link:hover {
+  color: #000000;
+}
+
+.btn.green {
+  background-color: #00f200;
+  color: #000000;
+}
+
+.btn.green:hover {
+  background-color: #00d100;
+}
+
+.btn-signout {
+  width: fit-content;
+  color: #979797;
+  background-color: transparent;
+}
+
+.btn-signout:hover {
+  width: fit-content;
+  color: #ffffff;
+  background-color: transparent;
+}
+
+a {
+  color: #000000;
+  text-decoration: none;
+}
+
+.w-auto.dropdown {
+  height: 2.7em;
+  border: 1px solid #ced4da;
+  width: 10em !important;
+}
+
+.form-label {
+  margin-right: 1em;
+
+}
+
+.form-switch {
+  margin: 1em;
+  text-align: left;
+}
+
+/* PROGRESS BAR */
+.progressbar {
+  width: 50%;
+  height: 10px;
+  background-color: rgb(0, 0, 0);
+  margin-bottom: 50px;
+}
+
+.progressbar div {
+  width: 33.3%;
+  height: 100%;
+  background-color: #00f200;
+}
