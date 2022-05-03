@@ -30,6 +30,7 @@ const message_queue = {
 
 //Post request
 app.post('/', function(req, res) {
+    console.log("Post Received")
     // req has already been parsed by bodyParser
     let message = req.body;
     //Update the state

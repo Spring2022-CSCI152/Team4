@@ -4,7 +4,7 @@ import json
 
 def sendMessageToMaleeServer():
 
-    url = "http://172.24.239.76:4000/get_image/210/someOtherID2"
+    url = "http://localhost:8080/"
     data = {"profile_id": "someOtherID2", "business_id": 210}
 
     header = {"Content-type": "application/json", }
