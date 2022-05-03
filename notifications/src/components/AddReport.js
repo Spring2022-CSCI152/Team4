@@ -6,11 +6,6 @@ import {useState, useEffect} from "react";
 import axios from 'axios';
 import React from "react";
 import ReportBoxes from  './ReportBoxes';
-<<<<<<< HEAD
-import usePromise from "react-promise";
-import Async from "react-async";
-=======
->>>>>>> c72089e5b573a6c2630811ac8ed4d3d9378f6d6e
 
 
  function AddReport() {
@@ -331,14 +326,10 @@ import Async from "react-async";
       {/* Upload Image*/}
 
       <div className="mt-3 mb-2"> <input type="file"
-        onChange={
-<<<<<<< HEAD
-          (event) => { uploadImageHandler(event.target.files); }
-=======
-         // (event) => { uploadImageHandler(event.target.files); }
-         console.log("a")
->>>>>>> c72089e5b573a6c2630811ac8ed4d3d9378f6d6e
-        } />
+        // onChange={
+        //   (event) => { uploadImageHandler(event.target.files); }
+        // }
+         />
       </div>
       
       <div className="col-12">
