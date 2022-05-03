@@ -6,13 +6,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './reportDashboard.css';
 import './utility.css';
 import ReportBoxes from './components/ReportBoxes'
-import reports from './Reports'
+import Reports from './Reports'
 
 
 
 ReactDOM.render(
     <BrowserRouter> 
-        <ReportBoxes/>
+        <Reports/>
     </BrowserRouter>   ,
 document.getElementById('root') 
 );
