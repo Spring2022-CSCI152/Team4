@@ -1,16 +1,177 @@
 import US_states from "./US-states";
 import mockData from "../mockData";
 import { Button } from "react-bootstrap";
+import { ImDrive } from "react-icons/im";
+import {useState, useEffect} from "react";
+import axios from 'axios';
+import React from "react";
+import ReportBoxes from  './ReportBoxes';
+import usePromise from "react-promise";
+import Async from "react-async";
 
-const AddReport = () => {
 
-  const uploadImageHandler = (files) => {
-    const formData = new FormData()
-    formData.append("img", files[0])
-    console.log(formData)
-  }
+ function AddReport() {
 
-  return (
+//   const url = "http://172.24.158.171:8080/api/v1/reports/get_report_format"
+//   const User = JSON.parse(localStorage.getItem("User"))
+//   const bodyData = {
+//       token: User.token,
+//       accountId: {
+//           accountIdString: User.accountIdString,
+//           email: User.email,
+//           businessId: User.businessId 
+//       }
+//   }
+//     console.log("outside!")
+    
+    
+//     const obj = {data: ''}
+
+//     const response = await(axios.post(url, bodyData))
+
+//     obj.data = response.data
+
+//     console.log('40',obj)
+//     return (<>{obj.data.accountIdString}</>)
+    
+// }
+
+// const loadFormat = ()=>{
+
+//   const url = "http://172.24.158.171:8080/api/v1/reports/get_report_format"
+//   const User = JSON.parse(localStorage.getItem("user"))
+//   const bodyData = {
+//       token: User.token,
+//       accountId: {
+//           accountIdString: User.accountIdString,
+//           email: User.email,
+//           businessId: User.businessId 
+//       }
+//   }
+
+//   return new Promise((resolve, reject) => {
+//     axios.post(url, bodyData).then(res => {
+//         console.log(res)
+//         resolve(res.data)
+//     })
+//     .catch(err => reject(err))
+// })
+// }
+
+// const AddReport = () => (
+
+// <Async promiseFn={loadFormat}>
+// { ({data, error, isLoading}) => {
+//   console.log('70 ',data)
+//   if(isLoading) return "Loading..."
+//   if(error) return `Something went wrong: ${error.message}`
+//   if(data){
+//       return <>{data.box2Name}
+    
+//       </>
+//   }
+//   return  <ReportBoxes/>;
+// }}
+// </Async>
+// );
+
+// export default AddReport;
+
+
+
+// const AddReport = () => {
+//   const [formats, setFormats] = useState()
+  
+
+
+//   const User = JSON.parse(localStorage.getItem("User"))
+//   const bodyData = {
+//     token: User.token,
+//     accountId :{
+//       accountIdString: User.accountIdString,
+//       email: User.email,
+//       businessId: User.businessId
+//     }
+//   }
+//   const url = "http://172.24.158.171:8080/api/v1/reports/get_report_format"
+
+
+    // const form = axios.post(url, bodyData)
+    // .then(form => {
+    //   console.log(form.data)
+
+    //   if (!formats){
+    //     setFormats(form.data)
+    //   }
+    //   else{
+    //     let needsUpdate = false
+    //     Object.keys(form.data).forEach(key=>{
+    //       if (form.data[key] != formats[key]){
+    //         needsUpdate = true
+    //       }
+    //     })
+    //     if (needsUpdate) {
+    //       setFormats(form.data)
+    //     } 
+    //   }
+
+
+// let needsUpdate = false
+
+// function getFormats(){
+//   if(!formats){
+//     needsUpdate = true
+// }
+// if(needsUpdate)
+// {
+//    axios.post(url, bodyData).then(form => {
+//         if(!!formats){
+//             console.log(formats)
+//             Object.key(form.data).forEach(key => {
+//                     if(form.data[key] !== formats[key]){
+//                         needsUpdate = true;
+//                     }
+//                 })
+//         }
+//         else if(needsUpdate || !formats){
+//           console.log("!formats")
+//             needsUpdate = false;
+//             setFormats(form.data);
+//         }
+//     })
+//   }
+// return formats;
+// }
+
+// const {form, loading} = usePromise(Promise.resolve(
+//   getFormats()
+// ))
+
+// if (loading || !form){
+//   return null;
+// }
+
+// return <>{form.accountIdString}</>
+  // function some(){
+    
+  //   if(!formats){
+  //     return <></>
+  //   }else{
+  //     console.log(formats)
+  //     return <>{formats.accountIdString}</>
+  //   }
+  // }
+  
+ 
+
+  //  // Object.values(formats).forEach(var => {return var};)
+  
+  
+  // );
+//};
+
+    return(
+        <>
     <form className="row m-2">
       <h3>New Incident</h3>
       <div className="col-3">
@@ -21,6 +182,9 @@ const AddReport = () => {
         <label htmlFor="inputDate" className="form-label">Incident Date</label>
         <input type="date" className="form-control" id="inputDate" />
       </div>
+
+  
+
       <div className="col-2">
         <label htmlFor="inputTime" className="form-label">Time</label>
         <input type="time" className="form-control" id="inputTime" />
@@ -173,12 +337,13 @@ const AddReport = () => {
         <button type="submit" className="btn green btn-sm">Add Person</button>
         <hr className="green"></hr>
       </div>
+     </form>      
+     <ReportBoxes/>
+     </>
+    )
+ }
 
-
-
-
-    </form>
-  );
-};
 
 export default AddReport;
+ 
+

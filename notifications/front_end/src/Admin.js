@@ -1,8 +1,11 @@
-import React from "react";
+import React, {useState} from "react";
+import AcctModal from "./components/AdminModal";
 import mockData from "./mockData";
 import {RiKeyFill, RiUserAddFill, RiProfileFill, RiFileCopy2Fill} from "react-icons/ri";
 
-const Admin = () => {
+function Accounts(){
+  const [openAcctModal, setOpenAcctModal] = useState(false);
+
   const AcctSrcResult = mockData.map((profiles) => {
     return profiles.profile.map((acct) => {
       return (
@@ -25,10 +28,23 @@ const Admin = () => {
         <hr className="green txt-align-center"></hr>
       </div>        
 
-        <p>Search Account</p>
-      <div className="txt-align-center">{AcctSrcResult}</div>
+      {/* Search Bar */}
+      <div className="container-fluid p-3 card-label">
+        <form className="d-flex ">
+          <input className="form-control me-2" type="search" placeholder="Search Account" aria-label="Search" style={{ background: "#eeeeee" }}/>
+          <button type="button" className="btn btn-outline-secondary" style={{ background: "#00f200" }}>Search</button>
+        </form>
+      </div>
+
+      <div className="txt-align-center"
+      onClick={() => {
+        setOpenAcctModal(true);
+      }}
+      >
+        {AcctSrcResult}
+      </div>
+      {openAcctModal && <AcctModal setOpenAcctModal={setOpenAcctModal} />}
     </div>
   );
-};
-
-export default Admin;
+}
+export default Accounts;
