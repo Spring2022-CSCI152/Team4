@@ -39,7 +39,7 @@ import Async from "react-async";
 const loadFormat = ()=>{
 
   const url = "http://172.24.158.171:8080/api/v1/reports/get_report_format"
-  const User = JSON.parse(localStorage.getItem("User"))
+  const User = JSON.parse(localStorage.getItem("user"))
   const bodyData = {
       token: User.token,
       accountId: {
@@ -65,8 +65,9 @@ const AddReport = () => (
   console.log('70 ',data)
   if(isLoading) return "Loading..."
   if(error) return `Something went wrong: ${error.message}`
-  if(data){
-      return <>{data.box2Name}</>
+  if(data.box3Name != ""){
+      return <>{data.box3Name} {data.box2Name}</>
+
   }
   return null;
 }}
@@ -82,7 +83,7 @@ export default AddReport;
   
 
 
-//   const User = JSON.parse(localStorage.getItem("User"))
+//   const User = JSON.parse(localStorage.getItem("user"))
 //   const bodyData = {
 //     token: User.token,
 //     accountId :{
