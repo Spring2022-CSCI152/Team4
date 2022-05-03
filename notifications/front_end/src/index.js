@@ -12,7 +12,7 @@ import AddReport from './components/AddReport'
 
 ReactDOM.render(
     <BrowserRouter> 
-        <AddReport/>
+        <App/>
     </BrowserRouter>   ,
 document.getElementById('root') 
 );
