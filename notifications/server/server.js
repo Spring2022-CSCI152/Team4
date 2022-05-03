@@ -1,6 +1,6 @@
 const http = require('http');
 const hostname = '0.0.0.0';
-const port = 8080;
+const port = 4000;
 
 let message_queue = {
   _observers: [],
@@ -21,7 +21,7 @@ let message_queue = {
 
 let message_sender = {
   signal: function(state){
-    [...clients(),keys()].forEach((client) => {
+   clients.forEach((client) => {
       const meta = clients.get(client)
       if(meta.business_id == state.business_id){
         client.send(state)
@@ -29,6 +29,18 @@ let message_sender = {
     });
   }
 };
+
+
+// let message_sender = {
+//   signal: function(state){
+//     [...clients, keys].forEach((client) => {
+//       const meta = clients.get(client)
+//       if(meta.business_id == state.business_id){
+//         client.send(state)
+//       }
+//     });
+//   }
+// };
 
 
 // let test_signal = {
@@ -41,7 +53,7 @@ let message_sender = {
 //     });
 //   }
 // };
-//message_queue.add(test_signal);
+// message_queue.add(test_signal);
 
 //triggers notification for all ws
 message_queue.add(message_sender); 
@@ -100,6 +112,7 @@ const server = http.createServer((req, res) => {
     });
     message_queue.setState(body)
     req.on("end", function (chunk) {
+      
       console.log(JSON.parse(body))
     });
     res.statusCode = 200;
