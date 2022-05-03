@@ -210,7 +210,7 @@ function ReportFormat({reportData,setReportData}) {
           className="mt-3"
           type="text"
           placeholder="Enter report field"
-          defaultValue={reportData.box4Name}
+          defaultValue={reportData.box5Name}
           onChange={(e) => {
             setReportData({ ...reportData, box5Name: e.target.value });
           }}
