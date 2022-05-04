@@ -1,63 +1,169 @@
 import React, { useState, useEffect } from 'react';
+import mockData from '../mockData'
 
+const url = 'ws://localhost:8081/';
 
+function reconnectingSocket(url){
+    let client;
+    let isConnected = false;
+    let reconnectOnClose = true;
+    let messageListeners = [];
+    let stateChangeListeners = [];
 
-function Notif(){
-  
-	const [notif, setNotif] = useState([])
+    function on(fn){
+        messageListeners.push(fn);
+    }
 
-	const client = new WebSocket('ws://localhost:8080/');
+    function off(fn){
+        messageListeners = messageListeners.filter(l => l!== fn);
+    }
 
-	const business_id = UserData.business_id;
-
-	function onClick(){
-
-		//Either Nav to Profile or Close Notif
-	}
-
-	useEffect(() => {
-
-        client.onopen = function() {
-            console.log('Socket open. \nSending Business Id...');
-            socket.send(JSON.stringify({business_id: business_id}));
-            console.log('Business Id sent.')
-        };
-
-        //When you get something back (typically the profile_id and business_id, which is redundant, but oh well
-        client.onmessage = function(message) {
-            
-            let data = JSON.parse(message.data) // turn it into an object
-            //Your Notif Creation Code here==========================================
-
-            newNotif = {
-            	//img: //,
-            	name: data_name,
-            	status: data_status
-            	// Whatever else you wanna put
-            }
-
-            setNotif({newNotif});
-        };
-
-		return () => {} //useEffect returns cleanup - close connection here
-	}, []);
-
-    function getDisplayable(){
-        if(!notif){
-            return (<></>)
-        }
-        else{
-            return ( 
-                <div>
-                </div>)
+    function onStateChange(fn){
+        stateChangeListeners.push(fn);
+        return () => {
+            stateChangeListeners = stateChangeListeners.filter(l => l !== fn);
         }
     }
 
-	return (
-		<div className="Notif" onclick={this.onclick}>
-			{this.getDisplayable}
-		</div>
-	)
+    function start(){
+        client = new WebSocket(url);
+
+        client.onopen = () => {
+            isConnected = true;
+            stateChangeListeners.forEach(fn => fn(true));
+        }
+
+        const close = client.close;
+
+        client.close = () =>{
+            reconnectOnClose = false;
+            close.call(client);
+        }
+
+        client.onmessage = (message) => {
+            let data = JSON.parse(message.data);
+            console.log("Getting Data:" , data.profile_id);
+            messageListeners.forEach(fn => fn(data));
+        }
+
+        client.onerror = (e) => console.log(e);
+
+        client.ononclose = () =>{
+            isConnected = false;
+            stateChangeListeners.forEach(fn => fn(false));
+
+            if(!reconnectOnClose){
+                console.log('WS closed by app');
+                return ;
+            }
+
+            setTimeout(start, 3000);
+        }
+
+    }
+
+    start();
+
+    return {
+        on, off, onStateChange,
+        close: () => client.close(),
+        getClient: () => client,
+        isConnected: () => isConnected
+    };
+}
+
+const client = reconnectingSocket(url);
+
+function useMessages(){
+    const [messages, setMessages] = useState({});
+
+    useEffect(() => {
+        console.log("Setting Messages");
+        //'message' is expected to be a JSON
+        function handleMessage(message){
+            setMessages(message);
+        }
+        client.on(handleMessage); //This sets the above function as the 'message listener'
+        return () => client.off(handleMessage);
+    }, [messages, setMessages]);
+
+    return messages;
+}
+
+const Notif = ({loggedIn}) => {
+    const messages = useMessages();
+    const [isConnected, setIsConnected] = useState(client.isConnected());
+    const [isUser, setUser] = useState(loggedIn);
+    const [notif, setNotif] = useState({
+        id: null,
+        status: null
+    });
+
+    useEffect(() => {
+        console.log("Is Connected");
+        return client.onStateChange(setIsConnected);
+    }, [setIsConnected]);
+
+    // If user is logged in, send business_id to web socket
+    useEffect(() => {
+        console.log(isUser)
+        if(isConnected && isUser && !!localStorage.getItem('user')){
+            let data = JSON.parse(localStorage.getItem('user'));
+            console.log(data);
+            client.getClient().send(JSON.stringify({business_id: data.businessId}));
+        }
+    }, [isConnected, isUser]);
+
+
+    //When the messages dependecies is changed, call this function
+    useEffect(() =>{
+        console.log("Messages Updated")
+        //'messages' is expected to be a JSON
+        console.log(messages.profile_id)
+        let status = null;
+        mockData.forEach(report => {
+            report.profile.forEach(profile => {
+                if(profile.name == messages.profile_id){
+                    status = profile.status;
+                }
+            });
+        });
+        setNotif({
+            id: messages.profile_id,
+            status: status
+        })
+        console.log(notif)
+        console.log(messages.profile_id);
+
+    }, [messages])
+
+    function onclick(){
+        console.log("Clicked")
+        setNotif({
+            id: null, 
+            status: null
+        })
+    }
+
+    const getDisplayable = () => {
+        if(notif.id !== null){
+            return (
+                <div>
+                    <div>{notif.id}</div>
+                    <div>{notif.status}</div>
+                </div>
+            )
+        }
+        else{
+            return (<></>)
+        }
+    }
+
+    return (
+        <button onClick={onclick}>
+            {getDisplayable()}
+        </button>
+    )
 }
 
 export default Notif;

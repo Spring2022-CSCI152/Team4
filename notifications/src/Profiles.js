@@ -25,7 +25,7 @@ function Profiles(){
     }
 
     // get profile format (use post instead of get)
-    const form2 = await axios.post("http://172.24.158.171:8080/api/v1/reports/get_profile_format",
+    const form2 = await axios.post("http://172.24.12.161:8080/api/v1/reports/get_profile_format",
     {
       token: newUser.token,
       accountId: accountId,
@@ -57,7 +57,7 @@ async function getAllProfiles(e){
       }
 
       // get profile format (use post instead of get)
-      const form2 = await axios.post("http://172.24.158.171:8080/api/v1/reports/get_profiles",
+      const form2 = await axios.post("http://172.24.12.161:8080/api/v1/reports/get_profiles",
       {
         token: newUser.token,
         accountId: accountId,

@@ -16,12 +16,12 @@ import Notif from "./components/example_notif";
 
 
 const App = () => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(false);
 
   const Layout = () => (
     <>
-      <Notif/>
       <NavBarComp signOutComplete={() => setUser(false)} />
+      <Notif loggedIn={user}/>
       <Outlet />
     </>
   );
@@ -63,6 +63,7 @@ const App = () => {
         </>
       )}
     </Routes>
+    
     </div>
   );
 };
