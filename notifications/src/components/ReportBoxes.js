@@ -8,7 +8,7 @@ import React from "react";
 import Async from "react-async";
 
 function loadFormat () {
-  const url = "http://172.24.12.161:8080/api/v1/reports/get_report_format";
+  const url = `${process.env.REACT_APP_JAVA_SERVER}/api/v1/reports/get_report_format`;
   const User = JSON.parse(localStorage.getItem("user"));
   const bodyData = {
     token: User.token,

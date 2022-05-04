@@ -31,8 +31,6 @@ const App = () => {
   return (
     <div>
   
-
-    
     <Routes>
       {!user && (
         <>
