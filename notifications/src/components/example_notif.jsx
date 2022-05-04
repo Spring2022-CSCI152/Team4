@@ -148,10 +148,13 @@ const Notif = ({loggedIn}) => {
     const getDisplayable = () => {
         if(notif.id !== null){
             return (
-                <div>
-                    <div>{notif.id}</div>
-                    <div>{notif.status}</div>
-                </div>
+                
+                <button onClick={onclick}>
+                    <div>Detected!</div>
+                    <div>Name: {notif.id}</div>
+                    <div>Status: {notif.status}</div>
+                </button>
+                
             )
         }
         else{
@@ -160,9 +163,8 @@ const Notif = ({loggedIn}) => {
     }
 
     return (
-        <button onClick={onclick}>
-            {getDisplayable()}
-        </button>
+           <>{getDisplayable()}</>
+        
     )
 }
 
