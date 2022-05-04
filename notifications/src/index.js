@@ -8,14 +8,18 @@ import './utility.css';
 import ReportBoxes from './components/ReportBoxes'
 import AllList from './components/AllList'
 import Notif from './components/example_notif'
+import NavBarComp from './components/NavBarComp'
 
 
 
 
 ReactDOM.render(
     <BrowserRouter> 
+        {/* <NavBarComp/>
+        <Notif/>
+        <AllList/> */}
         <App/>
-    </BrowserRouter> ,
+    </BrowserRouter>   ,
 document.getElementById('root') 
 );
 

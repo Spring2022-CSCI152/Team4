@@ -82,7 +82,7 @@ import ReportBoxes from  './ReportBoxes';
   
 
 
-//   const User = JSON.parse(localStorage.getItem("User"))
+//   const User = JSON.parse(localStorage.getItem("user"))
 //   const bodyData = {
 //     token: User.token,
 //     accountId :{
@@ -326,10 +326,10 @@ import ReportBoxes from  './ReportBoxes';
       {/* Upload Image*/}
 
       <div className="mt-3 mb-2"> <input type="file"
-        onChange={
-         // (event) => { uploadImageHandler(event.target.files); }
-         console.log("a")
-        } />
+        // onChange={
+        //   (event) => { uploadImageHandler(event.target.files); }
+        // }
+         />
       </div>
       
       <div className="col-12">

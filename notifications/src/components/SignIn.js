@@ -12,9 +12,10 @@ const SignIn = ({ signInTrigger }) => {
         console.log(signIn.data)
         console.log('response ', signIn.status)
         signInTrigger();
-      }).catch(
+      }).catch(error => {
        
         alert("Invalid Credentials")
+      }
       )
   };
 
