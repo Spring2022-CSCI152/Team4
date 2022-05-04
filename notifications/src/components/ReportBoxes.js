@@ -5,12 +5,10 @@ import { ImDrive } from "react-icons/im";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import React from "react";
-import Test from "./test";
-import usePromise from "react-promise";
 import Async from "react-async";
 
-const loadFormat = () => {
-  const url = "http://172.24.158.171:8080/api/v1/reports/get_report_format";
+function loadFormat () {
+  const url = "http://172.24.12.161:8080/api/v1/reports/get_report_format";
   const User = JSON.parse(localStorage.getItem("user"));
   const bodyData = {
     token: User.token,
@@ -53,19 +51,14 @@ const ReportBoxes = () => (
             }
           }
 
-       
         return (
             <div>
-                  
                   {boxesNames.map((boxes) => (
                     <div>
                        <div>{boxes} </div>
-                    
                     </div>
                     )) 
                 } 
-
-
 
 
                 {boxesTrue.map((boxes) => (
@@ -75,10 +68,8 @@ const ReportBoxes = () => (
                         type="text"
                         placeholder={boxes}
                         defaultValue=""
-                        onChange={(e) => {
-                        e.target.value;
-                        }}
-                    />
+                       
+                      />
                     </div>
                     )) 
                 } 

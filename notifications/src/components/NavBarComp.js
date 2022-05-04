@@ -19,7 +19,7 @@ const NavBarComp = ({ signOutComplete }) => {
     };
 
     const signOut = await axios
-      .put("http://172.24.158.171:8080/api/v1/accounts/logout", {
+      .put("http://172.24.12.161:8080/api/v1/accounts/logout", {
         token: user.token,
         accountId: accountId,
       })

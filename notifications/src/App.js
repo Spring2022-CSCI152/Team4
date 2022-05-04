@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Navigate, Outlet } from "react-router";
 import Reports from "./Reports";
 import Notifications from "./Notifications";
@@ -11,18 +11,27 @@ import NavBarComp from "./components/NavBarComp";
 import AddReport from "./components/AddReport";
 import UpdatedLogs from "./components/UpdatedLogs"
 import AllList from "./components/AllList";
+import Notif from "./components/example_notif";
+
+
 
 const App = () => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(false);
 
   const Layout = () => (
     <>
       <NavBarComp signOutComplete={() => setUser(false)} />
+      <Notif loggedIn={user}/>
       <Outlet />
     </>
   );
 
+
   return (
+    <div>
+  
+
+    
     <Routes>
       {!user && (
         <>
@@ -54,6 +63,8 @@ const App = () => {
         </>
       )}
     </Routes>
+    
+    </div>
   );
 };
 
