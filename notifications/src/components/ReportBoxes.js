@@ -46,8 +46,8 @@ const ReportBoxes = () => (
         }
         return (
           <div>
-            {boxesNames.map((boxes) => (
-              <div className="mt-4 m-5">
+            {boxesNames.map((boxes, i) => (
+              <div key={i} className="mt-4 m-5">
                 <div className="form-group">
                   <label for="comment">{boxes} </label>
                   <textarea className="form-control" rows="5" id="comment"></textarea>
