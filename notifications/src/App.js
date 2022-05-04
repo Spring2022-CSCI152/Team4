@@ -16,6 +16,7 @@ import Notif from "./components/example_notif";
 
 
 const App = () => {
+
   const [user, setUser] = useState(false);
 
   const Layout = () => (
