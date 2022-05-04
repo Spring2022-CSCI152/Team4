@@ -131,3 +131,21 @@ a {
   height: 100%;
   background-color: #00f200;
 }
+
+.notification{
+  background-color: rgb(255, 81, 81);
+  border-width: 0;
+  border-radius: .25em;
+  width: 20em;
+  text-align: left;
+}
+
+.notification:hover{
+  transform: scale(1.01);
+  background-color: rgb(255, 0, 0);
+}
+
+.vert-align-md {
+  display: flex;
+  align-items: center;
+}

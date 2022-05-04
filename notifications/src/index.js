@@ -7,12 +7,14 @@ import './reportDashboard.css';
 import './utility.css';
 import ReportBoxes from './components/ReportBoxes'
 import AllList from './components/AllList'
+import Notif from './components/example_notif'
 
 
 
 ReactDOM.render(
     <BrowserRouter> 
-        <App/>
+        <Notif/>
+        <AllList/>
     </BrowserRouter>   ,
 document.getElementById('root') 
 );
