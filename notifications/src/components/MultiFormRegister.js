@@ -84,11 +84,7 @@ function RegisterForms( {signInTrigger}) {
     }
 
     // post profile format
-<<<<<<< HEAD
-    const form2 = await axios.post("http://172.24.158.171:8080/api/v1/reports/set_profile_format",
-=======
     const form2 = await axios.post(`${process.env.REACT_APP_JAVA_SERVER}/api/v1/reports/set_profile_format`,
->>>>>>> 23509c58a45a904b5b5a91be3f21edfc4c6fd96d
       {
         token: newUser.token,
         accountId: accountId,
@@ -102,11 +98,7 @@ function RegisterForms( {signInTrigger}) {
       })
 
     // post report format
-<<<<<<< HEAD
-    const form3 = await axios.post("http://172.24.158.171:8080/api/v1/reports/set_report_format",
-=======
     const form3 = await axios.post(`${process.env.REACT_APP_JAVA_SERVER}/api/v1/reports/set_report_format`,
->>>>>>> 23509c58a45a904b5b5a91be3f21edfc4c6fd96d
       {
         token: newUser.token,
         accountId: accountId,
