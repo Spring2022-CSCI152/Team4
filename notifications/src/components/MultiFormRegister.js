@@ -4,6 +4,7 @@ import ProfileFormat from "./ProfileFormat";
 import ReportFormat from "./ReportFormat";
 import axios from "axios";
 
+
 function RegisterForms( {signInTrigger}) {
   const [page, setPage] = useState(0);
 
@@ -64,7 +65,7 @@ function RegisterForms( {signInTrigger}) {
   async function postRegistrationForm() {
 
     // when posting form to register business, save info in localStorage
-    const form1 = await axios.post("http://172.24.12.161:8080/api/v1/accounts/register_business", formData)
+    const form1 = await axios.post(`${process.env.REACT_APP_JAVA_SERVER}/api/v1/accounts/register_business`, formData)
       .then(form1 => {
         console.log(form1.data)
         localStorage.setItem("user", JSON.stringify(form1.data))
@@ -83,7 +84,7 @@ function RegisterForms( {signInTrigger}) {
     }
 
     // post profile format
-    const form2 = await axios.post("http://172.24.12.161:8080/api/v1/reports/set_profile_format",
+    const form2 = await axios.post(`${process.env.REACT_APP_JAVA_SERVER}/api/v1/reports/set_profile_format`,
       {
         token: newUser.token,
         accountId: accountId,
@@ -97,7 +98,7 @@ function RegisterForms( {signInTrigger}) {
       })
 
     // post report format
-    const form3 = await axios.post("http://172.24.12.161:8080/api/v1/reports/set_report_format",
+    const form3 = await axios.post(`${process.env.REACT_APP_JAVA_SERVER}/api/v1/reports/set_report_format`,
       {
         token: newUser.token,
         accountId: accountId,

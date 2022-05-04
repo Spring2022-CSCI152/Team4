@@ -11,11 +11,11 @@ import Notif from './components/example_notif'
 
 
 
+
 ReactDOM.render(
     <BrowserRouter> 
-        <Notif/>
-        <AllList/>
-    </BrowserRouter>   ,
+        <App/>
+    </BrowserRouter> ,
 document.getElementById('root') 
 );
 

@@ -5,7 +5,7 @@ import axios from 'axios'
 const SignIn = ({ signInTrigger }) => {
 
   async function handleSignIn(e) {
-    const signIn = await axios.post("http://172.24.12.161:8080/api/v1/accounts/login",
+    const signIn = await axios.post(`${process.env.REACT_APP_JAVA_SERVER}/api/v1/accounts/login/api/v1/accounts/login`,
       formData)
       .then(signIn => {
         localStorage.setItem("user", JSON.stringify(signIn.data))
