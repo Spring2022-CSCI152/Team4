@@ -54,12 +54,6 @@ public class SettingsService {
         return repoManager.getCustomerProfileFormatIfExists(request.getBusinessId());
     }
 
-    private boolean isAdminForBusiness(Integer businessId, String accountIdString){
-        return (accounts.getBusinessIfExists(businessId)
-                .getAdmins()
-                .contains(accountIdString));
-    }
-
     //Checks the stored business accounts' admins and employee lists
     //returns true if id is found
     private boolean isValidBusinessIdAndAccount(Integer businessId, String accountId){
@@ -68,33 +62,38 @@ public class SettingsService {
     }
 
     private void validateAndSaveReportFormat(Integer businessId, ReportFormat reportFormat){
-        validateReportFormat(reportFormat);
+        validateReportFormat(businessId, reportFormat);
         repoManager.saveReportFormat(reportFormat);
     }
 
-    private void validateReportFormat(ReportFormat reportFormat){
+    private void validateReportFormat(Integer businessId, ReportFormat reportFormat){
         if(reportFormat == null){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Request, Report Format is null");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Report Format cannot be null!");
         }
-        if(reportFormat.getBusinessId() == null){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Business Id!");
+        if(reportFormat.getBusinessId() == null
+            || !reportFormat.getBusinessId().equals(businessId)){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Business Id!");
         }
     }
 
     private void validateAndSaveProfileFormat(Integer businessId, CustomerProfileFormat profileFormat){
-        validateProfileFormat(profileFormat);
+        validateProfileFormat(businessId, profileFormat);
         repoManager.saveCustomerProfileFormat(profileFormat);
     }
 
-    private void validateProfileFormat(CustomerProfileFormat profileFormat){
-        if(profileFormat.getBusinessId() == null){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Business Id!");
+    private void validateProfileFormat(Integer businessId, CustomerProfileFormat profileFormat){
+        if(profileFormat == null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Profile Format cannot be null!");
+        }
+        if(profileFormat.getBusinessId() == null
+            || !profileFormat.getBusinessId().equals(businessId)){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Business Id!");
         }
     }
 
     private void validateBusinessId(Request request){
         if(!isValidBusinessIdAndAccount(request.getBusinessId(), request.getAccountIdString())){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Business ID");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid Business Id!");
         }
     }
 
