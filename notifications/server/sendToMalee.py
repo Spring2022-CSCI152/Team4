@@ -4,11 +4,10 @@ import json
 
 def sendMessageToMaleeServer():
 
+    url = "http://localhost:8081/"
+    data = {"profile_id": "Abigail Bowen", "business_id": 18084}
 
-    url = "http://localhost:8080"
-    data = {"profile_id": "someID", "business_id": 100}
-
-    header = {"Content-type": "application/json", }
+    header = {"Content-type": "application/json"}
 
     r = requests.post(url, data=json.dumps(data), headers=header)
     print(r)

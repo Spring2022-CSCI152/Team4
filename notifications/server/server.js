@@ -73,10 +73,13 @@ let httpServer = app.app; // Store the 'server' part of the Server File into htt
 let messageQueue = app.message_queue // Create a reference to the 'observable message queue'
 
 // SET PORT AND CREATE A 'MAP' TO STORE WebSocket Connections and User Data INTO
+<<<<<<< HEAD
 const port = 8080;
 >>>>>>> c72089e5b573a6c2630811ac8ed4d3d9378f6d6e
+=======
+const port = 8081;
+>>>>>>> 9ddf1be2043a39efc81542fac758258cb4dcaf9e
 const clients = new Map();
-
 // CREATE A NEW WebSocket Server setting the internal 'server' to the server defined above
 let wss = new WSServer({
     server: server
@@ -122,6 +125,7 @@ wss.on('connection', function connection(ws){
         console.log("Receiving Business Id...")
         //Get Message data, this should be the business_id json as a string
         const msg = JSON.parse(message);
+        console.log(msg)
         //Using the connection from ws, get the stored metadata
         let metadata = clients.get(ws);
         console.log("Setting Business Id...")

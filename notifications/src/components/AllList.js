@@ -6,6 +6,7 @@ import ReportModal from "./ReportModal";
 import { Card, Stack } from "react-bootstrap";
 
 
+
 function AllList() {
   {
     /* Cards display and page calculation */

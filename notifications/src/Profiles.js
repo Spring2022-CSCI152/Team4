@@ -87,6 +87,80 @@ function Profiles(){
 
 
 
+
+
+  async function getProfileFormat(e){
+
+    // newUser should be the user logged in
+    const newUser = JSON.parse(localStorage.getItem("user")) 
+
+    // newUsers accountId
+    const accountId = {
+      accountIdString: newUser.accountIdString,
+      email: newUser.email,
+      businessId: newUser.businessId
+    }
+
+    // get profile format (use post instead of get)
+    const form2 = await axios.post("http://172.24.12.161:8080/api/v1/reports/get_profile_format",
+    {
+      token: newUser.token,
+      accountId: accountId,
+    })
+    .then(form2 => {
+      console.log('form2 data: :', form2.data)
+      console.log('res 2', form2.status)
+      localStorage.setItem("profileCheckStates", JSON.stringify(form2.data)) // add states to localStorage
+      const profileFormat = JSON.parse(localStorage.getItem(form2.data)) //retrive states from localStorage
+    }).catch(error =>{
+      console.log(error)
+      console.log("Julie, it's NOT working :(")
+    })
+}
+
+async function getAllProfiles(e){
+      // newUser should be the user logged in
+      const newUser = JSON.parse(localStorage.getItem("user")) 
+
+      // newUsers accountId
+      const accountId = {
+        accountIdString: newUser.accountIdString,
+        email: newUser.email,
+        businessId: newUser.businessId
+      }
+  
+      const state = {
+        length: null
+      }
+
+      // get profile format (use post instead of get)
+      const form2 = await axios.post("http://172.24.12.161:8080/api/v1/reports/get_profiles",
+      {
+        token: newUser.token,
+        accountId: accountId,
+      })
+      .then(form2 => {
+        console.log('form2 data: :', form2.data)
+        console.log('res 2', form2.status)
+        console.log("length", form2.data.content.length)       // How to access elements 
+        localStorage.setItem("profileList", JSON.stringify(form2.data)) // add states to localStorage
+        const profileList = JSON.parse(localStorage.getItem(form2.data)) //retrive states from localStorage
+
+        this.setState({length: form2.data.content.length})
+        console.log(profileList)
+
+        // if(form2.data.length == 0){
+        //   return 1
+        // }
+
+
+      }).catch(error =>{
+        console.log(error)
+        console.log("Julie, it's NOT working :(")
+      })
+
+}
+
   // Individual profile is not initially opened
   const [openProfModal, setOpenProfModal] = useState(false);
 
