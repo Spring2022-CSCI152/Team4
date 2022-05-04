@@ -133,19 +133,29 @@ a {
 }
 
 .notification{
-  background-color: rgb(255, 81, 81);
+  background-color: rgb(255, 80, 80);
   border-width: 0;
   border-radius: .25em;
-  width: 20em;
+  min-width: 5em;
+  width: fit-content;
   text-align: left;
 }
 
-.notification:hover{
+ .notification:hover{
   transform: scale(1.01);
-  background-color: rgb(255, 0, 0);
-}
+  background-color: rgb(243, 29, 29);
+} 
 
 .vert-align-md {
   display: flex;
   align-items: center;
 }
+
+.img-md{
+  width: 5em;
+  height: 5em;
+  object-fit: cover;
+ 
+
+}
+

@@ -156,18 +156,17 @@ const Notif = ({ loggedIn }) => {
         if (notif.id !== null) {
             return (
                 <button onClick={onclick} className="notification m-3">
-                    <div className="row vert-align-md p-3">
-                        <div className="col-3">
-                            <GoAlert size="3em" />
+                    <div className="row vert-align-md p-1">
+                        <div className="col-auto">
+                            <div><img src ={notif.photo}  className="img-md"/></div>
+                            {/* test photo size <div><img src ={mockData[0].profile[0].url}  className="img-md"/></div> */}
                             <div>{notif.photo}</div>
                         </div>
                         <div className="col">
-                            <h6><b>Detected!</b></h6>
+                            <div className="txt-align-right"><GoAlert size="2em"/></div>
+                            <h6><b>  Detected! </b> </h6>
                             <div>Name: {notif.id}</div>
                             <div>Status: {notif.status}</div></div>
-                        <div className="col">
-                            <div>{notif.photo}</div>
-                        </div>
                     </div>
                 </button>
             )
