@@ -116,8 +116,6 @@ function ProfModal({setOpenProfModal}){
                 <div className="row">
                     <div className="border border-dark">Reports Listed Here ..</div>
                 </div>
-        {/* </div>    */}
-
             </div>
         </div>
     );
