@@ -16,6 +16,7 @@ database = DBManager(config('HOST'), config('UNAME'), config('PASSWORD'), config
 
 # Saves a base64 rep of an image to local system and corresponding info to db
 @app.route("/save_image", methods=['POST'])
+@cross_origin() 
 def post():
 	request_data = request.get_json()
 	if 'image' in request_data:
@@ -78,6 +79,7 @@ def get(path_business_id, path_profile_id):
 
 	image = Image.open(path)
 
+	response.headers.add("Access-Control-Allow-Origin", "*")
 	return 	send_file(path, as_attachment=True, attachment_filename=image.filename, mimetype='image/'+image.format)
 
 
