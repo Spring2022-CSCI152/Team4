@@ -1,0 +1,7 @@
+opencv-python
+numpy
+python-decouple
+Pillow
+Flask
+flask-cors
+mysql-connector-python
