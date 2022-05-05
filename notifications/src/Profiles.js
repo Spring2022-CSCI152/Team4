@@ -9,6 +9,8 @@ import Async from "react-async";
 
 //   // load format
   const getProfileFormat = () => {
+    {console.log("in")}
+
 
     const url = `${process.env.REACT_APP_JAVA_SERVER}/api/v1/reports/get_report_format`
 
@@ -24,7 +26,6 @@ import Async from "react-async";
           businessId: User.businessId 
       }
     }
-    {console.log("in")}
 
     return new Promise((resolve, reject) => {
       axios.post(url, bodyData).then(res => {
@@ -35,30 +36,28 @@ import Async from "react-async";
   })
 }
 
-const ShowProfile = () => (
+const ShowProfile = () => {
 
-  <Async promiseFn={getProfileFormat}>
+  <Async promiseFn={getProfileFormat()}>
     {console.log("clicked")}
-  { ({data, error, isLoading}) => {
-    console.log('data:',data)
-    console.log('data address:',data.address)
-    if(isLoading) return "Loading..."
-    if(error) return `Something went wrong: ${error.message}`
-  if(data){
-        return <>
-         <div className="card acct area-padding txt-align-center mt-4"
-          onClick={(e) => { modalListener.getClient().signal(true); }} > //setOpenProfModal is inside a different object, you will need middle man class to open it
-
-          <img src={prof_pic} style={{ borderRadius: "50%" }} /> {data.box2Name}
-        </div>
-        
-         </>
-  
-    }
-    return null;
-  }}
+    { ({data, error, isLoading}) => {
+      console.log('data:',data)
+      console.log('data address:',data.address)
+      if(isLoading) return "Loading..."
+      if(error) return `Something went wrong: ${error.message}`
+      if(data){
+          return <>
+            <div> Hello </div>
+            <div className="card acct area-padding txt-align-center mt-4"
+              onClick={(e) => { modalListener.getClient().signal(true); }} > //setOpenProfModal is inside a different object, you will need middle man class to open it
+              <img src={prof_pic} style={{ borderRadius: "50%" }} /> {}
+            </div>
+          </>
+      }
+      return null;
+    }}
   </Async>
-  );
+}
 
 function setModalListener(){
   let listeners = [];
@@ -155,10 +154,6 @@ async function getAllProfiles(e){
 
         this.setState({length: form2.data.content.length})
         console.log(profileList)
-
-        // if(form2.data.length == 0){
-        //   return 1
-        // }
 
       }).catch(error =>{
         console.log(error)
