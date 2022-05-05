@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import Register from "./Register";
 import ProfileFormat from "./ProfileFormat";
 import ReportFormat from "./ReportFormat";
+import BidReminder from "./BidReminder"
 import axios from "axios";
+import { Navigate } from "react-router";
+import { MdTitle } from "react-icons/md";
 
 
 function RegisterForms( {signInTrigger}) {
@@ -50,15 +53,17 @@ function RegisterForms( {signInTrigger}) {
   });
 
 
-  const FormTitles = ["Register Business", "Profile Format", "Report Format"];
+  const FormTitles = ["Register Business", "Profile Format", "Report Format", ""];
 
   const PageDisplay = () => {
-    if (page === 0) {
+    if (page == 0) {
       return <Register formData={formData} setFormData={setFormData} />;
-    } else if (page === 1) {
+    } else if (page == 1) {
       return <ProfileFormat profileData={profileData} setProfileData={setProfileData} />;
-    } else {
+    } else if (page == 2){
       return <ReportFormat reportData={reportData} setReportData={setReportData} />;
+    } else {
+      return <BidReminder />;
     }
   };
 
@@ -69,7 +74,6 @@ function RegisterForms( {signInTrigger}) {
       .then(form1 => {
         console.log(form1.data)
         localStorage.setItem("user", JSON.stringify(form1.data))
-        console.log('first res ', form1.status)
       }).catch(error =>{
         console.log(error)
       })
@@ -91,7 +95,6 @@ function RegisterForms( {signInTrigger}) {
         profileFormat: { ...profileData, businessId: newUser.businessId }
       })
       .then(form2 => {
-        console.log('form2 data: :', form2.data)
         console.log('res 2', form2.status)
       }).catch(error =>{
         console.log(error)
@@ -105,12 +108,13 @@ function RegisterForms( {signInTrigger}) {
         reportFormat: { ...reportData, businessId: newUser.businessId }
       })
       .then(form3 => {
-        console.log(form3)
         console.log('res 3', form3.status)
-        signInTrigger();
       }).catch(error =>{
         console.log(error)
       })
+
+  
+      
   }
 
   return (
@@ -126,14 +130,14 @@ function RegisterForms( {signInTrigger}) {
           <div className="progressbar mx-auto ">
             <div
               style={{
-                width: page === 0 ? "33.3%" : page == 1 ? "66.6%" : "100%",
+                width: page === 0 ? "25%" : page == 1 ? "50%" : page == 2 ? "75%" : "100%",
               }}
             ></div>
           </div>
 
           <button
             className="btn btn-dark btn-lg btn-block"
-            disabled={page == 0}
+            disabled={page == 0 && page == FormTitles.length-1}
             onClick={() => {
               setPage((currPage) => currPage - 1);
             }}
@@ -146,7 +150,7 @@ function RegisterForms( {signInTrigger}) {
             className="btn btn-dark btn-lg btn-block"
             onClick={(e) => {
               e.preventDefault();
-              if (page == FormTitles.length - 1) {
+              if (page == FormTitles.length - 2) {
                 <input
                   value={formData}
                   onChange={(e) => setFormData(e.target.value)}
@@ -159,14 +163,23 @@ function RegisterForms( {signInTrigger}) {
                   value={reportData}
                   onChange={(e) => setReportData(e.target.value)}
                 />;
-                { postRegistrationForm(e) }
-              } else {
+                {postRegistrationForm(e)}
+              
+              } 
+              if (page == FormTitles.length - 1) {
+                {console.log("on last page")}
+            // {signInTrigger()}
+              }else {
                 setPage((currPage) => currPage + 1);
               }
             }}
           >
-            {page === FormTitles.length - 1 ? "Submit" : "Next"}
+            {page === FormTitles.length - 2 ? "Submit" : page === FormTitles.length - 1 ? "Continue" :"Next"}
           </button>
+
+        
+
+
         </div>
       </div>
     </form>
