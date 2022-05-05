@@ -2,175 +2,18 @@ import US_states from "./US-states";
 import mockData from "../mockData";
 import { Button } from "react-bootstrap";
 import { ImDrive } from "react-icons/im";
-import {useState, useEffect} from "react";
-import axios from 'axios';
+import { useState, useEffect } from "react";
+import axios from "axios";
 import React from "react";
-import ReportBoxes from  './ReportBoxes';
+import Async from "react-async";
+import ReportBoxes from "./ReportBoxes";
 
-
- function AddReport() {
-
-//   const url = "http://172.24.158.171:8080/api/v1/reports/get_report_format"
-//   const User = JSON.parse(localStorage.getItem("User"))
-//   const bodyData = {
-//       token: User.token,
-//       accountId: {
-//           accountIdString: User.accountIdString,
-//           email: User.email,
-//           businessId: User.businessId 
-//       }
-//   }
-//     console.log("outside!")
-    
-    
-//     const obj = {data: ''}
-
-//     const response = await(axios.post(url, bodyData))
-
-//     obj.data = response.data
-
-//     console.log('40',obj)
-//     return (<>{obj.data.accountIdString}</>)
-    
-// }
-
-// const loadFormat = ()=>{
-
-//   const url = "http://172.24.158.171:8080/api/v1/reports/get_report_format"
-//   const User = JSON.parse(localStorage.getItem("user"))
-//   const bodyData = {
-//       token: User.token,
-//       accountId: {
-//           accountIdString: User.accountIdString,
-//           email: User.email,
-//           businessId: User.businessId 
-//       }
-//   }
-
-//   return new Promise((resolve, reject) => {
-//     axios.post(url, bodyData).then(res => {
-//         console.log(res)
-//         resolve(res.data)
-//     })
-//     .catch(err => reject(err))
-// })
-// }
-
-// const AddReport = () => (
-
-// <Async promiseFn={loadFormat}>
-// { ({data, error, isLoading}) => {
-//   console.log('70 ',data)
-//   if(isLoading) return "Loading..."
-//   if(error) return `Something went wrong: ${error.message}`
-//   if(data){
-//       return <>{data.box2Name}
-    
-//       </>
-//   }
-//   return  <ReportBoxes/>;
-// }}
-// </Async>
-// );
-
-// export default AddReport;
-
-
-
-// const AddReport = () => {
-//   const [formats, setFormats] = useState()
+{
+  /*function AddReport() {
   
-
-
-//   const User = JSON.parse(localStorage.getItem("user"))
-//   const bodyData = {
-//     token: User.token,
-//     accountId :{
-//       accountIdString: User.accountIdString,
-//       email: User.email,
-//       businessId: User.businessId
-//     }
-//   }
-//   const url = "http://172.24.158.171:8080/api/v1/reports/get_report_format"
-
-
-    // const form = axios.post(url, bodyData)
-    // .then(form => {
-    //   console.log(form.data)
-
-    //   if (!formats){
-    //     setFormats(form.data)
-    //   }
-    //   else{
-    //     let needsUpdate = false
-    //     Object.keys(form.data).forEach(key=>{
-    //       if (form.data[key] != formats[key]){
-    //         needsUpdate = true
-    //       }
-    //     })
-    //     if (needsUpdate) {
-    //       setFormats(form.data)
-    //     } 
-    //   }
-
-
-// let needsUpdate = false
-
-// function getFormats(){
-//   if(!formats){
-//     needsUpdate = true
-// }
-// if(needsUpdate)
-// {
-//    axios.post(url, bodyData).then(form => {
-//         if(!!formats){
-//             console.log(formats)
-//             Object.key(form.data).forEach(key => {
-//                     if(form.data[key] !== formats[key]){
-//                         needsUpdate = true;
-//                     }
-//                 })
-//         }
-//         else if(needsUpdate || !formats){
-//           console.log("!formats")
-//             needsUpdate = false;
-//             setFormats(form.data);
-//         }
-//     })
-//   }
-// return formats;
-// }
-
-// const {form, loading} = usePromise(Promise.resolve(
-//   getFormats()
-// ))
-
-// if (loading || !form){
-//   return null;
-// }
-
-// return <>{form.accountIdString}</>
-  // function some(){
-    
-  //   if(!formats){
-  //     return <></>
-  //   }else{
-  //     console.log(formats)
-  //     return <>{formats.accountIdString}</>
-  //   }
-  // }
-  
- 
-
-  //  // Object.values(formats).forEach(var => {return var};)
-  
-  
-  // );
-//};
-
     return(
         <>
-    <form className="row m-2">
+   <form className="row m-2">
       <h3>New Incident</h3>
       <div className="col-3">
         <label htmlFor="inputAuthor" className="form-label">Author</label>
@@ -180,9 +23,6 @@ import ReportBoxes from  './ReportBoxes';
         <label htmlFor="inputDate" className="form-label">Incident Date</label>
         <input type="date" className="form-control" id="inputDate" />
       </div>
-
-  
-
       <div className="col-2">
         <label htmlFor="inputTime" className="form-label">Time</label>
         <input type="time" className="form-control" id="inputTime" />
@@ -199,8 +39,12 @@ import ReportBoxes from  './ReportBoxes';
           <option value="2">Warning</option>
         </select>
       </div>
-      <hr className="green"></hr>
-      <h6>Involved Parties</h6>
+
+
+      <hr className="green"></hr> {/*-------------------------------------------------------------------*/
+}
+{
+  /* <h6>Involved Parties</h6>
       <div className="col-12 mb-3">
         <label htmlFor="inputProfile" className="form-label">Existing Profiles </label>
         <select className="w-auto form-select-md col-2 dropdown" aria-label="Default select example">
@@ -247,9 +91,11 @@ import ReportBoxes from  './ReportBoxes';
       </div>
       <div className="col-fill"></div>
 
-      {/* Profile Attributes */}
+      {/* Profile Attributes */
+}
 
-      <div className="col-2 mb-3">
+{
+  /* <div className="col-2 mb-3">
         <label htmlFor="inputSex" className="form-label">Sex</label>
         <input type="text" className="form-control" id="inputSex" />
       </div>
@@ -300,10 +146,14 @@ import ReportBoxes from  './ReportBoxes';
       <div className="col-2 mb-3">
         <label htmlFor="inputRace" className="form-label">Race</label>
         <input type="text" className="form-control" id="inputRace" />
-      </div>
+      </div> */
+}
 
-{/* Profile Address */}
-      <div className="col-md-5 mb-3">
+{
+  /* Profile Address */
+}
+{
+  /* <div className="col-md-5 mb-3">
         <label htmlFor="inputAddress2" className="form-label">Address</label>
         <input type="text" className="form-control" id="inputAddress2" />
       </div>
@@ -321,28 +171,123 @@ import ReportBoxes from  './ReportBoxes';
       <div className="col-md-2">
         <label htmlFor="inputZip" className="form-label">Zip</label>
         <input type="text" className="form-control" id="inputZip" />
-      </div>
+      </div> */
+}
 
-      {/* Upload Image*/}
+{
+  /* Upload Image*/
+}
 
-      <div className="mt-3 mb-2"> <input type="file"
-        // onChange={
-        //   (event) => { uploadImageHandler(event.target.files); }
-        // }
-         />
+{
+  /* <div className="mt-3 mb-2"> <input type="file"
+        onChange={
+         // (event) => { uploadImageHandler(event.target.files); }
+         console.log("a")
+        } />
       </div>
       
       <div className="col-12">
         <button type="submit" className="btn green btn-sm">Add Person</button>
         <hr className="green"></hr>
       </div>
-     </form>      
+     </form>         
      <ReportBoxes/>
      </>
-    )
- }
+    )*/
+}
 
+
+function loadFormat() {
+  const url = `${process.env.REACT_APP_JAVA_SERVER}/api/v1/reports/get_report_format`;
+  const User = JSON.parse(localStorage.getItem("user"));
+  const bodyData = {
+    token: User.token,
+    accountId: {
+      accountIdString: User.accountIdString,
+      email: User.email,
+      businessId: User.businessId,
+    },
+  };
+
+  return new Promise((resolve, reject) => {
+    axios
+      .post(url, bodyData)
+      .then((res) => {
+        console.log(res);
+        resolve(res.data);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+}
+
+const AddReport = () => (
+  <Async promiseFn={loadFormat}>
+    {({ data, error, isLoading }) => {
+      const boxesNames = [];
+      let bid;
+      let profile;
+      let changeLog;
+      let type;
+      if (isLoading) return "Loading...";
+      if (error) return `Something went wrong: ${error.message}`;
+      if (data) {
+        console.log(data);
+        //filters
+        for (const [key, value] of Object.entries(data)) {
+          if (
+            !key.includes("box") &&
+            key != "businessId" &&
+            key != "profiles" &&
+            key != "changeLog" &&
+            key != "type"
+          ) {
+            boxesNames.push(key);
+          }
+          if (key == "businessId") {
+            bid = value;
+          }
+          if (key == "profiles" && value == true) {
+            profile = key;
+          }
+          if (key == "changeLog" && value == true) {
+            changeLog = key;
+          }
+          if (key == "type" && value == true) {
+            type = key;
+          }
+        }
+
+        console.log(" ", data);
+        return (
+          <div className="m-4">
+            <label>Business ID:</label> {bid}
+            {boxesNames.map((boxes, i) => (
+              <div key={i} className="mt-4 m-5">
+                <div className="form-group">
+                  <label>{boxes} </label>
+                  <input type={boxes} className="form col-12"/>
+                </div>
+              </div>
+            ))}
+
+        <div>Incident {type}</div>
+        <select className="w-auto form-select-sm col-2 dropdown " aria-label="Default select example">
+          <option defaultValue={""}>Verbal</option>
+          <option value="1">Physical</option>
+          <option value="2">Warning</option>
+        </select>
+          
+            <div>{profile}</div>
+            <div>{changeLog}</div>
+            <ReportBoxes/>
+          </div>
+        );
+      }
+      return null;
+    }}
+  </Async>
+);
 
 export default AddReport;
- 
-

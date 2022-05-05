@@ -6,8 +6,9 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import React from "react";
 import Async from "react-async";
+import { form, input } from "react-bootstrap";
 
-function loadFormat () {
+function loadFormat() {
   const url = `${process.env.REACT_APP_JAVA_SERVER}/api/v1/reports/get_report_format`;
   const User = JSON.parse(localStorage.getItem("user"));
   const bodyData = {
@@ -28,59 +29,35 @@ function loadFormat () {
       })
       .catch((err) => {reject(err)});
   });
-};
+}
 
 const ReportBoxes = () => (
   <Async promiseFn={loadFormat}>
     {({ data, error, isLoading }) => {
-      console.log("70 ", data);
-
-      const boxesTrue = [];
-      const boxesNames =[];
+      const boxesNames = [];
       if (isLoading) return "Loading...";
       if (error) return `Something went wrong: ${error.message}`;
       if (data) {
+        //filter to get all report box names
         for (const [key, value] of Object.entries(data)) {
-          if ( value == true && key.includes("box")) {
-            boxesTrue.push(key);
+          if (typeof value == `string` && value != "") {
+            boxesNames.push(value);
           }
         }
-        for (const [key, value] of Object.entries(data)) {
-            if ( key.includes("Name")) {
-              boxesNames.push(value);
-            }
-          }
-
         return (
-            <div>
-                  {boxesNames.map((boxes) => (
-                    <div>
-                       <div>{boxes} </div>
-                    </div>
-                    )) 
-                } 
-
-
-                {boxesTrue.map((boxes) => (
-                    <div>
-                       <div>{boxes} </div>
-                    <input
-                        type="text"
-                        placeholder={boxes}
-                        defaultValue=""
-                       
-                      />
-                    </div>
-                    )) 
-                } 
- 
-            </div>
-           
-           
-        )
-
-    }
-    return null;
+          <div>
+            {boxesNames.map((boxes, i) => (
+              <div key={i} className="mt-4 m-5">
+                <div className="form-group">
+                  <label for="comment">{boxes} </label>
+                  <textarea className="form-control" rows="5" id="comment"></textarea>
+                </div>
+              </div>
+            ))}
+          </div>
+        );
+      }
+      return null;
     }}
   </Async>
 );
