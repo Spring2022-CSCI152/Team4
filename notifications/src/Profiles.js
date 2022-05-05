@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import ProfModal from "./components/ProfileModal";
 import ProfileFormat from "./components/ProfileFormat";
 // import mockData from "./mockData";
@@ -10,9 +10,7 @@ import Async from "react-async";
 //   // load format
   const getProfileFormat = () => {
 
-    // const url = "http://172.24.158.171:8080/api/v1/reports/get_report_format"
     const url = `${process.env.REACT_APP_JAVA_SERVER}/api/v1/reports/get_report_format`
-
 
     // newUser should be the user logged in
     const User = JSON.parse(localStorage.getItem("user")) 
@@ -26,6 +24,7 @@ import Async from "react-async";
           businessId: User.businessId 
       }
     }
+    {console.log("in")}
 
     return new Promise((resolve, reject) => {
       axios.post(url, bodyData).then(res => {
@@ -39,6 +38,7 @@ import Async from "react-async";
 const ShowProfile = () => (
 
   <Async promiseFn={getProfileFormat}>
+    {console.log("clicked")}
   { ({data, error, isLoading}) => {
     console.log('data:',data)
     console.log('data address:',data.address)
@@ -47,7 +47,7 @@ const ShowProfile = () => (
   if(data){
         return <>
          <div className="card acct area-padding txt-align-center mt-4"
-          onClick={(e) => { setOpenProfModal(true); }} >
+          onClick={(e) => { modalListener.getClient().signal(true); }} > //setOpenProfModal is inside a different object, you will need middle man class to open it
 
           <img src={prof_pic} style={{ borderRadius: "50%" }} /> {data.box2Name}
         </div>
@@ -60,6 +60,39 @@ const ShowProfile = () => (
   </Async>
   );
 
+function setModalListener(){
+  let listeners = [];
+  let client = {
+    signal: (data) => {
+      listeners.forEach(fn => fn(data))
+    } 
+  }
+
+  function on(listener){
+    listeners.push(listener);
+  }
+
+  function off(listener){
+    listeners = listeners.filter(l => l !== listener)
+  }
+
+  return {on, off, getClient: () => client}
+}
+
+function useOpenModal(){
+  const [open, setOpen] = useState(null);
+
+  useEffect(() => {
+    function open(status){
+      setOpen(status);
+    }
+    modalListener.on(open);
+    return () => modalListener.off(open)
+  }, [open, setOpen]);
+
+  return open;
+}
+const modalListener = setModalListener();
 
 function Profiles(){
 
@@ -133,10 +166,13 @@ async function getAllProfiles(e){
       })
 
 }
-
+  const open = useOpenModal();
   // Individual profile is not initially opened
   const [openProfModal, setOpenProfModal] = useState(false);
 
+  useEffect(() => {
+    setOpenProfModal(open);
+  }, [open])
   return(
     <div className="profiles"> 
       <div className="row-4 area-padding">
@@ -152,30 +188,28 @@ async function getAllProfiles(e){
             placeholder="Search Profile" 
             aria-label="Search" 
             style={{ background: "#eeeeee" }}/>
+
             <button type="button" 
               className="btn btn-outline-secondary" 
               style={{ background: "#00f200" }}
-              > Search </button>
+            > Search 
+            </button>
           </form>
 
           {/* open profile modal when click on card */}
           <div className="card acct area-padding txt-align-center mt-4"
           onClick={(e) => { setOpenProfModal(true); }} >
-
-          <img src={prof_pic} style={{ borderRadius: "50%" }} /> {}
-
-
+            <img src={prof_pic} style={{ borderRadius: "50%" }} /> {}
           </div>
+
           {openProfModal && <ProfModal setOpenProfModal={setOpenProfModal} />}
 
           <button
             type="submit"
             className="btn btn-dark btn-lg btn-block"
-            onClick={(e) => {
-              { ShowProfile() }            
-            }}
-          > View Profiles </button>
-
+            onClick={(e) => {{ ShowProfile() }}}
+          > View Profiles 
+          </button>
         </div>
       </div>
     </div>
@@ -183,17 +217,3 @@ async function getAllProfiles(e){
 }
 
 export default Profiles;
-
-
-
-
-
-
-
-
-
-
-
-
-
-

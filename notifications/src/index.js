@@ -9,16 +9,17 @@ import ReportBoxes from './components/ReportBoxes'
 import AllList from './components/AllList'
 import Notif from './components/example_notif'
 import NavBarComp from './components/NavBarComp'
+import Profiles from './Profiles'
 
 
 
 
 ReactDOM.render(
     <BrowserRouter> 
-        {/* <NavBarComp/>
-        <Notif/>
-        <AllList/> */}
-        <App/>
+        {/* <NavBarComp/> */}
+        {/* <Profiles/> */}
+        {/* <AllList/> */}
+         <App/>
     </BrowserRouter>   ,
 document.getElementById('root') 
 );
