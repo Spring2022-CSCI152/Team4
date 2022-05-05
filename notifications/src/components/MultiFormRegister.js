@@ -137,7 +137,7 @@ function RegisterForms( {signInTrigger}) {
 
           <button
             className="btn btn-dark btn-lg btn-block"
-            disabled={page == 0 && page == FormTitles.length-1}
+            disabled={page == 0 || page == FormTitles.length-1}
             onClick={() => {
               setPage((currPage) => currPage - 1);
             }}
@@ -164,11 +164,9 @@ function RegisterForms( {signInTrigger}) {
                   onChange={(e) => setReportData(e.target.value)}
                 />;
                 {postRegistrationForm(e)}
-              
               } 
               if (page == FormTitles.length - 1) {
-                {console.log("on last page")}
-            // {signInTrigger()}
+                {signInTrigger()}
               }else {
                 setPage((currPage) => currPage + 1);
               }
@@ -176,9 +174,6 @@ function RegisterForms( {signInTrigger}) {
           >
             {page === FormTitles.length - 2 ? "Submit" : page === FormTitles.length - 1 ? "Continue" :"Next"}
           </button>
-
-        
-
 
         </div>
       </div>

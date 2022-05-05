@@ -17,7 +17,8 @@ const getUser = () => {
     },
   };
 
-  return new Promise((resolve, reject) => {
+ return
+  new Promise((resolve, reject) => {
     axios
       .post(url, bodyData)
       .then((res) => {
@@ -32,26 +33,28 @@ const getUser = () => {
 
 const BidReminder = () => {
 
-    <Async promiseFn={getUser}>
-    {({ data, error, isLoading }) => {
-        if (isLoading) return <>"Loading..."</>;
-        if (error) return <>`Something went wrong: ${error.message}`</>;
-        if (data) {
-        return (
-            <>
-            <h3>Welcome</h3>
-            <div className="text-danger">
-                <b>Important!</b> Save the following Business ID to sign in again in
-                the future
-            </div>
-            <div>Business ID</div>
-            <b>{data}</b>
-            </>
-        );
-        }
-        return null;
-    }}
-    </Async>;
+  let userData = JSON.parse(localStorage.getItem('user'));
+  const displ = () => {
+    if (!!userData.businessId){
+      return (
+        <>
+        <h3>Welcome</h3>
+        <div className="text-danger">
+            <b>Important!</b> Save the following Business ID to sign in again in
+            the future
+        </div>
+        <div>Business ID</div>
+        <b>{userData.businessId}</b>
+        </>
+      );
+    }
+    else {
+      return (<>Loading...</>)
+    }
+  }
+
+  return (<>{displ()}</>)
+
 }
 
 export default BidReminder;
