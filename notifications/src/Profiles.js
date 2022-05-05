@@ -10,7 +10,9 @@ import Async from "react-async";
 //   // load format
   const getProfileFormat = () => {
 
-    const url = "http://172.24.158.171:8080/api/v1/reports/get_report_format"
+    // const url = "http://172.24.158.171:8080/api/v1/reports/get_report_format"
+    const url = `${process.env.REACT_APP_JAVA_SERVER}/api/v1/reports/get_report_format`
+
 
     // newUser should be the user logged in
     const User = JSON.parse(localStorage.getItem("user")) 
@@ -43,44 +45,20 @@ const ShowProfile = () => (
     if(isLoading) return "Loading..."
     if(error) return `Something went wrong: ${error.message}`
   if(data){
-        return <>{data.address} </>
+        return <>
+         <div className="card acct area-padding txt-align-center mt-4"
+          onClick={(e) => { setOpenProfModal(true); }} >
+
+          <img src={prof_pic} style={{ borderRadius: "50%" }} /> {data.box2Name}
+        </div>
+        
+         </>
   
     }
     return null;
   }}
   </Async>
   );
-
-
-  // --------------------------------- this works
-  // const AddReport = () => (
-
-    // <Async promiseFn={getProfileFormat}>
-    // { ({data, error, isLoading}) => {
-    //   console.log('70 ',data)
-    //   if(isLoading) return "Loading..."
-    //   if(error) return `Something went wrong: ${error.message}`
-    //   if(data){
-    //       return <>{data.box2Name}
-
-    //     <div className="card acct area-padding txt-align-center mt-4"
-    //       onClick={(e) => { setOpenProfModal(true); }} >
-
-    //       <img src={prof_pic} style={{ borderRadius: "50%" }} /> {data.box2Name}
-    //     </div>
-        
-    //       </>
-    //   }
-    //   return  <ReportBoxes/>;
-    // }}
-    // </Async>
-    // );
-    
-    // export default AddReport;
-    // --------------------------------- delete
-
-
-  // export default ShowProfile;
 
 
 function Profiles(){
