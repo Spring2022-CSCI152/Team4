@@ -312,7 +312,7 @@ const Profiles = () => {
                   <hr className="green"></hr>
                   <button 
                       className="close-btn" fixed="top"
-                      onClick={() => {setOpenProfModal(false);}}
+                      
                   > X </button>
   
                   {/* <div className="container"> */}

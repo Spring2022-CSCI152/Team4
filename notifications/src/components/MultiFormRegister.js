@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Register from "./Register";
 import ProfileFormat from "./ProfileFormat";
 import ReportFormat from "./ReportFormat";
@@ -10,6 +10,7 @@ import { MdTitle } from "react-icons/md";
 
 function RegisterForms( {signInTrigger}) {
   const [page, setPage] = useState(0);
+  const [user, setUser] = useState({})
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -55,6 +56,14 @@ function RegisterForms( {signInTrigger}) {
 
   const FormTitles = ["Register Business", "Profile Format", "Report Format", ""];
 
+  const useUser = () => {
+
+    useEffect(() => {
+      return () => user;
+    }, [user])
+
+    return user;
+  }
   const PageDisplay = () => {
     if (page == 0) {
       return <Register formData={formData} setFormData={setFormData} />;
@@ -63,9 +72,11 @@ function RegisterForms( {signInTrigger}) {
     } else if (page == 2){
       return <ReportFormat reportData={reportData} setReportData={setReportData} />;
     } else {
-      return <BidReminder />;
+      return <BidReminder user={user} setUser={setUser} />;
     }
   };
+
+
 
   async function postRegistrationForm() {
 
@@ -73,6 +84,8 @@ function RegisterForms( {signInTrigger}) {
     const form1 = await axios.post(`${process.env.REACT_APP_JAVA_SERVER}/api/v1/accounts/register_business`, formData)
       .then(form1 => {
         console.log(form1.data)
+        console.log("Setting Userdata")
+        setUser(form1.data);
         localStorage.setItem("user", JSON.stringify(form1.data))
       }).catch(error =>{
         console.log(error)
@@ -80,7 +93,6 @@ function RegisterForms( {signInTrigger}) {
 
     // create newUser from localStorage infor
     const newUser = JSON.parse(localStorage.getItem("user")) // previously newUser
-    
     const accountId = {
       accountIdString: newUser.accountIdString,
       email: newUser.email,
@@ -137,7 +149,7 @@ function RegisterForms( {signInTrigger}) {
 
           <button
             className="btn btn-dark btn-lg btn-block"
-            disabled={page == 0 || page == FormTitles.length-1}
+            disabled={page == 0}
             onClick={() => {
               setPage((currPage) => currPage - 1);
             }}

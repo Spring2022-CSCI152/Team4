@@ -1,6 +1,6 @@
+import React, { useEffect, useState } from "react";
 import { reject } from "async";
 import axios from "axios";
-import React from "react";
 import Async from "react-async";
 
 const getUser = () => {
@@ -17,8 +17,7 @@ const getUser = () => {
     },
   };
 
- return
-  new Promise((resolve, reject) => {
+ return new Promise((resolve, reject) => {
     axios
       .post(url, bodyData)
       .then((res) => {
@@ -31,11 +30,16 @@ const getUser = () => {
   });
 };
 
-const BidReminder = () => {
 
-  let userData = JSON.parse(localStorage.getItem('user'));
+const BidReminder = ({user, setUser}) => {
+
+  useEffect(() => {
+    setUser(user);
+  }, [user, setUser]);
+
   const displ = () => {
-    if (!!userData.businessId){
+
+    if (!!user && !!user.businessId){
       return (
         <>
         <h3>Welcome</h3>
@@ -44,7 +48,7 @@ const BidReminder = () => {
             the future
         </div>
         <div>Business ID</div>
-        <b>{userData.businessId}</b>
+        <b>{user.businessId}</b>
         </>
       );
     }
@@ -59,11 +63,3 @@ const BidReminder = () => {
 
 export default BidReminder;
 
-// <div>
-// <>
-//     <h3>Welcome</h3>
-//     <div className="text-danger"><b>Important!</b> Save the following Business ID to sign in again in the future</div>
-//     <div>Business ID</div>
-//     <b>{bid}</b>
-// </>
-// </div>
