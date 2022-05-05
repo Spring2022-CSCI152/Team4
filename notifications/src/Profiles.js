@@ -40,20 +40,21 @@ const ShowProfile = () => {
 
   <Async promiseFn={getProfileFormat()}>
     {console.log("clicked")}
+    {console.log("hi")}
     { ({data, error, isLoading}) => {
-      console.log('data:',data)
-      console.log('data address:',data.address)
+      // console.log('data:',data)
+      // console.log('data address:',data.address)
       if(isLoading) return "Loading..."
       if(error) return `Something went wrong: ${error.message}`
       if(data){
           return <>
-            <div> Hello </div>
             <div className="card acct area-padding txt-align-center mt-4"
               onClick={(e) => { modalListener.getClient().signal(true); }} > //setOpenProfModal is inside a different object, you will need middle man class to open it
               <img src={prof_pic} style={{ borderRadius: "50%" }} /> {}
             </div>
           </>
       }
+      console.log("hi")
       return null;
     }}
   </Async>
@@ -192,10 +193,10 @@ async function getAllProfiles(e){
           </form>
 
           {/* open profile modal when click on card */}
-          <div className="card acct area-padding txt-align-center mt-4"
+          {/* <div className="card acct area-padding txt-align-center mt-4"
           onClick={(e) => { setOpenProfModal(true); }} >
             <img src={prof_pic} style={{ borderRadius: "50%" }} /> {}
-          </div>
+          </div> */}
 
           {openProfModal && <ProfModal setOpenProfModal={setOpenProfModal} />}
 

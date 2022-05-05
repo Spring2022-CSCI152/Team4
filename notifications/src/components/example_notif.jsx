@@ -153,7 +153,7 @@ const Notif = ({ loggedIn }) => {
     }
 
     const getDisplayable = () => {
-        if (notif.id !== null) {
+        if (notif.id !== null && !!notif.id) {
             return (
                 <button onClick={onclick} className="notification m-3">
                     <div className="row vert-align-md p-1">
