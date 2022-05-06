@@ -127,12 +127,13 @@ const Notif = ({ loggedIn }) => {
         let photo;
         mockData.forEach(report => {
             report.profile.forEach(profile => {
-                if (profile.name == messages.profile_id) {
+                if (profile.id == messages.profile_id) {
                     status = profile.status;
                     photo = profile.url
                 }
             });
         });
+        {console.log('set photourl: ', photo, ' and status: ', status)}
         setNotif({
             id: messages.profile_id,
             status: status,
@@ -153,14 +154,14 @@ const Notif = ({ loggedIn }) => {
     }
 
     const getDisplayable = () => {
-        if (notif.id !== null && !!notif.id) {
+        if (notif.id !== null && !!notif.id && notif.status !== "Cleared") {
             return (
                 <button onClick={onclick} className="notification m-3">
                     <div className="row vert-align-md p-1">
                         <div className="col-auto">
                             <div><img src ={notif.photo}  className="img-md"/></div>
                             {/* test photo size <div><img src ={mockData[0].profile[0].url}  className="img-md"/></div> */}
-                            <div>{notif.photo}</div>
+                            {/* <div>{notif.photo}</div> */}
                         </div>
                         <div className="col">
                             <div className="txt-align-right"><GoAlert size="2em"/></div>

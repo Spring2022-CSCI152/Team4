@@ -4,19 +4,28 @@ const mockData=
   {
     "profile": [
       {
+        "id": "julie",
         "name": "Julie Mendez",
         "status": "Banned",
         "url": "https://cdn.discordapp.com/attachments/827666575489368097/946650135289528370/unknown.png"
       },
       {
+        "id": "ryan",
         "name": "Ryan Anderson",
         "status": "Watch",
         "url": "https://cdn.discordapp.com/attachments/827666575489368097/961056360995381338/ryan.png"
       },
       {
+        "id": "marc",
         "name": "Marc Bantay",
-        "status": "Cleared",
+        "status": "Wanted",
         "url": "https://cdn.discordapp.com/attachments/769776478820368385/946653873538486362/20220217_150003.jpg"
+      },
+      {
+        "id": "malee",
+        "name": "Malee Seechan",
+        "status": "Cleared",
+        "url": "https://cdn.discordapp.com/attachments/827666575489368097/971940406428332072/unknown.png"
       }
     ],
     "boxes": [
@@ -46,11 +55,13 @@ const mockData=
   {
     "profile": [
     {
+      "id": "pearlie",
       "name": "Pearlie Johnston",
       "status": "Watch",
       "url": "https://via.placeholder.com/600/92c952"
     },
     {
+      "id": "pena ",
       "name": "Pena Watts",
       "status": "Banned",
       "url": "https://via.placeholder.com/600/92c952"
@@ -79,6 +90,7 @@ const mockData=
 {
   "profile": [
     {
+      "id": "melody",
       "name": "Melody Wyatt",
       "status": "Watch",
       "url": "https://via.placeholder.com/600/92c952"
@@ -107,11 +119,13 @@ const mockData=
 {
   "profile": [
     {
+      "id": "aida",
       "name": "Aida Fernandez",
       "status": "Banned",
       "url": "https://via.placeholder.com/600/92c952"
     },
     {
+      "id": "tricia",
       "name": "Tricia Dickson",
       "status": "Banned",
       "url": "https://via.placeholder.com/600/92c952"
@@ -140,11 +154,13 @@ const mockData=
 {
   "profile": [
     {
-      "name": "Deanna Perez",
+      "id": "deanna",
+      "name":  "Deanna Perez",
       "status": "Banned",
       "url": "https://via.placeholder.com/600/92c952"
     },
     {
+      "id": "abigail",
       "name": "Abigail Bowen",
       "status": "Watch",
       "url": "https://via.placeholder.com/600/92c952"
