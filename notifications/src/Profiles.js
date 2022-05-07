@@ -49,14 +49,7 @@ function Profiles(){
             </div>
 
             {openProfModal && <ProfModal setOpenProfModal={setOpenProfModal} />}
-
-
-
-
-
-
-
-
+            
       </div>
     </div>
   );

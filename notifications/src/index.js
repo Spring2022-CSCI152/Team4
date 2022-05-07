@@ -18,8 +18,8 @@ import Accounts from './Admin'
 ReactDOM.render(
     <BrowserRouter> 
         <NavBarComp/>  
-        <Accounts/>
-         {/* <AllList/> */}
+        {/* <Accounts/> */}
+         <Profiles/>
          {/* <App/> */}
     </BrowserRouter>   ,
 document.getElementById('root') 

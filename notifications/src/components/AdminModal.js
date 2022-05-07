@@ -23,62 +23,101 @@ function AcctModal({setOpenAcctModal}){
                         <div className="col-3 border border-dark" style={{backgroundColor: "grey"}}> {/*style={{backgroundColor: "light grey"}}*/}
 
                             {/* Profile Image */}
-                            <div className ="m-4"> <img src={prof_pic} className="img-fluid img-thumbnail rounded-circle" alt="image not loading" /> </div>
+                            <div className ="m-4"> <img src="https://cdn.discordapp.com/attachments/827666575489368097/961056360995381338/ryan.png" className="img-fluid img-thumbnail rounded-circle" alt="image not loading" /> </div>
 
                             {/* Name Field*/}
                             <div className=" input-group input-group-lg text-center" >
-                                <div className="form-control fw-bold" style={{border: "0px solid #ced4da", backgroundColor: "grey"}}>Employee Name</div> 
+                                <div className="form-control fw-bold" style={{border: "0px solid #ced4da", backgroundColor: "grey"}}>Ryan Anderson</div> 
+                            </div>
+
+                            {/* Email Field*/}
+                            <div className="input-group input-group-md text-center">
+                                <div className="form-control fw-bold" style={{border: "0px solid #ced4da", backgroundColor: "grey", color: "lightgrey"}}>anderson94@gmail.com</div> 
                             </div>
 
                             {/* Job Title Field*/}
                             <div className="input-group input-group-md text-center mb-4">
-                                <div className="form-control fw-bold" style={{border: "0px solid #ced4da", backgroundColor: "grey", color: "lightgrey"}}>Job Title</div> 
-
+                                <div className="form-control fw-bold" style={{border: "0px solid #ced4da", backgroundColor: "grey", color: "lightgrey"}}>Security</div> 
                             </div>
 
                         </div>
 
-                    {/* Account Information */}
+                    {/* Permissions */}
                     <div className="col border border-dark ">
-
-                        {/* Email Field*/}
+                       
+                        {/* Per1 Field*/}
                         <div className=" input-group input-group-sm mt-4" >
-                            <div className="form-control">anderson94@mail.fresnostate.edu</div>
+                        <div className="form-control">✓</div>
+                        <div className="form-control">✓</div>
+                        <div className="form-control">✓</div>
+                        <div className="form-control">✓</div>
+                        <div className="form-control">✓</div>
+
                         </div>
-                        {/* Email Label*/}
+                        {/* per1 Label*/}
                         <div className="input-group input-group-sm">
-                            <div className="form-control fw-bold" style={{  border: "0px solid #ced4da"}}>Email</div>
+                        <div className="form-control fw-bold" style={{  border: "0px solid #ced4da"}}>Create Reports</div>
+                        <div className="form-control fw-bold" style={{  border: "0px solid #ced4da"}}>Edit Reports</div>
+                        <div className="form-control fw-bold" style={{  border: "0px solid #ced4da"}}>Delete Reports</div>
+                        <div className="form-control fw-bold" style={{  border: "0px solid #ced4da"}}>Set Report Format</div>
+                        <div className="form-control fw-bold" style={{  border: "0px solid #ced4da"}}>Set Profile Format</div>
+                        </div>                        
+                        
+                        {/* Per2 Field*/}
+                        <div className=" input-group input-group-sm mt-4" >
+                        <div className="form-control">✓</div>
+                        <div className="form-control">✓</div>
+                        <div className="form-control">✓</div>
+                        <div className="form-control">✓</div>
+                        <div className="form-control">✓</div>
+
+                        </div>
+                        {/* per2 Label*/}
+                        <div className="input-group input-group-sm">
+                        <div className="form-control fw-bold" style={{  border: "0px solid #ced4da"}}>Create Updates</div>
+                        <div className="form-control fw-bold" style={{  border: "0px solid #ced4da"}}>Edit Updates</div>
+                        <div className="form-control fw-bold" style={{  border: "0px solid #ced4da"}}>Delete Updates</div>
+                        <div className="form-control fw-bold" style={{  border: "0px solid #ced4da"}}>Create Attachments</div>
+                        <div className="form-control fw-bold" style={{  border: "0px solid #ced4da"}}>Delete Attachments</div>
+                        </div>                        
+                        
+                        {/* Per3 Field*/}
+                        <div className=" input-group input-group-sm mt-4" >
+                        <div className="form-control">✓</div>
+                        <div className="form-control">✓</div>
+                        <div className="form-control">✓</div>
+                        <div className="form-control">X</div>
+                        <div className="form-control">X</div>
+
+                        </div>
+                        {/* per3 Label*/}
+                        <div className="input-group input-group-sm">
+                        <div className="form-control fw-bold" style={{  border: "0px solid #ced4da"}}>Create Images</div>
+                        <div className="form-control fw-bold" style={{  border: "0px solid #ced4da"}}>Edit Images</div>
+                        <div className="form-control fw-bold" style={{  border: "0px solid #ced4da"}}>Create Profiles</div>
+                        <div className="form-control fw-bold" style={{  border: "0px solid #ced4da"}}>Edit Profiles</div>
+                        <div className="form-control fw-bold" style={{  border: "0px solid #ced4da"}}>Delete Profiles</div>
                         </div>
 
-                        {/* Permissions Fields*/}
+                        {/* Per4 Field*/}
                         <div className=" input-group input-group-sm mt-4" >
-                            <div className="form-control">Create Reports
-Edit Reports
-Delete Reports
- 	Set the Report Format for the business
- 	Create Updates
- 	Edit Updates
- 	Delete Updates
- 	Create Attachments
- 	Delete Attachments
- 	Create Images
- 	Edit Images
- 	Create Profiles
-	Edit Profiles
-Delete Profiles
-Set the Profile format for the business
-Enable/Disable Notifications
-Register other accounts
-Promote other accounts
-Demote other accounts
-View other accounts info
-Update other accounts info
-</div>
+                        <div className="form-control">✓</div>
+                        <div className="form-control">X</div>
+                        <div className="form-control">X</div>
+                        <div className="form-control">X</div>
+                        <div className="form-control">✓</div>
+                        <div className="form-control">X</div>
+
                         </div>
-                        {/* Permissions Labels*/}
+                        {/* per4 Label*/}
                         <div className="input-group input-group-sm">
-                            <div className="form-control fw-bold" style={{  border: "0px solid #ced4da"}}>Permissions</div>
-                        </div>              
+                        <div className="form-control fw-bold" style={{  border: "0px solid #ced4da"}}>Enable/Disable Notifications</div>
+                        <div className="form-control fw-bold" style={{  border: "0px solid #ced4da"}}>Register other accounts</div>
+                        <div className="form-control fw-bold" style={{  border: "0px solid #ced4da"}}>Promote other accounts</div>
+                        <div className="form-control fw-bold" style={{  border: "0px solid #ced4da"}}>Demote other accounts</div>
+                        <div className="form-control fw-bold" style={{  border: "0px solid #ced4da"}}>View other accounts info</div>
+                        <div className="form-control fw-bold" style={{  border: "0px solid #ced4da"}}>Update other accounts info</div>
+                        </div>          
 
                         <div className="txt-align-right" >
                             <button className="btn green round" style={{ alignContent: "flex-end"}}><RiUserAddFill /> Edit Account</button>

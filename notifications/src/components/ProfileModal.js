@@ -122,7 +122,7 @@ function ProfModal({setOpenProfModal}){
         {/* <h6>Reports:</h6> */}
         <Accordion>
             <Accordion.Item eventKey="0">
-                <Accordion.Header>2015-12-29 Assault</Accordion.Header>
+                <Accordion.Header>2015-12-29, Report #0, Assault</Accordion.Header>
                 <Accordion.Body>
             
                 <div className="border border-dark">
