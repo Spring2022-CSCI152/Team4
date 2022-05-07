@@ -2,7 +2,7 @@
 
 Role | Name
 ---|---
-*Team Lead*| **Julieta Mendez**
+*Team Lead, Front-End*| **Julieta Mendez**
 *Front-End*| **Malee Seechan**
 *AI/ML Facial Rec*| **Marc Andrew Bantay**
 *Back-End, Front-End Support*| **Ryan Anderson**
