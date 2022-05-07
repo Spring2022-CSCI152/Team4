@@ -43,7 +43,7 @@ function AcctModal({setOpenAcctModal}){
 
                         {/* Email Field*/}
                         <div className=" input-group input-group-sm mt-4" >
-                            <div className="form-control">Email</div>
+                            <div className="form-control">anderson94@mail.fresnostate.edu</div>
                         </div>
                         {/* Email Label*/}
                         <div className="input-group input-group-sm">
@@ -52,7 +52,28 @@ function AcctModal({setOpenAcctModal}){
 
                         {/* Permissions Fields*/}
                         <div className=" input-group input-group-sm mt-4" >
-                            <div className="form-control">Permissions</div>
+                            <div className="form-control">Create Reports
+Edit Reports
+Delete Reports
+ 	Set the Report Format for the business
+ 	Create Updates
+ 	Edit Updates
+ 	Delete Updates
+ 	Create Attachments
+ 	Delete Attachments
+ 	Create Images
+ 	Edit Images
+ 	Create Profiles
+	Edit Profiles
+Delete Profiles
+Set the Profile format for the business
+Enable/Disable Notifications
+Register other accounts
+Promote other accounts
+Demote other accounts
+View other accounts info
+Update other accounts info
+</div>
                         </div>
                         {/* Permissions Labels*/}
                         <div className="input-group input-group-sm">

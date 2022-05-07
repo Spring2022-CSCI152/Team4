@@ -10,16 +10,17 @@ import AllList from './components/AllList'
 import Notif from './components/example_notif'
 import NavBarComp from './components/NavBarComp'
 import Profiles from './Profiles'
+import Accounts from './Admin'
 
 
 
 
 ReactDOM.render(
     <BrowserRouter> 
-        {/* <NavBarComp/> */}
-        {/* <Profiles/> */}
-        {/* <AllList/> */}
-         <App/>
+        <NavBarComp/>  
+        <Accounts/>
+         {/* <AllList/> */}
+         {/* <App/> */}
     </BrowserRouter>   ,
 document.getElementById('root') 
 );
