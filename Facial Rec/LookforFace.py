@@ -32,43 +32,50 @@ class FaceRec:
         # Set list of all image paths
         print("Connecting To Camera")
         self.cap = cv2.VideoCapture(0)
-        print("Setting image dirs")
-        self.set_image_dirs()
+#         print("Setting image dirs")
+#         self.set_image_dirs()
         print("Encoding Images")
         self.encode_images()
 
-        # transponse image files into ML friendly values
-        # encode images and store the encodings
+    # transponse image files into ML friendly values
+    # encode images and store the encodings
     def encode_images(self):
-        self.need_update = False
-        self.encoded_images = []
-        for img in self.image_list:
-            cur_image = self.read_and_encode_image(img)
-            for enc in face_recognition.face_encodings(cur_image):
-                self.encoded_images.append(enc) 
-                  
-     # Walks through the file system and stores the paths to all images found
-    def set_image_dirs(self):
         # Walk through the subdirectories and find all files
         for path, subdirs, files in os.walk(self.path):
             for name in files:
                 file_path = os.path.join(path, name)
                 # Save only if not already in list
                 if file_path not in self.image_list: # <- doing a check here prevents having to rebuild from scratch later
-                    # only save the paths that end with a file
-                    self.image_list.append(file_path)
-                    self.need_update = True
+                  # only save the paths that end with a file
+                  self.image_list.append(file_path)
+                  # encode image to ML friendly value
+	            cur_image = self.read_and_encode_image(file_path)
+	            for enc in face_recognition.face_encodings(cur_image):
+                        # Store value
+                	      self.encoded_images.append(enc) 
+                   
+#      # Walks through the file system and stores the paths to all images found
+#     def set_image_dirs(self):
+#         # Walk through the subdirectories and find all files
+#         for path, subdirs, files in os.walk(self.path):
+#             for name in files:
+#                 file_path = os.path.join(path, name)
+#                 # Save only if not already in list
+#                 if file_path not in self.image_list: # <- doing a check here prevents having to rebuild from scratch later
+#                     # only save the paths that end with a file
+#                     self.image_list.append(file_path)
+#                     self.need_update = True
     
      # rename a function call for understandibility
-    def update_image_dirs(self):
-        self.set_image_dirs()
-        if self.need_update:
-            self.encode_images()
+#     def update_image_dirs(self):
+#         self.set_image_dirs()
+#         if self.need_update:
+#             self.encode_images()
         
     def execute_facial_rec(self):
 
         while True:
-            self.update_image_dirs()
+            self.encode_images()
             
             success, img = self.cap.read()
             img_to_process = self.resize_and_encode_image(img) 
