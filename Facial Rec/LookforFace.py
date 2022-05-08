@@ -41,9 +41,9 @@ class FaceRec:
         # encode images and store the encodings
     def encode_images(self):
         self.need_update = False
+        self.encoded_images = []
         for img in self.image_list:
             cur_image = self.read_and_encode_image(img)
-            self.encoded_images = []
             for enc in face_recognition.face_encodings(cur_image):
                 self.encoded_images.append(enc) 
                   
@@ -85,10 +85,11 @@ class FaceRec:
                 for encode_face, face_loc in zip(encodes_curr_frame, face_curr_frame): 
                     matches = face_recognition.compare_faces(self.encoded_images, encode_face) 
                     face_dis = face_recognition.face_distance(self.encoded_images, encode_face)
-                    match_index = np.argmin(face_dis) #get min element from array
+                   
 
                     #In feed Creates box and places name
-                    if matches[match_index]: 
+                    if True in matches:
+                        match_index = matches.index(True)
                         self.notif_manager.enqueue_match(self.image_list[match_index])
     
                         """
