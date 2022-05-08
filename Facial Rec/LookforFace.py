@@ -49,10 +49,10 @@ class FaceRec:
                   # only save the paths that end with a file
                   self.image_list.append(file_path)
                   # encode image to ML friendly value
-	            cur_image = self.read_and_encode_image(file_path)
-	            for enc in face_recognition.face_encodings(cur_image):
-                        # Store value
-                	      self.encoded_images.append(enc) 
+	          cur_image = self.read_and_encode_image(file_path)
+	          for enc in face_recognition.face_encodings(cur_image):
+                  	# Store value
+                   	self.encoded_images.append(enc) 
                    
 #      # Walks through the file system and stores the paths to all images found
 #     def set_image_dirs(self):
