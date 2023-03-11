@@ -1,4 +1,4 @@
-# Team 4 aka FrankenBoob
+# Team 4 aka FrankenBob
 
 Role | Name
 ---|---
